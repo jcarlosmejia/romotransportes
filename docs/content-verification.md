@@ -10,163 +10,75 @@ un dato sin confirmar no se publica, no se sustituye por una suposición y no se
 toma de la competencia. Los campos correspondientes en `src/data/company.ts`
 están en `null` y la interfaz oculta lo que no puede sostener.
 
-**Total de puntos pendientes: 24**
+**Total de puntos pendientes: 10**
 
-## Bloquea la publicación (8)
-
-_El sitio no debe publicarse sin esto._
-
-### ¿Cuál es el número de WhatsApp comercial que debe recibir las cotizaciones?
-
-- **Por qué no se publica:** No se proporcionó ningún número. Inventar o suponer un número enviaría a los clientes a un tercero.
-- **Qué hace el sitio hoy:** Los botones de WhatsApp están ocultos. El formulario genera la solicitud y ofrece "Copiar solicitud" como alternativa.
-- **Identificador interno:** `whatsapp`
-
-### ¿Cuál es el teléfono de contacto que se debe publicar?
-
-- **Por qué no se publica:** No se proporcionó ningún teléfono.
-- **Qué hace el sitio hoy:** No se muestra ningún teléfono en el encabezado, contacto ni pie de página.
-- **Identificador interno:** `phone`
-
-### ¿A qué correo deben llegar las solicitudes de cotización?
-
-- **Por qué no se publica:** No se proporcionó ningún correo.
-- **Qué hace el sitio hoy:** No se muestra correo y el formulario no lo usa como destino; la conversión depende de WhatsApp o del copiado manual.
-- **Identificador interno:** `email`
-
-### ¿Cuál es el dominio definitivo del sitio?
-
-- **Por qué no se publica:** El dominio se administra por separado (NEUBOX / Cloudflare DNS) y no fue confirmado en el material entregado.
-- **Qué hace el sitio hoy:** No se publica etiqueta canonical ni sitemap absoluto hasta que se defina NEXT_PUBLIC_SITE_URL.
-- **Identificador interno:** `domain`
-
-### ¿Cómo quiere recibir las solicitudes: WhatsApp, un correo, o una función de Cloudflare conectada a un buzón?
-
-- **Por qué no se publica:** No existen credenciales ni buzón configurado.
-- **Qué hace el sitio hoy:** El formulario es funcional del lado del cliente: valida, arma el mensaje y lo entrega por WhatsApp o portapapeles.
-- **Identificador interno:** `form-destination`
-
-### ¿Autoriza publicar las 14 fotografías incluidas, con los encuadres aplicados, en el sitio público?
-
-- **Por qué no se publica:** Las fotografías provienen de material interno compartido por WhatsApp y no de una sesión fotográfica aprobada.
-- **Qué hace el sitio hoy:** Todas las fotografías están publicadas en el sitio pendiente de esta aprobación.
-- **Identificador interno:** `photo-publication`
-
-### ¿Autoriza que sean visibles las placas, los números económicos y los registros USDOT / ICC MC / VIN parcial que aparecen en algunas unidades?
-
-- **Por qué no se publica:** En la fotografía nocturna de flota se leen ICCMC, USDOT, CA, VIN parcial y KYU. En otras se ven placas y el número económico 0917.
-- **Qué hace el sitio hoy:** No se editó ninguna fotografía. Los identificadores siguen visibles tal como se capturaron.
-- **Identificador interno:** `photo-identifiers`
-
-### ¿Autoriza que aparezca personal identificable en dos fotografías?
-
-- **Por qué no se publica:** En la fotografía de tubería se alcanza a ver al operador dentro de la cabina; en la de varilla aparece personal de maniobra de espalda.
-- **Qué hace el sitio hoy:** Las fotografías se publican sin edición.
-- **Identificador interno:** `photo-people`
-
-## Limita el mensaje (13)
+## Limita el mensaje (6)
 
 _El sitio funciona, pero no puede afirmarlo hasta que se confirme._
 
-### ¿Desde qué año opera Romo's Transportes?
+### ¿Qué certificaciones o registros concretos tiene Romo's Transportes (ISO, OEA, CTPAT, SCT u otro), y con qué número o vigencia?
 
-- **Por qué no se publica:** No hay dato verificado; afirmar antigüedad sin confirmarla sería falso.
-- **Qué hace el sitio hoy:** El sitio habla de "experiencia en transporte terrestre de carga" sin citar años ni fecha de fundación.
-- **Identificador interno:** `years-operating`
-
-### ¿Cuántos tractocamiones, plataformas y cajas secas hay en operación?
-
-- **Por qué no se publica:** Las fotografías muestran varias unidades, pero una fotografía no es un inventario verificable.
-- **Qué hace el sitio hoy:** No se publica ningún conteo de unidades ni estadística de flota.
-- **Identificador interno:** `fleet-size`
-
-### ¿Las plataformas son de tres ejes con suspensión de aire y capacidad de 36 toneladas? ¿Aplica a todas las unidades?
-
-- **Por qué no se publica:** El material de origen menciona tres ejes, suspensión de aire y 36 toneladas, pero se indicó tratarlo como provisional.
-- **Qué hace el sitio hoy:** Se describe la plataforma como "de tres ejes" solo porque los tres ejes son visibles en las fotografías. No se publica capacidad, suspensión ni tonelaje.
-- **Identificador interno:** `platform-specs`
-
-### ¿Qué medidas tienen las cajas secas (48 ft, 53 ft, otras) y qué capacidad soportan?
-
-- **Por qué no se publica:** No se confirmaron medidas ni capacidades.
-- **Qué hace el sitio hoy:** La caja seca se describe por uso, no por medidas ni capacidad.
-- **Identificador interno:** `dry-van-specs`
-
-### ¿En qué estados o corredores opera realmente? ¿Hay rutas de alta frecuencia que quiera destacar?
-
-- **Por qué no se publica:** El material menciona "rutas nacionales", pero no se confirmó ninguna ruta, estado ni corredor específico.
-- **Qué hace el sitio hoy:** La sección de cobertura habla de servicio en rutas nacionales dentro de la República Mexicana, sin nombrar estados, ciudades ni corredores.
-- **Identificador interno:** `coverage`
-
-### ¿La mercancía viaja con seguro de carga? ¿Con qué cobertura y aseguradora?
-
-- **Por qué no se publica:** No se confirmó ninguna póliza.
-- **Qué hace el sitio hoy:** No se menciona seguro en ninguna parte del sitio.
-- **Identificador interno:** `insurance`
-
-### ¿Las unidades cuentan con GPS o monitoreo? ¿El cliente puede consultar la ubicación?
-
-- **Por qué no se publica:** No se confirmó ningún sistema de rastreo ni monitoreo.
-- **Qué hace el sitio hoy:** La sección de seguridad habla de comunicación directa durante el traslado, sin mencionar GPS, rastreo satelital ni monitoreo 24/7.
-- **Identificador interno:** `gps-monitoring`
-
-### ¿Romo's cuenta con alguna certificación o registro (ISO, OEA, CTPAT, SCT)?
-
-- **Por qué no se publica:** Una fotografía muestra un letrero "EMPRESA CERTIFICADA ISO 9001:2015", pero pertenece a la instalación del cliente, no a Romo's.
-- **Qué hace el sitio hoy:** No se menciona ninguna certificación.
+- **Por qué no se publica:** Se autorizó mencionar certificaciones, pero no se indicó cuál. Publicar "contamos con certificaciones" sin nombrar ninguna no es verificable por el cliente y no aporta confianza real. Además, el letrero "EMPRESA CERTIFICADA ISO 9001:2015" que aparece al fondo de una fotografía pertenece a la instalación del cliente, y el propietario indicó expresamente no atribuir certificaciones ajenas.
+- **Qué hace el sitio hoy:** No se menciona ninguna certificación. Sí se publican seguro de carga, GPS y monitoreo durante el traslado, que quedaron autorizados.
 - **Identificador interno:** `certifications`
 
-### ¿Qué procedimientos de seguridad se realizan de forma sistemática: revisión previa al viaje, sujeción de carga, mantenimiento preventivo, planeación de ruta?
+### ¿Confirmación documental de la capacidad de la plataforma (36 t) y del tipo de suspensión (de aire)?
 
-- **Por qué no se publica:** Las fotografías muestran sujeción con bandas y personal con casco y chaleco, pero eso no confirma un procedimiento formal.
-- **Qué hace el sitio hoy:** La sección de seguridad describe únicamente prácticas visibles en el material propio y en términos operativos, sin afirmar protocolos ni certificaciones.
-- **Identificador interno:** `safety-procedures`
+- **Por qué no se publica:** El propietario indicó mantener únicamente "plataforma de tres ejes" hasta contar con confirmación documental.
+- **Qué hace el sitio hoy:** Se publica "plataforma de tres ejes" (los tres ejes son visibles en la fotografía). No se publica tonelaje ni tipo de suspensión.
+- **Identificador interno:** `platform-specs`
 
-### ¿Qué capacitación o licencias tienen los operadores?
+### ¿Qué medidas tienen las cajas secas (48 ft, 53 ft u otras) y qué capacidad soportan?
 
-- **Por qué no se publica:** No se confirmó ningún programa de capacitación.
-- **Qué hace el sitio hoy:** Se habla de "operadores con experiencia en carretera" sin afirmar certificaciones ni programas.
+- **Por qué no se publica:** El propietario indicó describir la caja seca por uso hasta confirmar medidas.
+- **Qué hace el sitio hoy:** La caja seca se describe por uso, sin medidas ni capacidad.
+- **Identificador interno:** `dry-van-specs`
+
+### ¿Qué cobertura y qué aseguradora respaldan la carga, y hay un monto o tope que convenga publicar?
+
+- **Por qué no se publica:** Se autorizó mencionar el seguro de carga, sin detalles de cobertura. Publicar un monto sin confirmarlo sería una afirmación contractual.
+- **Qué hace el sitio hoy:** Se menciona que la mercancía viaja con seguro de carga y que la cobertura se confirma por servicio, sin montos ni aseguradora.
+- **Identificador interno:** `insurance-detail`
+
+### ¿El cliente puede consultar la ubicación de su unidad por algún medio (enlace, acceso, reporte) o el seguimiento se da solo por teléfono y WhatsApp?
+
+- **Por qué no se publica:** Se autorizó mencionar GPS y monitoreo. No se confirmó si existe un acceso para el cliente ni un centro de monitoreo con horario definido.
+- **Qué hace el sitio hoy:** Se menciona GPS en las unidades y monitoreo durante el traslado. No se afirma monitoreo 24/7, centro de control ni acceso de consulta para el cliente.
+- **Identificador interno:** `monitoring-detail`
+
+### ¿Qué capacitación, licencia federal o programa tienen los operadores?
+
+- **Por qué no se publica:** No se confirmó ningún programa ni tipo de licencia.
+- **Qué hace el sitio hoy:** Se habla de "operadores con experiencia en viaje largo" sin afirmar certificaciones ni programas.
 - **Identificador interno:** `operator-qualifications`
 
-### ¿Romo's ofrece efectivamente carga completa, caja seca, plataforma y servicio dedicado? ¿Hay algún servicio que NO deba aparecer?
-
-- **Por qué no se publica:** Los tipos de equipo son visibles en las fotografías, pero la oferta comercial la define el propietario.
-- **Qué hace el sitio hoy:** Se publican solo transporte nacional, carga completa, caja seca, plataforma y servicio dedicado. No se menciona refrigerado, materiales peligrosos, cruce fronterizo, aduanas, almacenaje, paquetería ni última milla.
-- **Identificador interno:** `services-offered`
-
-### ¿Autoriza que aparezcan instalaciones y señalización de terceros al fondo de algunas fotografías?
-
-- **Por qué no se publica:** Dos fotografías muestran señalización de una instalación ajena. El sitio no afirma en ningún momento que sean clientes.
-- **Qué hace el sitio hoy:** Se aplicaron encuadres que centran la unidad de Romo's y reducen la señalización de terceros, sin edición generativa.
-- **Identificador interno:** `photo-third-parties`
-
-### ¿Aprueba la redacción final de la sección "Nosotros" y el resto de los textos?
-
-- **Por qué no se publica:** La misión original se reescribió en español profesional, sin reproducirla literalmente y sin agregar afirmaciones nuevas.
-- **Qué hace el sitio hoy:** Se publica la versión reescrita.
-- **Identificador interno:** `mission-copy`
-
-## Mejora opcional (3)
+## Mejora opcional (4)
 
 _No bloquea nada; mejora el resultado si se resuelve._
 
-### ¿Existe el original sin la marca de agua de cámara en la fotografía de estructuras metálicas?
+### ¿Desea publicar un domicilio de operaciones y un horario de atención comercial?
 
-- **Por qué no se publica:** El original accesible trae la marca "capturada en motorola one" en la esquina inferior izquierda.
-- **Qué hace el sitio hoy:** Se recortó el encuadre para excluir la marca. No se aplicó borrado, clonado ni relleno generativo.
-- **Identificador interno:** `photo-watermark`
+- **Por qué no se publica:** No se proporcionaron. Un domicilio verificado permitiría además usar datos estructurados LocalBusiness, que hoy se omiten.
+- **Qué hace el sitio hoy:** No se publica domicilio ni horario. El JSON-LD usa Organization en lugar de LocalBusiness, que exige dirección física.
+- **Identificador interno:** `address-hours`
 
-### ¿Desea publicar la fotografía del patio de operaciones que se dejó fuera por calidad de encuadre?
+### ¿Hay más ciudades o corredores de operación frecuente que convenga listar además de los confirmados?
 
-- **Por qué no se publica:** El encuadre está saturado (agua estancada, tarimas sueltas) y la señalización de un tercero es el elemento más legible.
-- **Qué hace el sitio hoy:** La fotografía no se publica. El archivo original permanece disponible.
-- **Identificador interno:** `photo-excluded`
+- **Por qué no se publica:** Se confirmaron Culiacán, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. La lista se cierra con "y otras rutas nacionales".
+- **Qué hace el sitio hoy:** Se publican las ciudades confirmadas y se indica cobertura en rutas nacionales para el resto del país.
+- **Identificador interno:** `coverage-additional`
 
 ### ¿Desea medir conversiones (Cloudflare Web Analytics, GA4 u otra herramienta)?
 
 - **Por qué no se publica:** No se configuró ninguna herramienta de analítica.
 - **Qué hace el sitio hoy:** No se carga ningún script de terceros. Los botones ya emiten un evento `romo:cta` en el DOM, listo para conectar.
 - **Identificador interno:** `analytics`
+
+### ¿Puede conseguir el logotipo en vectorial o PNG con transparencia?
+
+- **Por qué no se publica:** El archivo entregado es una fotografía de la insignia, con viñeteado y grano. El propietario aprobó el tratamiento actual y sustituirlo más adelante.
+- **Qué hace el sitio hoy:** La insignia se monta sobre una placa de marca que convierte su borde fotográfico en una decisión de diseño.
+- **Identificador interno:** `logo-vector`
 
 ## Fotografías disponibles
 

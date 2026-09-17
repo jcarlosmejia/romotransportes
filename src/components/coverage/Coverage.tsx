@@ -33,6 +33,31 @@ export function Coverage() {
               ))}
             </ul>
 
+            {/* Confirmed destinations. Closed with a footnote so the list never
+                reads as an exhaustive map of where Romo's can go. */}
+            <div className="mt-9">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-romo-red">
+                Ciudades con servicio
+              </h3>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {coverage.cities.map((city) => (
+                  <li
+                    key={city.name}
+                    className="cut-corner border border-romo-border-light bg-white px-3 py-1.5"
+                    style={{ ['--cut' as string]: '0.5rem' }}
+                  >
+                    <span className="text-[0.8125rem] font-bold uppercase tracking-[0.06em] text-romo-charcoal">
+                      {city.name}
+                    </span>
+                    <span className="ml-1.5 text-[0.75rem] text-romo-muted-dark">{city.state}</span>
+                  </li>
+                ))}
+                <li className="flex items-center px-1 py-1.5 text-[0.8125rem] italic text-romo-muted-dark">
+                  {coverage.citiesFootnote}
+                </li>
+              </ul>
+            </div>
+
             <p className="mt-7 border-l-2 border-romo-red bg-white/70 py-3 pl-4 pr-3 text-sm text-romo-muted-dark">
               {coverage.note}
             </p>

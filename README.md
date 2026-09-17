@@ -11,17 +11,28 @@ como **exportación totalmente estática** para Cloudflare Pages.
 
 ## Estado actual
 
-La implementación técnica está completa y validada. **El sitio no debe
-publicarse todavía**: faltan datos de negocio que sólo el propietario puede
-confirmar, empezando por el número de WhatsApp, el teléfono, el correo y el
-dominio.
+**Listo para desplegar.** El propietario firmó el contenido, las fotografías, las
+especificaciones de equipo y los datos de contacto el **17 de septiembre de
+2026**, y esos datos ya están integrados:
 
-Lista completa: **[`docs/content-verification.md`](docs/content-verification.md)**
-— 24 puntos, 8 de ellos bloqueantes.
+| Dato | Valor publicado |
+| :-- | :-- |
+| WhatsApp y teléfono | `+52 33 2383 8729` |
+| Correo | `jcarlosmejiaayala@gmail.com` |
+| Dominio | `https://romostransportes.com.mx` |
+| Inicio de operaciones | 2010 |
+| Cobertura | Culiacán, Hermosillo, Tijuana, Tecate, León, interior de Jalisco, y otras rutas nacionales |
+| Seguro, GPS y monitoreo | Publicados en la sección de Seguridad |
+| Destino del formulario | WhatsApp (principal) y el correo anterior (secundario) |
 
-Nada sin confirmar se publica. Los campos correspondientes están en `null` y la
-interfaz **oculta** lo que no puede sostener, en lugar de mostrar un enlace roto
-o un dato inventado.
+Quedan **10 puntos de mejora**, **ninguno bloqueante**:
+**[`docs/content-verification.md`](docs/content-verification.md)**.
+
+Sigue vigente la regla del proyecto: nada sin confirmar se publica. Por eso el
+sitio **no** afirma número de unidades (el propietario pidió manejarlo de forma
+genérica), ni 36 t ni suspensión de aire en plataforma, ni medidas de caja seca,
+ni ninguna certificación con nombre — se autorizó mencionarlas, pero no se
+indicó cuál, y un "contamos con certificaciones" sin nombre no es verificable.
 
 ---
 
@@ -91,25 +102,64 @@ rutas de metadatos (`sitemap.ts`, `robots.ts`, `manifest.ts`) declaran
 
 ### Variables de entorno
 
-Todas son opcionales para que el build funcione, y **necesarias para publicar**.
-Configúrelas en *Cloudflare Pages → Settings → Environment variables*:
+**No hace falta configurar ninguna para publicar.** Los datos confirmados están
+en `src/data/company.ts` y el build ya los incluye. Las variables existen sólo
+para sobrescribirlos sin tocar código:
 
-| Variable | Ejemplo de formato | Efecto al definirla |
-| :-- | :-- | :-- |
-| `NEXT_PUBLIC_ROMO_WHATSAPP` | `521234567890` | Activa los botones de WhatsApp en las 7 ubicaciones y el envío del formulario por WhatsApp |
-| `NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY` | `+52 1 33 1234 5678` | Forma legible del número |
-| `NEXT_PUBLIC_ROMO_PHONE` | `+523312345678` | Muestra el enlace `tel:` |
-| `NEXT_PUBLIC_ROMO_PHONE_DISPLAY` | `+52 33 1234 5678` | Forma legible del teléfono |
-| `NEXT_PUBLIC_ROMO_EMAIL` | `cotizaciones@ejemplo.com` | Muestra el enlace `mailto:` |
-| `NEXT_PUBLIC_SITE_URL` | `https://romostransportes.com` | Publica la etiqueta canonical y usa el dominio real en sitemap, OpenGraph y JSON-LD |
+| Variable | Valor por omisión (ya integrado) |
+| :-- | :-- |
+| `NEXT_PUBLIC_ROMO_WHATSAPP` | `523323838729` (E.164, sólo dígitos, sin `+`) |
+| `NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY` | `+52 33 2383 8729` |
+| `NEXT_PUBLIC_ROMO_PHONE` | `+523323838729` |
+| `NEXT_PUBLIC_ROMO_PHONE_DISPLAY` | `+52 33 2383 8729` |
+| `NEXT_PUBLIC_ROMO_EMAIL` | `jcarlosmejiaayala@gmail.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://romostransportes.com.mx` |
 
-**Los valores de la tabla son ejemplos de formato, no datos reales.** El número de
-WhatsApp va en formato E.164, sólo dígitos, sin `+`.
+Caso de uso real de la sobrescritura: en un despliegue de vista previa
+(`*.pages.dev`), defina `NEXT_PUBLIC_SITE_URL` con ese subdominio para que la
+etiqueta canonical y el sitemap no apunten al dominio de producción.
 
-Mientras `NEXT_PUBLIC_SITE_URL` no esté definida no se publica etiqueta
-canonical: un canonical apuntando a un dominio supuesto es peor que no tenerlo.
+El dominio se administra por separado (NEUBOX / Cloudflare DNS); ver
+§ *Dominio y DNS* más abajo.
 
-El dominio se administra por separado (NEUBOX / Cloudflare DNS).
+### Pasos en el panel de Cloudflare
+
+1. *Workers & Pages* → **Create** → pestaña **Pages** → **Connect to Git**.
+2. Autorice el repositorio y elija la rama `main`.
+3. En *Build settings*:
+   - Framework preset: **Next.js (Static HTML Export)**
+   - Build command: **`npm run build`**
+   - Build output directory: **`out`**
+4. En *Variables and Secrets*, añada **`NODE_VERSION` = `20`** (o superior). Es
+   la única variable realmente necesaria.
+5. **Save and Deploy.**
+
+### Dominio y DNS
+
+En *Pages → el proyecto → Custom domains*, agregue `romostransportes.com.mx` y
+`www.romostransportes.com.mx`. Cloudflare indicará los registros a crear:
+
+- Si el dominio ya usa los nameservers de Cloudflare, los registros se crean
+  automáticamente.
+- Si el DNS sigue en NEUBOX, cree ahí el `CNAME` que Cloudflare le indique
+  apuntando al subdominio `*.pages.dev` del proyecto. Para el dominio raíz,
+  NEUBOX debe soportar `CNAME` plano o `ALIAS`; si no lo soporta, conviene mover
+  los nameservers a Cloudflare.
+
+### Después del primer despliegue
+
+Falta una sola cosa que no se puede medir en local — **correr Lighthouse contra
+la URL publicada** y registrar los resultados. Los objetivos son Performance
+≥90, Accessibility ≥95, Best Practices ≥95 y SEO ≥95.
+
+Conviene además:
+
+- Verificar en un teléfono real que el botón de WhatsApp abre la app con el
+  mensaje ya escrito.
+- Enviar una solicitud de prueba por correo y confirmar que llega a
+  `jcarlosmejiaayala@gmail.com`.
+- Dar de alta el sitio en Google Search Console y enviar
+  `https://romostransportes.com.mx/sitemap.xml`.
 
 ---
 
@@ -241,16 +291,17 @@ elija sin tocar los botones.
 | Errores de consola | Ninguno |
 | Peticiones fallidas | Ninguna |
 | Peticiones a terceros | **Ninguna** |
-| Imágenes | 22/22 cargan, todas servidas en AVIF |
+| Imágenes | 21/21 cargan, todas servidas en AVIF |
 | **CLS** | **0** (sin un solo desplazamiento registrado) |
 | LCP | La imagen del hero (AVIF precargada), elemento LCP correcto |
 | Desbordamiento horizontal | Ninguno en 320 / 375 / 390 / 430 / 768 / 1024 / 1280 / 1600 px |
 | Jerarquía de encabezados | Un solo `h1`, sin saltos de nivel |
-| Alt text | Presente en las 22 imágenes; `alt=""` en las 2 decorativas |
+| Alt text | Presente en las 21 imágenes; `alt=""` en las 2 decorativas |
 | Objetivos táctiles | Todos ≥24 px (WCAG 2.5.8) |
 | Foco de teclado | Anillo crema visible, 2 px, contraste 12.4:1 |
 | Menú móvil | `aria-expanded`, trampa de foco, Escape cierra y devuelve el foco, bloqueo de scroll |
 | Formulario | Etiquetas, `aria-invalid`, `aria-describedby`, resumen con `role="alert"` y foco |
+| Entrega del formulario | WhatsApp verificado con el número real; `mailto:` verificado (acentos, guión largo y saltos de línea íntegros) |
 | Preguntas frecuentes | `<details>`/`<summary>` nativos, funcionan sin JavaScript |
 | Contraste | 13/13 combinaciones cumplen AA (`npm run brand`) |
 | `prefers-reduced-motion` | Respetado; el contenido nunca queda oculto sin JavaScript |
@@ -272,11 +323,11 @@ página son 7.6 KB.
 
 ### Lo que todavía **no** está medido
 
-Las cifras de arriba se tomaron con el build de producción servido en local.
-**No se ha corrido Lighthouse contra un despliegue real** y por eso no se
-reportan puntuaciones. Los objetivos (Performance ≥90, Accessibility ≥95, Best
-Practices ≥95, SEO ≥95) deben medirse después del primer despliegue en
-Cloudflare Pages, con el dominio y los datos de contacto ya configurados.
+Las cifras de arriba se tomaron con el build de producción servido en local, sin
+latencia de red y sin compresión del servidor. **No se ha corrido Lighthouse
+contra un despliegue real**, así que este documento no reporta puntuaciones.
+Medirlas es el primer paso después del despliegue (ver
+§ *Después del primer despliegue*).
 
 ---
 

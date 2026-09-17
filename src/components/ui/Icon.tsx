@@ -76,6 +76,14 @@ const paths: Record<IconName, React.ReactNode> = {
       <path d="M8.7 4.5v13.1M15.3 6.6v13" />
     </>
   ),
+  // Hard hat: PPE, distinct from the `shield` used for cargo insurance.
+  helmet: (
+    <>
+      <path d="M4.9 15.2v-2.1a7.1 7.1 0 0 1 14.2 0v2.1" />
+      <path d="M9.4 6.1V4.4a1 1 0 0 1 1-1h3.2a1 1 0 0 1 1 1v1.7" />
+      <path d="M2.9 15.2h18.2a.9.9 0 0 1 .9.9v1a.9.9 0 0 1-.9.9H2.9a.9.9 0 0 1-.9-.9v-1a.9.9 0 0 1 .9-.9z" />
+    </>
+  ),
   shield: (
     <>
       <path d="M12 3.2 4.8 5.8v5.5c0 4.2 2.9 7.5 7.2 9.5 4.3-2 7.2-5.3 7.2-9.5V5.8z" />

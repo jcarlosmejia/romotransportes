@@ -53,11 +53,21 @@ export const faqs: readonly Faq[] = [
   {
     question: '¿La carga viaja asegurada?',
     answer:
-      'Las condiciones de cobertura se confirman por servicio, en función de la mercancía y su valor declarado. Indíquenos qué va a mover y qué cobertura necesita para revisarlo antes de confirmar el traslado.',
+      'Sí. La mercancía viaja con seguro de carga. Las condiciones que aplican a cada embarque se confirman al cotizar, en función del tipo de mercancía y de su valor declarado, así que conviene indicarnos qué va a mover desde la solicitud.',
   },
   {
     question: '¿Puedo dar seguimiento a mi embarque durante el viaje?',
     answer:
-      'Durante el traslado la comunicación es directa: puede solicitarnos el estatus de su unidad y le informamos la situación del viaje.',
+      'Sí. Las unidades cuentan con GPS y damos seguimiento al viaje mientras la unidad está en ruta. Puede solicitarnos el estatus por teléfono o WhatsApp y le informamos la situación de su embarque.',
+  },
+  {
+    question: '¿A qué ciudades llegan?',
+    answer:
+      'Damos servicio a las principales ciudades del país. Entre los destinos habituales están Culiacán, Hermosillo, Tijuana, Tecate, León y el interior de Jalisco, además de otras rutas nacionales. Indíquenos su origen y destino y le confirmamos la disponibilidad.',
+  },
+  {
+    question: '¿Desde cuándo opera Romo\'s Transportes?',
+    answer:
+      'Operamos transporte de carga por carretera desde 2010.',
   },
 ];

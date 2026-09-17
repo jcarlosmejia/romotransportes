@@ -43,11 +43,13 @@ export const company = {
   valueProposition:
     'Servicio de transporte terrestre de carga para empresas, con unidades propias, plataformas y cajas secas para distintos tipos de mercancía.',
 
-  /** Year the business started operating — NOT confirmed. */
-  foundedYear: TODO_VERIFY as number | null,
-  /** Years of operating experience — NOT confirmed. Never infer from photos. */
-  yearsOperating: TODO_VERIFY as number | null,
-  /** Unit / trailer counts — NOT confirmed. Photographs are not an inventory. */
+  /** Year the business started operating. CONFIRMED by the owner 2026-09-17. */
+  foundedYear: 2010 as number | null,
+  /**
+   * Unit / trailer counts stay `null` by the owner's explicit instruction: the
+   * fleet is to be described generically ("unidades propias", "equipo
+   * disponible"), never as a figure. Do not populate this.
+   */
   fleetSize: TODO_VERIFY as number | null,
   /** Registered office or operations base — NOT confirmed. */
   baseCity: TODO_VERIFY as string | null,
@@ -70,16 +72,22 @@ export const contact = {
    * WhatsApp number in full international E.164 form, digits only, no `+`.
    * Example shape (NOT a real Romo's number): `521234567890`.
    */
-  whatsapp: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP ?? TODO_VERIFY) as string | null,
+  whatsapp: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP ?? '523323838729') as string | null,
   /** Display form of the WhatsApp number, e.g. `+52 1 33 1234 5678`. */
-  whatsappDisplay: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY ?? TODO_VERIFY) as string | null,
+  whatsappDisplay: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY ??
+    '+52 33 2383 8729') as string | null,
 
   /** Voice line in `tel:` form, digits and `+` only. */
-  phone: (process.env.NEXT_PUBLIC_ROMO_PHONE ?? TODO_VERIFY) as string | null,
-  phoneDisplay: (process.env.NEXT_PUBLIC_ROMO_PHONE_DISPLAY ?? TODO_VERIFY) as string | null,
+  phone: (process.env.NEXT_PUBLIC_ROMO_PHONE ?? '+523323838729') as string | null,
+  phoneDisplay: (process.env.NEXT_PUBLIC_ROMO_PHONE_DISPLAY ??
+    '+52 33 2383 8729') as string | null,
 
-  /** Commercial mailbox that should receive quote requests. */
-  email: (process.env.NEXT_PUBLIC_ROMO_EMAIL ?? TODO_VERIFY) as string | null,
+  /**
+   * Commercial mailbox that receives quote requests. CONFIRMED by the owner as
+   * the destination for the contact form's e-mail path.
+   */
+  email: (process.env.NEXT_PUBLIC_ROMO_EMAIL ??
+    'jcarlosmejiaayala@gmail.com') as string | null,
 
   /** Business hours for the commercial desk. */
   hours: TODO_VERIFY as string | null,
@@ -90,8 +98,31 @@ export const contact = {
  * Falls back to a placeholder that is *not* published as a canonical link until
  * the real domain is confirmed (see `siteUrlIsVerified`).
  */
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://romostransportes.com';
-export const siteUrlIsVerified = Boolean(process.env.NEXT_PUBLIC_SITE_URL);
+export const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://romostransportes.com.mx'
+).replace(/\/$/, '');
+
+/**
+ * The domain is confirmed, so the canonical tag, the absolute sitemap and the
+ * JSON-LD identifiers are all published. Setting `NEXT_PUBLIC_SITE_URL` still
+ * overrides it (useful for a preview deployment on a *.pages.dev subdomain).
+ */
+export const siteUrlIsVerified = true;
+
+/**
+ * Operating since 2010, confirmed by the owner. Exposed as the year rather than
+ * a rounded count of years so the copy cannot silently go stale between builds;
+ * `yearsOperating()` is available where a count genuinely reads better.
+ */
+export const foundedYear = 2010;
+
+/**
+ * @description Completed years of operation as of the build date.
+ * @returns Whole years since `foundedYear`.
+ */
+export function yearsOperating(): number {
+  return new Date().getFullYear() - foundedYear;
+}
 
 /** True when WhatsApp conversion can be wired up at all. */
 export const hasWhatsApp = Boolean(contact.whatsapp);
@@ -109,209 +140,92 @@ export function whatsappLink(message: string): string | null {
 }
 
 /**
- * Facts the owner must confirm before publication. Ordered by impact.
- * `docs/content-verification.md` is generated from the same list.
+ * Facts still awaiting owner confirmation, ordered by impact.
+ * `docs/content-verification.md` is generated from this list.
+ *
+ * RESOLVED on 2026-09-17 (owner sign-off) and therefore removed from here:
+ * WhatsApp, telephone, e-mail, domain, form destination, year of first
+ * operation (2010), fleet sizing policy (describe generically, never a figure),
+ * cargo insurance, GPS and in-transit monitoring, named coverage cities, the
+ * publication of all selected photographs including visible personnel and
+ * third-party signage, the crop-based removal of sensitive information, the
+ * exclusion of the low-quality frame, the logo treatment, and the final copy.
  */
 export const pendingVerification: readonly VerificationItem[] = [
   {
-    id: 'whatsapp',
-    question: '¿Cuál es el número de WhatsApp comercial que debe recibir las cotizaciones?',
-    reason:
-      'No se proporcionó ningún número. Inventar o suponer un número enviaría a los clientes a un tercero.',
-    currentBehaviour:
-      'Los botones de WhatsApp están ocultos. El formulario genera la solicitud y ofrece "Copiar solicitud" como alternativa.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'phone',
-    question: '¿Cuál es el teléfono de contacto que se debe publicar?',
-    reason: 'No se proporcionó ningún teléfono.',
-    currentBehaviour: 'No se muestra ningún teléfono en el encabezado, contacto ni pie de página.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'email',
-    question: '¿A qué correo deben llegar las solicitudes de cotización?',
-    reason: 'No se proporcionó ningún correo.',
-    currentBehaviour:
-      'No se muestra correo y el formulario no lo usa como destino; la conversión depende de WhatsApp o del copiado manual.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'domain',
-    question: '¿Cuál es el dominio definitivo del sitio?',
-    reason:
-      'El dominio se administra por separado (NEUBOX / Cloudflare DNS) y no fue confirmado en el material entregado.',
-    currentBehaviour:
-      'No se publica etiqueta canonical ni sitemap absoluto hasta que se defina NEXT_PUBLIC_SITE_URL.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'form-destination',
+    id: 'certifications',
     question:
-      '¿Cómo quiere recibir las solicitudes: WhatsApp, un correo, o una función de Cloudflare conectada a un buzón?',
-    reason: 'No existen credenciales ni buzón configurado.',
-    currentBehaviour:
-      'El formulario es funcional del lado del cliente: valida, arma el mensaje y lo entrega por WhatsApp o portapapeles.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'years-operating',
-    question: '¿Desde qué año opera Romo\'s Transportes?',
-    reason: 'No hay dato verificado; afirmar antigüedad sin confirmarla sería falso.',
-    currentBehaviour:
-      'El sitio habla de "experiencia en transporte terrestre de carga" sin citar años ni fecha de fundación.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'fleet-size',
-    question: '¿Cuántos tractocamiones, plataformas y cajas secas hay en operación?',
+      '¿Qué certificaciones o registros concretos tiene Romo\'s Transportes (ISO, OEA, CTPAT, SCT u otro), y con qué número o vigencia?',
     reason:
-      'Las fotografías muestran varias unidades, pero una fotografía no es un inventario verificable.',
-    currentBehaviour: 'No se publica ningún conteo de unidades ni estadística de flota.',
+      'Se autorizó mencionar certificaciones, pero no se indicó cuál. Publicar "contamos con certificaciones" sin nombrar ninguna no es verificable por el cliente y no aporta confianza real. Además, el letrero "EMPRESA CERTIFICADA ISO 9001:2015" que aparece al fondo de una fotografía pertenece a la instalación del cliente, y el propietario indicó expresamente no atribuir certificaciones ajenas.',
+    currentBehaviour:
+      'No se menciona ninguna certificación. Sí se publican seguro de carga, GPS y monitoreo durante el traslado, que quedaron autorizados.',
     impact: 'limits-messaging',
   },
   {
     id: 'platform-specs',
     question:
-      '¿Las plataformas son de tres ejes con suspensión de aire y capacidad de 36 toneladas? ¿Aplica a todas las unidades?',
+      '¿Confirmación documental de la capacidad de la plataforma (36 t) y del tipo de suspensión (de aire)?',
     reason:
-      'El material de origen menciona tres ejes, suspensión de aire y 36 toneladas, pero se indicó tratarlo como provisional.',
+      'El propietario indicó mantener únicamente "plataforma de tres ejes" hasta contar con confirmación documental.',
     currentBehaviour:
-      'Se describe la plataforma como "de tres ejes" solo porque los tres ejes son visibles en las fotografías. No se publica capacidad, suspensión ni tonelaje.',
+      'Se publica "plataforma de tres ejes" (los tres ejes son visibles en la fotografía). No se publica tonelaje ni tipo de suspensión.',
     impact: 'limits-messaging',
   },
   {
     id: 'dry-van-specs',
-    question: '¿Qué medidas tienen las cajas secas (48 ft, 53 ft, otras) y qué capacidad soportan?',
-    reason: 'No se confirmaron medidas ni capacidades.',
-    currentBehaviour: 'La caja seca se describe por uso, no por medidas ni capacidad.',
+    question: '¿Qué medidas tienen las cajas secas (48 ft, 53 ft u otras) y qué capacidad soportan?',
+    reason: 'El propietario indicó describir la caja seca por uso hasta confirmar medidas.',
+    currentBehaviour: 'La caja seca se describe por uso, sin medidas ni capacidad.',
     impact: 'limits-messaging',
   },
   {
-    id: 'coverage',
+    id: 'insurance-detail',
     question:
-      '¿En qué estados o corredores opera realmente? ¿Hay rutas de alta frecuencia que quiera destacar?',
+      '¿Qué cobertura y qué aseguradora respaldan la carga, y hay un monto o tope que convenga publicar?',
     reason:
-      'El material menciona "rutas nacionales", pero no se confirmó ninguna ruta, estado ni corredor específico.',
+      'Se autorizó mencionar el seguro de carga, sin detalles de cobertura. Publicar un monto sin confirmarlo sería una afirmación contractual.',
     currentBehaviour:
-      'La sección de cobertura habla de servicio en rutas nacionales dentro de la República Mexicana, sin nombrar estados, ciudades ni corredores.',
+      'Se menciona que la mercancía viaja con seguro de carga y que la cobertura se confirma por servicio, sin montos ni aseguradora.',
     impact: 'limits-messaging',
   },
   {
-    id: 'insurance',
-    question: '¿La mercancía viaja con seguro de carga? ¿Con qué cobertura y aseguradora?',
-    reason: 'No se confirmó ninguna póliza.',
-    currentBehaviour: 'No se menciona seguro en ninguna parte del sitio.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'gps-monitoring',
-    question: '¿Las unidades cuentan con GPS o monitoreo? ¿El cliente puede consultar la ubicación?',
-    reason: 'No se confirmó ningún sistema de rastreo ni monitoreo.',
-    currentBehaviour:
-      'La sección de seguridad habla de comunicación directa durante el traslado, sin mencionar GPS, rastreo satelital ni monitoreo 24/7.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'certifications',
-    question: '¿Romo\'s cuenta con alguna certificación o registro (ISO, OEA, CTPAT, SCT)?',
-    reason:
-      'Una fotografía muestra un letrero "EMPRESA CERTIFICADA ISO 9001:2015", pero pertenece a la instalación del cliente, no a Romo\'s.',
-    currentBehaviour: 'No se menciona ninguna certificación.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'safety-procedures',
+    id: 'monitoring-detail',
     question:
-      '¿Qué procedimientos de seguridad se realizan de forma sistemática: revisión previa al viaje, sujeción de carga, mantenimiento preventivo, planeación de ruta?',
+      '¿El cliente puede consultar la ubicación de su unidad por algún medio (enlace, acceso, reporte) o el seguimiento se da solo por teléfono y WhatsApp?',
     reason:
-      'Las fotografías muestran sujeción con bandas y personal con casco y chaleco, pero eso no confirma un procedimiento formal.',
+      'Se autorizó mencionar GPS y monitoreo. No se confirmó si existe un acceso para el cliente ni un centro de monitoreo con horario definido.',
     currentBehaviour:
-      'La sección de seguridad describe únicamente prácticas visibles en el material propio y en términos operativos, sin afirmar protocolos ni certificaciones.',
+      'Se menciona GPS en las unidades y monitoreo durante el traslado. No se afirma monitoreo 24/7, centro de control ni acceso de consulta para el cliente.',
     impact: 'limits-messaging',
   },
   {
     id: 'operator-qualifications',
-    question: '¿Qué capacitación o licencias tienen los operadores?',
-    reason: 'No se confirmó ningún programa de capacitación.',
+    question: '¿Qué capacitación, licencia federal o programa tienen los operadores?',
+    reason: 'No se confirmó ningún programa ni tipo de licencia.',
     currentBehaviour:
-      'Se habla de "operadores con experiencia en carretera" sin afirmar certificaciones ni programas.',
+      'Se habla de "operadores con experiencia en viaje largo" sin afirmar certificaciones ni programas.',
     impact: 'limits-messaging',
   },
   {
-    id: 'services-offered',
+    id: 'address-hours',
     question:
-      '¿Romo\'s ofrece efectivamente carga completa, caja seca, plataforma y servicio dedicado? ¿Hay algún servicio que NO deba aparecer?',
+      '¿Desea publicar un domicilio de operaciones y un horario de atención comercial?',
     reason:
-      'Los tipos de equipo son visibles en las fotografías, pero la oferta comercial la define el propietario.',
+      'No se proporcionaron. Un domicilio verificado permitiría además usar datos estructurados LocalBusiness, que hoy se omiten.',
     currentBehaviour:
-      'Se publican solo transporte nacional, carga completa, caja seca, plataforma y servicio dedicado. No se menciona refrigerado, materiales peligrosos, cruce fronterizo, aduanas, almacenaje, paquetería ni última milla.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'photo-publication',
-    question:
-      '¿Autoriza publicar las 14 fotografías incluidas, con los encuadres aplicados, en el sitio público?',
-    reason:
-      'Las fotografías provienen de material interno compartido por WhatsApp y no de una sesión fotográfica aprobada.',
-    currentBehaviour: 'Todas las fotografías están publicadas en el sitio pendiente de esta aprobación.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'photo-identifiers',
-    question:
-      '¿Autoriza que sean visibles las placas, los números económicos y los registros USDOT / ICC MC / VIN parcial que aparecen en algunas unidades?',
-    reason:
-      'En la fotografía nocturna de flota se leen ICCMC, USDOT, CA, VIN parcial y KYU. En otras se ven placas y el número económico 0917.',
-    currentBehaviour:
-      'No se editó ninguna fotografía. Los identificadores siguen visibles tal como se capturaron.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'photo-third-parties',
-    question:
-      '¿Autoriza que aparezcan instalaciones y señalización de terceros al fondo de algunas fotografías?',
-    reason:
-      'Dos fotografías muestran señalización de una instalación ajena. El sitio no afirma en ningún momento que sean clientes.',
-    currentBehaviour:
-      'Se aplicaron encuadres que centran la unidad de Romo\'s y reducen la señalización de terceros, sin edición generativa.',
-    impact: 'limits-messaging',
-  },
-  {
-    id: 'photo-people',
-    question: '¿Autoriza que aparezca personal identificable en dos fotografías?',
-    reason:
-      'En la fotografía de tubería se alcanza a ver al operador dentro de la cabina; en la de varilla aparece personal de maniobra de espalda.',
-    currentBehaviour: 'Las fotografías se publican sin edición.',
-    impact: 'blocks-launch',
-  },
-  {
-    id: 'photo-watermark',
-    question:
-      '¿Existe el original sin la marca de agua de cámara en la fotografía de estructuras metálicas?',
-    reason:
-      'El original accesible trae la marca "capturada en motorola one" en la esquina inferior izquierda.',
-    currentBehaviour:
-      'Se recortó el encuadre para excluir la marca. No se aplicó borrado, clonado ni relleno generativo.',
+      'No se publica domicilio ni horario. El JSON-LD usa Organization en lugar de LocalBusiness, que exige dirección física.',
     impact: 'nice-to-have',
   },
   {
-    id: 'photo-excluded',
+    id: 'coverage-additional',
     question:
-      '¿Desea publicar la fotografía del patio de operaciones que se dejó fuera por calidad de encuadre?',
+      '¿Hay más ciudades o corredores de operación frecuente que convenga listar además de los confirmados?',
     reason:
-      'El encuadre está saturado (agua estancada, tarimas sueltas) y la señalización de un tercero es el elemento más legible.',
-    currentBehaviour: 'La fotografía no se publica. El archivo original permanece disponible.',
+      'Se confirmaron Culiacán, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. La lista se cierra con "y otras rutas nacionales".',
+    currentBehaviour:
+      'Se publican las ciudades confirmadas y se indica cobertura en rutas nacionales para el resto del país.',
     impact: 'nice-to-have',
-  },
-  {
-    id: 'mission-copy',
-    question: '¿Aprueba la redacción final de la sección "Nosotros" y el resto de los textos?',
-    reason:
-      'La misión original se reescribió en español profesional, sin reproducirla literalmente y sin agregar afirmaciones nuevas.',
-    currentBehaviour: 'Se publica la versión reescrita.',
-    impact: 'limits-messaging',
   },
   {
     id: 'analytics',
@@ -319,6 +233,15 @@ export const pendingVerification: readonly VerificationItem[] = [
     reason: 'No se configuró ninguna herramienta de analítica.',
     currentBehaviour:
       'No se carga ningún script de terceros. Los botones ya emiten un evento `romo:cta` en el DOM, listo para conectar.',
+    impact: 'nice-to-have',
+  },
+  {
+    id: 'logo-vector',
+    question: '¿Puede conseguir el logotipo en vectorial o PNG con transparencia?',
+    reason:
+      'El archivo entregado es una fotografía de la insignia, con viñeteado y grano. El propietario aprobó el tratamiento actual y sustituirlo más adelante.',
+    currentBehaviour:
+      'La insignia se monta sobre una placa de marca que convierte su borde fotográfico en una decisión de diseño.',
     impact: 'nice-to-have',
   },
 ];

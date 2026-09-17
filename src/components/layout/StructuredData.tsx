@@ -1,20 +1,21 @@
 import { company, contact, siteUrl, siteUrlIsVerified } from '@/data/company';
+import { coverage } from '@/data/content';
 import { faqs } from '@/data/faqs';
 import { services } from '@/data/services';
 
 /**
  * @description JSON-LD structured data.
  *
- * Only confirmed facts are emitted. In particular there is **no**
- * `aggregateRating`, no `review`, no `award`, no `foundingDate`, no
+ * Only confirmed facts are emitted. `foundingDate` (2010), `telephone`,
+ * `email` and the named `areaServed` cities are all owner-confirmed. There is
+ * still **no** `aggregateRating`, no `review`, no `award`, no
  * `numberOfEmployees` and no street address — none of those are verified, and
  * fabricating review markup is both false and a search-policy violation.
  *
  * `LocalBusiness` is deliberately not used: it requires a physical address,
- * which has not been confirmed. The organisation is typed as `MovingCompany`
- * (a schema.org `LocalBusiness` subtype appropriate for a freight carrier)
- * only once an address exists; until then the plain `Organization` type carries
- * the identity, and `Service` nodes describe what is offered.
+ * which has not been confirmed (see `address-hours` in `pendingVerification`).
+ * Until one exists, the plain `Organization` type carries the identity and
+ * `Service` nodes describe what is offered.
  */
 export function StructuredData() {
   const id = siteUrlIsVerified ? `${siteUrl}/#organizacion` : '#organizacion';
@@ -28,16 +29,22 @@ export function StructuredData() {
     logo: siteUrlIsVerified
       ? `${siteUrl}/brand/logo-romos-transportes-512.png`
       : '/brand/logo-romos-transportes-512.png',
-    areaServed: {
-      '@type': 'Country',
-      name: 'México',
-    },
+    // Country plus the owner-confirmed cities. Nothing beyond what was confirmed.
+    areaServed: [
+      { '@type': 'Country', name: 'México' },
+      ...coverage.cities.map((city) => ({
+        '@type': 'City',
+        name: city.name,
+        containedInPlace: { '@type': 'AdministrativeArea', name: city.state },
+      })),
+    ],
     knowsAbout: [
       'Transporte de carga',
       'Transporte terrestre de mercancías',
       'Carga completa',
       'Caja seca',
       'Plataforma',
+      'Fletes nacionales',
     ],
   };
 

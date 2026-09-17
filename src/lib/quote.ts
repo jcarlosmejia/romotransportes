@@ -133,3 +133,27 @@ export function buildQuoteMessage(fields: QuoteFields): string {
 /** Short message for the header / hero "cotizar por WhatsApp" shortcuts. */
 export const quickWhatsAppMessage =
   "Hola, me gustaría solicitar una cotización de transporte con Romo's Transportes.";
+
+/** Subject line for the e-mail delivery path. */
+export const quoteEmailSubject = "Solicitud de cotización — Romo's Transportes";
+
+/**
+ * @description Builds a `mailto:` link carrying the formatted quote request.
+ *
+ * The owner chose e-mail as the secondary destination for the form, with
+ * WhatsApp as the primary call to action. A `mailto:` keeps the site fully
+ * static — no backend, no form provider, no third-party script — and hands the
+ * request to whatever mail client the visitor already uses.
+ * @param email Destination mailbox.
+ * @param fields The validated form values.
+ * @returns The `mailto:` URL.
+ */
+export function quoteMailtoLink(email: string, fields: QuoteFields): string {
+  const params = new URLSearchParams({
+    subject: quoteEmailSubject,
+    body: buildQuoteMessage(fields),
+  });
+  // URLSearchParams encodes spaces as "+", which mail clients render literally
+  // in the body; %20 is what they expect.
+  return `mailto:${email}?${params.toString().replace(/\+/g, '%20')}`;
+}

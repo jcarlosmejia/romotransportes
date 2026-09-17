@@ -128,7 +128,7 @@ export function Header() {
                   id={`nav-desktop-${item.href.slice(1)}`}
                   href={item.href}
                   aria-current={active === item.href ? 'true' : undefined}
-                  className={`relative block rounded-sm px-3 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] transition-colors after:absolute after:inset-x-3 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:bg-romo-red after:transition-transform hover:text-romo-cream-light hover:after:scale-x-100 aria-[current]:text-romo-cream-light aria-[current]:after:scale-x-100 ${
+                  className={`relative block rounded-sm px-2.5 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.1em] transition-colors xl:px-3 after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:bg-romo-red after:transition-transform hover:text-romo-cream-light hover:after:scale-x-100 aria-[current]:text-romo-cream-light aria-[current]:after:scale-x-100 ${
                     active === item.href ? 'text-romo-cream-light' : 'text-romo-muted'
                   }`}
                 >
@@ -140,12 +140,16 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* Held back to `xl`: between 1024px and 1280px the seven nav items plus
+              two buttons overflowed and the nav labels ran together. Below `xl`
+              the primary "Cotizar" button carries the header, and WhatsApp is
+              still reachable from the hero, the mobile drawer and the sticky bar. */}
           <WhatsAppButton
             place="header"
             label="WhatsApp"
             variant="ghost"
             size="sm"
-            className="hidden md:inline-flex"
+            className="hidden xl:inline-flex"
           />
           <QuoteButton place="header" label="Cotizar" size="sm" className="hidden sm:inline-flex" />
 

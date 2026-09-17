@@ -15,6 +15,7 @@ export type IconName =
   | 'flatbed'
   | 'dryvan'
   | 'shield'
+  | 'helmet'
   | 'headset'
   | 'clipboard'
   | 'straps'
@@ -51,10 +52,12 @@ export const trustPoints: readonly TrustPoint[] = [
     icon: 'headset',
   },
   {
-    id: 'carga-completa',
-    title: 'Carga completa',
-    description: 'La unidad se destina a su embarque, sin transbordos intermedios.',
-    icon: 'truck',
+    // Tenure is confirmed (2010), so it earns a slot here. It replaced a
+    // "carga completa" tile that duplicated the Servicios section.
+    id: 'experiencia',
+    title: 'Desde 2010',
+    description: 'Operando transporte de carga por carretera en rutas nacionales.',
+    icon: 'clock',
   },
 ];
 
@@ -91,9 +94,9 @@ export const differentiators: readonly { title: string; description: string; ico
     icon: 'radio',
   },
   {
-    title: 'Experiencia en carretera',
+    title: 'Experiencia en carretera desde 2010',
     description:
-      'Operadores con experiencia en viaje largo y en las maniobras que exige la carga en plataforma.',
+      'Operamos transporte de carga por carretera desde 2010, con operadores con experiencia en viaje largo y en las maniobras que exige la carga en plataforma.',
     icon: 'route',
   },
 ];
@@ -101,11 +104,13 @@ export const differentiators: readonly { title: string; description: string; ico
 /**
  * Safety.
  *
- * What is NOT here, and why: GPS, rastreo satelital, monitoreo 24/7, seguro de
- * carga, certificaciones y protocolos formales. None of those were confirmed.
- * Competitors lead with them; asserting them for Romo's would be fabrication.
- * Each item below corresponds to a practice visible in Romo's own material or
- * inherent to the service being offered.
+ * Cargo insurance, GPS and in-transit monitoring were authorised by the owner on
+ * 2026-09-17 and are now stated — but only at the level that was actually
+ * confirmed. Still deliberately absent: a named insurer, coverage amounts,
+ * "monitoreo 24/7", a control centre, a customer-facing tracking portal, and any
+ * named certification. Those remain open in `pendingVerification`
+ * (`insurance-detail`, `monitoring-detail`, `certifications`) because
+ * authorisation to mention a capability is not the same as knowing its terms.
  */
 export const safetyPractices: readonly { title: string; description: string; icon: IconName }[] = [
   {
@@ -124,7 +129,7 @@ export const safetyPractices: readonly { title: string; description: string; ico
     title: 'Maniobra con personal equipado',
     description:
       'El personal que participa en la carga y descarga trabaja con el equipo de protección que corresponde a la maniobra.',
-    icon: 'shield',
+    icon: 'helmet',
   },
   {
     title: 'Ruta definida antes de confirmar',
@@ -133,10 +138,22 @@ export const safetyPractices: readonly { title: string; description: string; ico
     icon: 'map',
   },
   {
+    title: 'Mercancía con seguro de carga',
+    description:
+      'La carga viaja asegurada. La cobertura que aplica a cada embarque se confirma al cotizar, según la mercancía y su valor declarado.',
+    icon: 'shield',
+  },
+  {
+    title: 'Unidades con GPS y monitoreo',
+    description:
+      'Las unidades cuentan con GPS y damos seguimiento a la unidad mientras está en ruta, para poder informar la situación del viaje.',
+    icon: 'radio',
+  },
+  {
     title: 'Contacto durante el traslado',
     description:
-      'Mantenemos comunicación con la unidad en ruta para poder informar y resolver cualquier cambio.',
-    icon: 'radio',
+      'Comunicación directa con la operación mientras la mercancía está en camino, para resolver cualquier cambio.',
+    icon: 'headset',
   },
   {
     title: 'Confirmación de entrega',
@@ -213,22 +230,35 @@ export const industries: readonly { title: string; description: string }[] = [
 ];
 
 /**
- * Coverage copy.
+ * Coverage.
  *
- * No state, city or corridor is named. The source material only said "rutas
- * nacionales". Naming a corridor because it appears in an example would be
- * publishing an unverified route claim.
+ * The cities below were confirmed by the owner on 2026-09-17, so they are now
+ * named. The list is closed with "y otras rutas nacionales" rather than padded
+ * with plausible-sounding corridors: only these were confirmed. The map in
+ * `MexicoMap` still draws no route lines or markers — the confirmation was of
+ * cities served, not of specific highway corridors or transit times.
  */
 export const coverage = {
   title: 'Movemos tu carga por México',
-  body: 'Operamos traslados de carga dentro de la República Mexicana. Cada servicio se organiza a partir del punto de origen, el destino y el tipo de mercancía, para definir la unidad y la ruta que corresponden.',
+  body: 'Operamos traslados de carga dentro de la República Mexicana, con servicio a las principales ciudades del país. Cada servicio se organiza a partir del punto de origen, el destino y el tipo de mercancía, para definir la unidad y la ruta que corresponden.',
   note: 'Si su ruta requiere una ventana de carga específica o una maniobra particular en origen o destino, indíquelo al solicitar la cotización.',
   bullets: [
-    'Traslados dentro de la República Mexicana',
+    'Servicio a las principales ciudades del país',
     'Rutas definidas por origen, destino y tipo de carga',
     'Viaje largo con operador asignado a la unidad',
     'Coordinación de ventanas de carga y entrega',
   ],
+  /** Confirmed destinations. Used by the coverage section and the JSON-LD. */
+  cities: [
+    { name: 'Culiacán', state: 'Sinaloa' },
+    { name: 'Hermosillo', state: 'Sonora' },
+    { name: 'Tijuana', state: 'Baja California' },
+    { name: 'Tecate', state: 'Baja California' },
+    { name: 'León', state: 'Guanajuato' },
+    { name: 'Interior de Jalisco', state: 'Jalisco' },
+  ],
+  /** Shown after the city list so it never reads as an exhaustive map. */
+  citiesFootnote: 'y otras rutas nacionales.',
 } as const;
 
 /** About / mission — rewritten from the owner's original wording, not copied. */
@@ -236,8 +266,8 @@ export const about = {
   overline: "Nosotros",
   title: "Romo's Transportes",
   paragraphs: [
-    'Romo\'s Transportes es una empresa mexicana de transporte terrestre de carga. Movemos mercancía de empresas dentro de la República Mexicana con unidades propias, plataformas y cajas secas, de acuerdo con lo que cada embarque necesita.',
-    'Trabajamos con una idea simple: la mercancía que nos entregan es responsabilidad nuestra desde que se carga hasta que se confirma la entrega. Eso significa revisar el equipo antes de salir, asegurar la carga como corresponde y mantener comunicación con el cliente mientras la unidad está en ruta.',
+    'Romo\'s Transportes es una empresa mexicana de transporte terrestre de carga. Desde 2010 movemos mercancía de empresas dentro de la República Mexicana con unidades propias, plataformas y cajas secas, de acuerdo con lo que cada embarque necesita.',
+    'Trabajamos con una idea simple: la mercancía que nos entregan es responsabilidad nuestra desde que se carga hasta que se confirma la entrega. Eso significa revisar el equipo antes de salir, asegurar la carga como corresponde, mantener las unidades con GPS y seguimiento en ruta, y comunicarnos con el cliente durante el traslado.',
     'Nos interesa la relación de largo plazo más que el viaje aislado. Por eso la atención es directa: quien cotiza es quien da seguimiento, y cuando el equipo o la ruta no son los adecuados para una carga, lo decimos antes de confirmar el servicio.',
   ],
 } as const;
