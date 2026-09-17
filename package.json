@@ -9,14 +9,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
+    "build:turbopack": "next build --turbopack",
     "start": "npx serve out -l 4310",
-    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "images": "node scripts/build-images.mjs",
     "brand": "node scripts/build-brand.mjs",
-    "build:turbopack": "next build --turbopack",
-    "lint:fix": "eslint . --fix",
-    "docs": "node scripts/build-docs.mjs"
+    "docs": "node scripts/build-docs.mjs",
+    "deploy": "wrangler deploy",
+    "deploy:dry": "wrangler deploy --dry-run",
+    "preview:cf": "wrangler dev"
   },
   "dependencies": {
     "next": "16.3.5",
@@ -34,6 +37,7 @@
     "postcss": "^8.5.6",
     "sharp": "0.35.4",
     "tailwindcss": "4.3.3",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "wrangler": "^4.133.0"
   }
 }

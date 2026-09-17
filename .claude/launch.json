@@ -8,6 +8,12 @@
       "port": 4310
     },
     {
+      "name": "romo-workers",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "dev", "--port", "4320"],
+      "port": 4320
+    },
+    {
       "name": "romo-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],

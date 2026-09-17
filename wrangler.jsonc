@@ -1,0 +1,42 @@
+{
+  // Romo's Transportes — static-assets-only Worker.
+  //
+  // WHY THIS FILE EXISTS
+  // The Cloudflare project was created under Workers (Workers & Pages → Create
+  // → Workers), not Pages. A Workers project needs a Wrangler configuration
+  // file to know what to deploy; without one the build has nothing to act on.
+  // This repo previously had none, because it was set up for the Pages flow
+  // (framework preset + build output directory, configured in the dashboard
+  // rather than in the repo).
+  //
+  // There is no `main` entrypoint on purpose: `main` is optional for
+  // assets-only Workers, and this site is a pure static export. No Worker
+  // script runs, so there are no billable invocations for page views.
+  //
+  // https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "romotransportes",
+  "compatibility_date": "2026-09-16",
+
+  "assets": {
+    // `next build` with `output: 'export'` writes here.
+    "directory": "./out/",
+
+    // Serve the 404.html that Next generates, with a 404 status, for any path
+    // that does not match a file.
+    "not_found_handling": "404-page",
+
+    // Matches `trailingSlash: true` in next.config.ts: Next emits
+    // `aviso-de-privacidad/index.html`, which this serves at
+    // `/aviso-de-privacidad/` — the same URL the site's own links use.
+    // This is also the default; stated explicitly so the pairing with
+    // next.config.ts is obvious to the next person.
+    "html_handling": "auto-trailing-slash"
+  },
+
+  "observability": {
+    // Cheap to leave on for an assets-only Worker and useful for confirming a
+    // deploy actually served traffic.
+    "enabled": true
+  }
+}

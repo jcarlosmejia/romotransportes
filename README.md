@@ -62,6 +62,9 @@ Abre <http://localhost:3000>.
 | `npm run images` | Regenera las renditions responsivas y los derivados de marca |
 | `npm run brand` | Muestrea el color del logotipo y audita el contraste WCAG |
 | `npm run docs` | Regenera `docs/content-verification.md` desde el código |
+| `npm run deploy:dry` | Valida `wrangler.jsonc` y cuenta los archivos a subir, **sin desplegar** |
+| `npm run deploy` | Despliega a Cloudflare Workers (requiere `wrangler login`) |
+| `npm run preview:cf` | Sirve `out/` con el runtime de Workers (`wrangler dev`) |
 
 > `build` usa **`next build --webpack`** a propósito. El builder Turbopack falla
 > en este entorno al levantar su proceso trabajador de PostCSS
@@ -70,24 +73,49 @@ Abre <http://localhost:3000>.
 
 ---
 
-## Despliegue en Cloudflare Pages
+## Despliegue en Cloudflare
 
-Configuración verificada contra la documentación de Cloudflare
-(*Pages → Framework guides → Next.js → Static site*, act. 25/08/2026) y contra la
-guía de export estático de Next.js 16.3.5:
+El proyecto está dado de alta como **Worker** (Workers & Pages → Create →
+Workers), no como proyecto de Pages. Eso cambia la configuración: un Worker se
+configura **desde el repositorio**, con `wrangler.jsonc`, mientras que Pages se
+configura en el panel. La ausencia de ese archivo es lo que impedía desplegar.
 
-| Opción | Valor |
-| :-- | :-- |
-| Preset de framework | **Next.js (Static HTML Export)** |
-| Comando de build | **`npm run build`** |
-| Directorio de salida | **`out`** |
-| Versión de Node | **20 o superior** (variable `NODE_VERSION`) |
-| Rama de producción | `main` |
+### `wrangler.jsonc`
 
-Cloudflare propone `npx next build` en su preset; use **`npm run build`** para
-que se aplique el `--webpack` explicado arriba.
+```jsonc
+{
+  "name": "romotransportes",
+  "compatibility_date": "2026-09-16",
+  "assets": {
+    "directory": "./out/",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
+```
 
-`next.config.ts` ya fija lo necesario:
+Es un Worker **sólo de assets**: no declara `main`, porque `main` es opcional
+cuando no hay script. El sitio es un export estático puro, así que **ninguna
+invocación de Worker ocurre al ver una página** y no hay costo por request de
+navegación.
+
+Dos ajustes que importan:
+
+- `not_found_handling: "404-page"` sirve el `out/404.html` que genera Next, con
+  código 404.
+- `html_handling: "auto-trailing-slash"` empareja con `trailingSlash: true` de
+  `next.config.ts`: Next emite `aviso-de-privacidad/index.html` y esto lo sirve
+  en `/aviso-de-privacidad/`, la misma URL que usan los enlaces del sitio.
+
+> No se usa **vinext** a propósito. Cloudflare lo recomienda para Next.js en
+> Workers, pero existe para las funciones de Next que necesitan runtime de
+> servidor. Este sitio es `output: 'export'`, así que un Worker de assets es
+> más simple y no añade una capa de adaptación.
+
+### Restricciones del export estático (siguen vigentes)
+
+`next.config.ts` no cambió al pasar de Pages a Workers: `output: 'export'`
+produce el mismo `out/`, y ahora `wrangler.jsonc` es lo que apunta ahí.
 
 ```ts
 output: 'export',          // emite HTML/CSS/JS estático en out/
@@ -95,78 +123,53 @@ trailingSlash: true,       // /ruta/ → /ruta/index.html
 images: { unoptimized: true },
 ```
 
-No se usa ninguna función incompatible con el export estático: sin SSR, sin rutas
-de API, sin middleware, sin Server Actions, sin ISR, sin rutas dinámicas. Las
-rutas de metadatos (`sitemap.ts`, `robots.ts`, `manifest.ts`) declaran
+No se usa ninguna función incompatible con el export estático: sin SSR, sin
+rutas de API, sin middleware, sin Server Actions, sin ISR, sin rutas dinámicas.
+Las rutas de metadatos (`sitemap.ts`, `robots.ts`, `manifest.ts`) declaran
 `export const dynamic = 'force-static'`, requisito del export.
+
+### Ajustes en el panel (Workers Builds)
+
+| Campo | Valor |
+| :-- | :-- |
+| Build command | **`npm run build`** |
+| Deploy command | **`npx wrangler deploy`** (el predeterminado) |
+| Variable | **`NODE_VERSION` = `20`** o superior |
+| Rama de producción | `main` |
+
+No hace falta configurar "build output directory": en un Worker eso lo define
+`assets.directory` dentro de `wrangler.jsonc`.
+
+Tampoco hace falta ninguna variable `NEXT_PUBLIC_*`: los datos confirmados
+están en `src/data/company.ts` y el build ya los incluye.
+
+### Comprobar antes de desplegar
+
+```bash
+npm run build && npm run deploy:dry
+```
+
+`deploy:dry` valida `wrangler.jsonc` y cuenta los archivos que subiría, sin
+desplegar nada. En la última corrida: 215 archivos leídos de `out/`, Worker de
+0.31 KiB (sólo el shim de assets, sin script).
 
 ### Cabeceras HTTP
 
-Un export estático no puede emitir cabeceras desde `next.config.ts`, así que van
-en **`public/_headers`**, que Next copia a `out/_headers` y Cloudflare Pages lee
-automáticamente. Incluye:
-
-- Cabeceras de seguridad: `X-Content-Type-Options`, `Referrer-Policy`,
-  `X-Frame-Options`, `Permissions-Policy`, `Strict-Transport-Security` (sin
-  `preload`, porque inscribirse en la lista HSTS es difícil de revertir y es
-  decisión del propietario) y `Cross-Origin-Opener-Policy`.
-- Caché inmutable de un año para `/_next/static/*`, que llevan hash en el
-  nombre. Sin esto, Cloudflare Pages los sirve con `max-age=0,
-  must-revalidate` y cada visita repetida los revalida.
-- Caché de una semana con `stale-while-revalidate` para `/images/*` y
-  `/brand/*`.
-- HTML siempre revalidado, para que un redespliegue se vea de inmediato.
-
-No se declara `Content-Security-Policy`: el sitio no renderiza contenido de
-usuario ni carga scripts de terceros, así que la superficie es mínima, y una CSP
-mal calibrada rompería el script en línea que habilita las animaciones. Queda
-como endurecimiento opcional.
-
-### Variables de entorno
-
-**No hace falta configurar ninguna para publicar.** Los datos confirmados están
-en `src/data/company.ts` y el build ya los incluye. Las variables existen sólo
-para sobrescribirlos sin tocar código:
-
-| Variable | Valor por omisión (ya integrado) |
-| :-- | :-- |
-| `NEXT_PUBLIC_ROMO_WHATSAPP` | `523323838729` (E.164, sólo dígitos, sin `+`) |
-| `NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY` | `+52 33 2383 8729` |
-| `NEXT_PUBLIC_ROMO_PHONE` | `+523323838729` |
-| `NEXT_PUBLIC_ROMO_PHONE_DISPLAY` | `+52 33 2383 8729` |
-| `NEXT_PUBLIC_ROMO_EMAIL` | `jcarlosmejiaayala@gmail.com` |
-| `NEXT_PUBLIC_SITE_URL` | `https://romostransportes.com.mx` |
-
-Caso de uso real de la sobrescritura: en un despliegue de vista previa
-(`*.pages.dev`), defina `NEXT_PUBLIC_SITE_URL` con ese subdominio para que la
-etiqueta canonical y el sitemap no apunten al dominio de producción.
-
-El dominio se administra por separado (NEUBOX / Cloudflare DNS); ver
-§ *Dominio y DNS* más abajo.
-
-### Pasos en el panel de Cloudflare
-
-1. *Workers & Pages* → **Create** → pestaña **Pages** → **Connect to Git**.
-2. Autorice el repositorio y elija la rama `main`.
-3. En *Build settings*:
-   - Framework preset: **Next.js (Static HTML Export)**
-   - Build command: **`npm run build`**
-   - Build output directory: **`out`**
-4. En *Variables and Secrets*, añada **`NODE_VERSION` = `20`** (o superior). Es
-   la única variable realmente necesaria.
-5. **Save and Deploy.**
+`public/_headers` → `out/_headers`. Funciona igual en Workers static assets que
+en Pages: el archivo no se sirve como asset, Workers lo interpreta y aplica sus
+reglas sobre las respuestas de assets. Contenido y motivos en § *Cabeceras
+HTTP* más abajo.
 
 ### Dominio y DNS
 
-En *Pages → el proyecto → Custom domains*, agregue `romostransportes.com.mx` y
-`www.romostransportes.com.mx`. Cloudflare indicará los registros a crear:
+En el Worker → *Settings* → *Domains & Routes* → **Add** → *Custom domain*,
+agregue `romostransportes.com.mx` y `www.romostransportes.com.mx`.
 
 - Si el dominio ya usa los nameservers de Cloudflare, los registros se crean
   automáticamente.
-- Si el DNS sigue en NEUBOX, cree ahí el `CNAME` que Cloudflare le indique
-  apuntando al subdominio `*.pages.dev` del proyecto. Para el dominio raíz,
-  NEUBOX debe soportar `CNAME` plano o `ALIAS`; si no lo soporta, conviene mover
-  los nameservers a Cloudflare.
+- Si el DNS sigue en NEUBOX, cree ahí el `CNAME` que Cloudflare indique. Para
+  el dominio raíz NEUBOX debe soportar `CNAME` plano o `ALIAS`; si no, conviene
+  mover los nameservers a Cloudflare.
 
 ### Después del primer despliegue
 
@@ -176,10 +179,11 @@ la URL publicada** y registrar los resultados. Los objetivos son Performance
 
 Conviene además:
 
-- Verificar en un teléfono real que el botón de WhatsApp abre la app con el
+- Verificar en un teléfono real que el botón flotante abre WhatsApp con el
   mensaje ya escrito.
-- Enviar una solicitud de prueba por correo y confirmar que llega a
+- Enviar una solicitud de prueba con el formulario y confirmar que llega a
   `jcarlosmejiaayala@gmail.com`.
+- Comprobar que una URL inexistente devuelve el 404 del sitio con código 404.
 - Dar de alta el sitio en Google Search Console y enviar
   `https://romostransportes.com.mx/sitemap.xml`.
 

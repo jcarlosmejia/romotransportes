@@ -1,9 +1,10 @@
-# Cloudflare Pages custom headers.
+# Cloudflare custom headers for static assets.
 #
 # `output: 'export'` cannot emit HTTP headers (Next.js `headers()` is one of the
 # unsupported features in a static export), so they are declared here instead.
-# Cloudflare Pages reads this file from the root of the build output; Next copies
-# everything in `public/` into `out/`, so it lands in the right place.
+# Workers reads this file from the root of the assets directory and does not
+# serve it; Next copies everything in `public/` into `out/`, so it lands in the
+# right place. The same file format works on Pages.
 #
 # Order matters: later, more specific rules win.
 
@@ -23,13 +24,27 @@
   Cross-Origin-Opener-Policy: same-origin
 
 # Hashed build assets are immutable: the filename changes whenever the content
-# does, so they can be cached for a year. Without this, Cloudflare Pages serves
-# them with `max-age=0, must-revalidate` and every repeat visit re-validates.
+# does, so they can be cached for a year. Without this they are served with
+# `max-age=0, must-revalidate` and every repeat visit re-validates. One splat
+# rule covers chunks, CSS and fonts — a splat matches greedily, across path
+# separators.
+#
+# KNOWN COSMETIC QUIRK (measured under `wrangler dev`, not yet on production):
+# `.woff2` responses come back with the value twice —
+# `public, max-age=31536000, immutable, public, max-age=31536000, immutable`.
+# It is not caused by this file: only one rule here matches that path, and root
+# probe files with no Cache-Control rule get `max-age=0, must-revalidate`. The
+# asset server appears to apply its own immutable default to fonts, and per the
+# `_headers` spec a repeated header is joined with a comma. `.css` and `.js`
+# under the very same rule are not affected.
+#
+# Left as-is deliberately. The combined value is functionally identical (RFC
+# 9110 parsers read the first `max-age`), whereas narrowing this rule to skip
+# `/_next/static/media/*` would drop font caching entirely if production does
+# NOT add that default. Confirm against the deployed URL with:
+#   curl -sI https://romostransportes.com.mx/_next/static/media/<hash>.woff2
+# and only then narrow the rule if the duplicate is real in production.
 /_next/static/*
-  Cache-Control: public, max-age=31536000, immutable
-
-# Self-hosted fonts also carry a content hash in the filename.
-/_next/static/media/*
   Cache-Control: public, max-age=31536000, immutable
 
 # Photography and brand derivatives are content-addressed by their slug and
