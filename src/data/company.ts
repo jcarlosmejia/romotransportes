@@ -124,8 +124,11 @@ export function yearsOperating(): number {
   return new Date().getFullYear() - foundedYear;
 }
 
-/** True when WhatsApp conversion can be wired up at all. */
-export const hasWhatsApp = Boolean(contact.whatsapp);
+/**
+ * `hasWhatsApp` used to gate several inline CTAs. Those are gone — WhatsApp has
+ * a single entry point now, and `WhatsAppFloat` checks `whatsappLink()` itself —
+ * so the flag was removed rather than left as an unused export.
+ */
 export const hasPhone = Boolean(contact.phone);
 export const hasEmail = Boolean(contact.email);
 

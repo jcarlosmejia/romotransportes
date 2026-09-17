@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useRef, useState } from 'react';
-import { contact, hasWhatsApp, whatsappLink } from '@/data/company';
+import { contact } from '@/data/company';
 import {
   buildQuoteMessage,
   emptyQuote,
@@ -51,21 +51,22 @@ const FIELDS: readonly FieldSpec[] = [
  *
  * DELIVERY MODEL (static site, no backend)
  * ----------------------------------------
- * This is a real, working conversion path rather than a decorative form. On
- * submit it validates the input, formats a readable Spanish message and hands
- * it off by the route the visitor picks:
+ * This form delivers by **e-mail only**. On submit it validates the input,
+ * formats a readable Spanish message and opens the visitor's mail client via
+ * `mailto:` addressed to the confirmed mailbox.
  *
- *   • **WhatsApp** — the primary action, per the owner's instruction. Opens
- *     WhatsApp pre-filled with the formatted request.
- *   • **Correo** — the secondary action, delivering the same request to the
- *     confirmed mailbox via `mailto:`.
- *   • If neither channel is configured, the request is copied to the clipboard
- *     so nothing the visitor typed is lost, and the form says so plainly.
+ * WhatsApp is deliberately NOT a submit option here. It has exactly one entry
+ * point site-wide — the floating button (`layout/WhatsAppFloat.tsx`) — which
+ * opens WhatsApp in a single click with no form to fill. Offering a second,
+ * multi-step WhatsApp route from inside the form would undo that.
  *
- * No fake "message sent" confirmation is ever shown. Keeping delivery
- * client-side is what lets the site stay a pure static export: no backend, no
- * form provider, no third-party script. Swapping in a Cloudflare Pages Function
- * later means changing only `onSubmit` — see README.
+ * If no mailbox were configured, the request is copied to the clipboard instead
+ * so nothing the visitor typed is lost, and the form says so plainly. No fake
+ * "message sent" confirmation is ever shown.
+ *
+ * Keeping delivery client-side is what lets the site stay a pure static export:
+ * no backend, no form provider, no third-party script. Swapping in a Cloudflare
+ * Pages Function later means changing only `onSubmit` — see README.
  *
  * ACCESSIBILITY
  * -------------
@@ -79,9 +80,7 @@ export function QuoteForm() {
   const [fields, setFields] = useState<QuoteFields>(emptyQuote);
   const [errors, setErrors] = useState<QuoteErrors>({});
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({});
-  const [status, setStatus] = useState<'idle' | 'whatsapp' | 'email' | 'copied' | 'copy-failed'>(
-    'idle',
-  );
+  const [status, setStatus] = useState<'idle' | 'email' | 'copied' | 'copy-failed'>('idle');
   const summaryRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const uid = useId();
@@ -103,54 +102,33 @@ export function QuoteForm() {
     setErrors(validateQuote(fields));
   };
 
-  async function deliver(intent: 'whatsapp' | 'email') {
-    const message = buildQuoteMessage(fields);
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-    if (intent === 'whatsapp') {
-      const link = whatsappLink(message);
-      if (link) {
-        window.open(link, '_blank', 'noopener,noreferrer');
-        setStatus('whatsapp');
-        return;
-      }
-    }
-
-    if (intent === 'email' && contact.email) {
-      window.location.href = quoteMailtoLink(contact.email, fields);
-      setStatus('email');
-      return;
-    }
-
-    // No channel available: preserve the visitor's work rather than lose it.
-    try {
-      await navigator.clipboard.writeText(message);
-      setStatus('copied');
-    } catch {
-      setStatus('copy-failed');
-    }
-  }
-
-  async function submitWith(intent: 'whatsapp' | 'email') {
     const found = validateQuote(fields);
     setErrors(found);
     setTouched(Object.fromEntries(FIELDS.map((f) => [f.name, true])));
 
-    const keys = Object.keys(found) as FieldKey[];
-    if (keys.length > 0) {
+    if (Object.keys(found).length > 0) {
       setStatus('idle');
       // Announce the summary, then let the user jump to the first problem.
       requestAnimationFrame(() => summaryRef.current?.focus());
       return;
     }
 
-    await deliver(intent);
-  }
+    if (contact.email) {
+      window.location.href = quoteMailtoLink(contact.email, fields);
+      setStatus('email');
+      return;
+    }
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // The default submit is the primary channel: WhatsApp when configured,
-    // e-mail otherwise. Enter in a text field therefore does the expected thing.
-    void submitWith(hasWhatsApp ? 'whatsapp' : 'email');
+    // No mailbox configured: preserve the visitor's work rather than lose it.
+    try {
+      await navigator.clipboard.writeText(buildQuoteMessage(fields));
+      setStatus('copied');
+    } catch {
+      setStatus('copy-failed');
+    }
   }
 
   const errorKeys = Object.keys(errors) as FieldKey[];
@@ -276,48 +254,24 @@ export function QuoteForm() {
         Datos necesarios para poder cotizar. El resto es opcional.
       </p>
 
-      {/* WhatsApp is the primary action by the owner's instruction; e-mail is the
-          secondary route to the same confirmed mailbox. */}
-      <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+      {/* One action. E-mail is this form's only destination — WhatsApp lives in
+          the floating button, one click away, with no form to fill. */}
+      <div className="mt-7">
         <button
           id="enviar-cotizacion"
           type="submit"
-          data-cta={hasWhatsApp ? 'enviar-whatsapp' : 'copiar-solicitud'}
+          data-cta={contact.email ? 'enviar-correo' : 'copiar-solicitud'}
           data-cta-place="formulario"
-          className="btn btn-primary flex-1"
+          className="btn btn-primary w-full"
         >
-          <Icon name={hasWhatsApp ? 'whatsapp' : 'quote'} className="h-[1.125rem] w-[1.125rem]" />
-          {hasWhatsApp ? 'Enviar por WhatsApp' : 'Generar solicitud'}
+          <Icon name={contact.email ? 'mail' : 'quote'} className="h-[1.125rem] w-[1.125rem]" />
+          {contact.email ? 'Enviar por correo' : 'Generar solicitud'}
         </button>
-
-        {contact.email ? (
-          <button
-            id="enviar-cotizacion-correo"
-            type="button"
-            onClick={() => void submitWith('email')}
-            data-cta="enviar-correo"
-            data-cta-place="formulario"
-            className="btn btn-secondary sm:flex-1"
-          >
-            <Icon name="mail" className="h-[1.125rem] w-[1.125rem]" />
-            Enviar por correo
-          </button>
-        ) : null}
       </div>
 
       {/* Post-submit status. Never claims a message was delivered to an inbox
           that does not exist. */}
       <div aria-live="polite" className="mt-4">
-        {status === 'whatsapp' ? (
-          <p className="flex items-start gap-2.5 border-l-2 border-[var(--success)] bg-romo-charcoal p-3.5 text-sm">
-            <Icon name="check" className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-[var(--success)]" />
-            <span>
-              Abrimos WhatsApp con tu solicitud lista. Si no se abrió, revisa si el navegador bloqueó
-              la ventana.
-            </span>
-          </p>
-        ) : null}
-
         {status === 'email' ? (
           <p className="flex items-start gap-2.5 border-l-2 border-[var(--success)] bg-romo-charcoal p-3.5 text-sm">
             <Icon name="check" className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-[var(--success)]" />

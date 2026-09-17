@@ -23,7 +23,7 @@ especificaciones de equipo y los datos de contacto el **17 de septiembre de
 | Inicio de operaciones | 2010 |
 | Cobertura | Culiacán, Hermosillo, Tijuana, Tecate, León, interior de Jalisco, y otras rutas nacionales |
 | Seguro, GPS y monitoreo | Publicados en la sección de Seguridad |
-| Destino del formulario | WhatsApp (principal) y el correo anterior (secundario) |
+| Destino del formulario | Sólo correo. WhatsApp queda en el botón flotante |
 
 Quedan **10 puntos de mejora**, **ninguno bloqueante**:
 **[`docs/content-verification.md`](docs/content-verification.md)**.
@@ -296,14 +296,17 @@ Tamaño: 56 px en móvil, 60 px en escritorio; por encima del mínimo de 44 px.
 
 El sitio es estático y no hay backend ni credenciales de ningún proveedor de
 formularios, así que la entrega es **100 % del lado del cliente**: se valida la
-entrada, se arma un mensaje en español legible y se entrega.
+entrada, se arma un mensaje en español legible y se abre el programa de correo
+del visitante con `mailto:` dirigido al buzón confirmado.
 
-- Con número de WhatsApp configurado → abre WhatsApp con el mensaje ya escrito.
-- Sin número configurado → copia la solicitud al portapapeles para que nada de lo
-  que escribió el visitante se pierda, y lo dice con claridad.
+**El formulario entrega sólo por correo.** WhatsApp no es una opción de envío
+aquí a propósito: tiene un único punto de entrada en el sitio —el botón
+flotante— que abre WhatsApp en un clic sin llenar nada. Ofrecer además una ruta
+de WhatsApp de varios pasos desde dentro del formulario anularía eso.
 
-**Nunca se muestra un "mensaje enviado" falso.** El formulario es una vía de
-conversión real, no un adorno.
+Si no hubiera buzón configurado, la solicitud se copia al portapapeles para que
+nada de lo que escribió el visitante se pierda, y el formulario lo dice con
+claridad. **Nunca se muestra un "mensaje enviado" falso.**
 
 Formato del mensaje generado:
 
@@ -363,7 +366,7 @@ elija sin tocar los botones.
 | Foco de teclado | Anillo crema visible, 2 px, contraste 12.4:1 |
 | Menú móvil | `aria-expanded`, trampa de foco, Escape cierra y devuelve el foco, bloqueo de scroll |
 | Formulario | Etiquetas, `aria-invalid`, `aria-describedby`, resumen con `role="alert"` y foco |
-| Entrega del formulario | WhatsApp verificado con el número real; `mailto:` verificado (acentos, guión largo y saltos de línea íntegros) |
+| Entrega del formulario | Un solo botón, `mailto:` al buzón confirmado; verificado que conserva acentos, guión largo y saltos de línea |
 | Botón flotante de WhatsApp | Un solo enlace `wa.me` en la página; 1 clic, 0 modales, 0 formularios; `target="_blank"` con `rel="noopener noreferrer"`; sin solape con la barra fija en 390×844 |
 | Preguntas frecuentes | `<details>`/`<summary>` nativos, funcionan sin JavaScript |
 | Contraste | 13/13 combinaciones cumplen AA (`npm run brand`) |
