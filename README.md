@@ -162,44 +162,46 @@ HTTP* más abajo.
 
 ### Dominio y DNS
 
-Los dos hostnames están declarados en `wrangler.jsonc`, así que `wrangler deploy`
-los adjunta al Worker:
+**El dominio se adjunta desde el panel, no desde `wrangler.jsonc`.** Worker →
+*Settings* → *Domains & Routes* → **Add** → *Custom domain* →
+`romostransportes.com.mx`, y repetir con `www.romostransportes.com.mx`.
 
-```jsonc
-"routes": [
-  { "pattern": "romostransportes.com.mx", "custom_domain": true },
-  { "pattern": "www.romostransportes.com.mx", "custom_domain": true }
-]
-```
+#### Por qué no está como configuración
 
-`custom_domain: true` —y no una ruta normal— es lo que hace que Cloudflare
-apunte el DNS del hostname al Worker y emita su certificado.
+Se intentó declararlos en `wrangler.jsonc` con
+`"routes": [{ "pattern": "...", "custom_domain": true }]`. **Ese build falló y
+tiró el sitio**: el hostname `workers.dev` empezó a devolver error 1042 de
+Cloudflare con todos los assets en 404, y el dominio propio siguió en 521.
 
-#### El estado en que estaba el dominio
+La causa: la zona ya tenía registros `A` proxeados para ambos nombres
+apuntando a un origen antiguo. Adjuntar un dominio personalizado tiene que
+**reemplazar** el registro existente, y el panel lo resuelve con una
+confirmación interactiva ("¿reemplazar este registro?") que un
+`wrangler deploy` corriendo desatendido en Workers Builds no puede contestar.
 
-Diagnóstico del 17/09/2026, antes de este cambio:
+Si alguna vez se quiere volver a poner como configuración, hay que **borrar
+primero** los dos registros `A` de `romostransportes.com.mx` y `www` en la
+pestaña **DNS** de la zona. El bloque exacto quedó comentado en
+`wrangler.jsonc` con esta misma advertencia.
+
+`workers_dev: true` está fijado explícitamente para que el hostname
+`*.workers.dev` siga sirviendo pase lo que pase con el DNS de la zona: es la
+URL de respaldo y la que conviene usar para verificar.
+
+#### Estado del dominio antes de adjuntarlo
+
+Diagnóstico del 17/09/2026:
 
 | Comprobación | Resultado |
 | :-- | :-- |
 | Nameservers | `rick.ns.cloudflare.com`, `elma.ns.cloudflare.com` → la zona **sí** está en Cloudflare |
 | `A` de apex y `www` | Resolvían a IPs de Cloudflare |
-| `https://romostransportes.com.mx` | **Error 521 de Cloudflare** (origen inaccesible) |
+| `https://romostransportes.com.mx` | **Error 521** (origen inaccesible) |
 | `http://romostransportes.com.mx` | 200, pero sirviendo una página vieja (`Last-Modified` del 11/09) |
-| `https://romotransportes.jcarlosmejiaayala.workers.dev` | 200, sitio correcto |
 
-Es decir: la zona estaba en Cloudflare y el DNS existía, pero estaba
-**proxeando a un origen antiguo** en lugar de apuntar al Worker. Tener el
-dominio "configurado" en Cloudflare no es lo mismo que tenerlo **enrutado al
-Worker**; son dos cosas distintas y sólo la segunda hace que el sitio aparezca.
-
-#### Si el deploy se queja del registro existente
-
-Adjuntar un dominio personalizado **reemplaza** el registro DNS que ya existe.
-Si `wrangler deploy` (o Workers Builds) falla diciendo que el registro ya
-existe, borre en la pestaña **DNS** de la zona los dos registros `A` de
-`romostransportes.com.mx` y `www`, y vuelva a desplegar. La alternativa por
-panel es: Worker → *Settings* → *Domains & Routes* → **Add** → *Custom domain*,
-que muestra una confirmación para reemplazar el registro.
+Tener el dominio dado de alta en Cloudflare no es lo mismo que tenerlo
+**enrutado al Worker**. El DNS existía y apuntaba a un origen antiguo; hasta
+que el hostname se adjunta al Worker, el sitio no aparece ahí.
 
 ### Después del primer despliegue
 

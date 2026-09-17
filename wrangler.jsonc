@@ -34,26 +34,32 @@
     "html_handling": "auto-trailing-slash"
   },
 
-  // Custom domains. Declaring them here means `wrangler deploy` attaches the
-  // hostnames to this Worker, instead of that binding living only as a click in
-  // the dashboard.
-  //
-  // `custom_domain: true` (not a plain route) is what makes Cloudflare point the
-  // hostname's DNS at the Worker and issue its certificate.
-  //
-  // NOTE ON THE FIRST DEPLOY WITH THESE: the zone already had proxied `A`
-  // records for both names, pointing at an old origin — which is why
-  // https://romostransportes.com.mx returned Cloudflare error 521 (origin
-  // unreachable) while the Worker itself was healthy on its workers.dev
-  // hostname. Attaching a custom domain REPLACES that existing record. If
-  // `wrangler deploy` refuses because the record already exists, delete the two
-  // `A` records for `romostransportes.com.mx` and `www` in the zone's DNS tab
-  // first, then redeploy.
-  "routes": [
-    { "pattern": "romostransportes.com.mx", "custom_domain": true },
-    { "pattern": "www.romostransportes.com.mx", "custom_domain": true }
-  ],
+  // Keep the *.workers.dev hostname serving. Pinned explicitly rather than left
+  // to the default: it is the fallback URL that works regardless of what the
+  // zone's DNS is doing, and it is what we verify against.
+  "workers_dev": true,
 
+  // CUSTOM DOMAINS ARE ATTACHED FROM THE DASHBOARD, NOT FROM HERE — on purpose.
+  //
+  // A previous revision declared them as config:
+  //
+  //   "routes": [
+  //     { "pattern": "romostransportes.com.mx",     "custom_domain": true },
+  //     { "pattern": "www.romostransportes.com.mx", "custom_domain": true }
+  //   ]
+  //
+  // That build FAILED and took the site down with it: the workers.dev hostname
+  // started returning Cloudflare error 1042 with every asset 404, and the
+  // custom domain stayed on 521. The zone already had proxied `A` records for
+  // both names pointing at an old origin, and attaching a custom domain has to
+  // REPLACE an existing record — which the dashboard resolves with an
+  // interactive "replace this record?" confirmation that a `wrangler deploy`
+  // running unattended in Workers Builds cannot answer.
+  //
+  // So the binding lives in the dashboard: Worker → Settings → Domains &
+  // Routes → Add → Custom domain. Re-adding the block above will break the
+  // build again unless the two `A` records are deleted from the zone's DNS tab
+  // first.
   "observability": {
     // Cheap to leave on for an assets-only Worker and useful for confirming a
     // deploy actually served traffic.
