@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { navItems } from '@/data/navigation';
-import { QuoteButton, WhatsAppButton } from '@/components/ui/Cta';
+import { QuoteButton } from '@/components/ui/Cta';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
 
@@ -140,17 +140,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {/* Held back to `xl`: between 1024px and 1280px the seven nav items plus
-              two buttons overflowed and the nav labels ran together. Below `xl`
-              the primary "Cotizar" button carries the header, and WhatsApp is
-              still reachable from the hero, the mobile drawer and the sticky bar. */}
-          <WhatsAppButton
-            place="header"
-            label="WhatsApp"
-            variant="ghost"
-            size="sm"
-            className="hidden xl:inline-flex"
-          />
+          {/* No WhatsApp button here: the floating button (`WhatsAppFloat`) is the
+              site's single WhatsApp entry point, so the header carries only the
+              quote CTA. That also gives the seven nav items room to breathe —
+              with two buttons they overflowed between 1024px and 1280px. */}
           <QuoteButton place="header" label="Cotizar" size="sm" className="hidden sm:inline-flex" />
 
           <button
@@ -210,7 +203,6 @@ export function Header() {
 
           <div className="mt-5 flex flex-col gap-2.5">
             <QuoteButton place="menu-movil" className="w-full" />
-            <WhatsAppButton place="menu-movil" className="w-full" />
           </div>
         </nav>
       </div>

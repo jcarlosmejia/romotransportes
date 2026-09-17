@@ -252,6 +252,46 @@ fotografías*.
 
 ---
 
+## Botón flotante de WhatsApp
+
+WhatsApp tiene **un solo punto de entrada** en todo el sitio: un botón flotante
+con el icono oficial, fijo en la esquina inferior derecha
+(`src/components/layout/WhatsAppFloat.tsx`).
+
+Es un `<a>` simple a un enlace `wa.me` con el mensaje ya codificado, así que
+**un clic abre WhatsApp de inmediato**: sin modal, sin formulario, sin copiar
+texto y sin elegir entre varios CTA. Como no necesita estado, es un componente
+de servidor y no envía JavaScript al navegador.
+
+Sustituyó a los seis botones de WhatsApp que estaban en encabezado, hero, menú
+móvil, CTA de media página, contacto y pie.
+
+### Color, medido
+
+El lockup oficial es glifo blanco sobre `#25D366`, que da apenas **1.98:1** —
+por debajo del 3:1 que WCAG 1.4.11 exige a objetos gráficos. El relleno enviado
+es verde WhatsApp oscurecido a **`#1FA855`**, que sostiene el glifo blanco en
+**3.09:1** y sigue siendo inconfundiblemente WhatsApp.
+
+Ese verde da 6.57:1 contra la superficie oscura de la marca, pero sólo **2.50:1
+contra las bandas crema**, así que el borde del botón lo define un **anillo de
+2 px en negro de marca**: 16.41:1 sobre crema y 6.57:1 sobre el propio relleno.
+El botón se distingue con claridad en todas las bandas de la página.
+
+El hover y el press van **más oscuros** (`#178644`, 4.64:1), no más claros, de
+modo que el contraste del glifo mejora al interactuar en lugar de degradarse.
+
+### Colocación
+
+`position: fixed` con `env(safe-area-inset-*)` para librar el indicador de
+inicio de iOS y la barra de gestos de Android. En móvil queda elevado sobre la
+barra fija de "Cotizar" con un desplazamiento **constante** —no reactivo—
+porque un valor que reaccionara a la aparición de la barra hacía vibrar el
+botón a media página. Medido en 390×844: separación de 8 px entre el botón y la
+barra, sin solape, y el relleno derecho de la barra mantiene su contenido libre.
+
+Tamaño: 56 px en móvil, 60 px en escritorio; por encima del mínimo de 44 px.
+
 ## Formulario de cotización
 
 El sitio es estático y no hay backend ni credenciales de ningún proveedor de
@@ -324,6 +364,7 @@ elija sin tocar los botones.
 | Menú móvil | `aria-expanded`, trampa de foco, Escape cierra y devuelve el foco, bloqueo de scroll |
 | Formulario | Etiquetas, `aria-invalid`, `aria-describedby`, resumen con `role="alert"` y foco |
 | Entrega del formulario | WhatsApp verificado con el número real; `mailto:` verificado (acentos, guión largo y saltos de línea íntegros) |
+| Botón flotante de WhatsApp | Un solo enlace `wa.me` en la página; 1 clic, 0 modales, 0 formularios; `target="_blank"` con `rel="noopener noreferrer"`; sin solape con la barra fija en 390×844 |
 | Preguntas frecuentes | `<details>`/`<summary>` nativos, funcionan sin JavaScript |
 | Contraste | 13/13 combinaciones cumplen AA (`npm run brand`) |
 | `prefers-reduced-motion` | Respetado; el contenido nunca queda oculto sin JavaScript |

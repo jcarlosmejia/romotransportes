@@ -130,9 +130,12 @@ export function buildQuoteMessage(fields: QuoteFields): string {
   ].join('\n');
 }
 
-/** Short message for the header / hero "cotizar por WhatsApp" shortcuts. */
-export const quickWhatsAppMessage =
-  "Hola, me gustaría solicitar una cotización de transporte con Romo's Transportes.";
+/**
+ * Message pre-filled by the floating WhatsApp button. Deliberately short: it is
+ * an opener the visitor can send as-is, not a form to edit.
+ */
+export const whatsappFloatMessage =
+  "Hola, me gustaría solicitar información y una cotización con Romo's Transportes.";
 
 /** Subject line for the e-mail delivery path. */
 export const quoteEmailSubject = "Solicitud de cotización — Romo's Transportes";

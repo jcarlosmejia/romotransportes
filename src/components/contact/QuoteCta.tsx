@@ -1,4 +1,4 @@
-import { QuoteButton, WhatsAppButton } from '@/components/ui/Cta';
+import { QuoteButton } from '@/components/ui/Cta';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { Reveal } from '@/components/ui/Reveal';
 
@@ -40,7 +40,6 @@ export function QuoteCta() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <QuoteButton place="cta-media-pagina" />
-            <WhatsAppButton place="cta-media-pagina" />
           </div>
         </div>
       </Reveal>

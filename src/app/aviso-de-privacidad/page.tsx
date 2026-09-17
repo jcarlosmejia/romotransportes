@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { company, contact } from '@/data/company';
 import { Footer } from '@/components/footer/Footer';
 import { Logo } from '@/components/ui/Logo';
+import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat';
 
 export const metadata: Metadata = {
   title: 'Aviso de privacidad',
@@ -139,6 +140,7 @@ export default function PrivacyPage() {
       </main>
 
       <Footer />
+      <WhatsAppFloat />
     </>
   );
 }

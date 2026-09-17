@@ -1,6 +1,5 @@
-import { contact, hasWhatsApp, whatsappLink } from '@/data/company';
+import { contact } from '@/data/company';
 import { QUOTE_ANCHOR } from '@/data/navigation';
-import { quickWhatsAppMessage } from '@/lib/quote';
 import { Icon } from './Icon';
 
 type Size = 'md' | 'sm';
@@ -50,52 +49,6 @@ export function QuoteButton({
 }
 
 /**
- * @description WhatsApp call to action.
- *
- * Renders **nothing** when no WhatsApp number has been confirmed. Showing a
- * broken or guessed number would send prospects to a stranger, so the component
- * removes itself and the quote form carries the conversion instead. Setting
- * `NEXT_PUBLIC_ROMO_WHATSAPP` (or `contact.whatsapp`) turns every instance on.
- * @param label Button text.
- * @param variant Visual treatment.
- * @param size Control height.
- * @param place Where this CTA sits, recorded on `data-cta-place` for analytics.
- * @param className Extra classes.
- */
-export function WhatsAppButton({
-  label = 'Cotizar por WhatsApp',
-  variant = 'secondary',
-  size = 'md',
-  place,
-  className = '',
-}: {
-  label?: string;
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: Size;
-  place: string;
-  className?: string;
-}) {
-  const href = whatsappLink(quickWhatsAppMessage);
-  if (!href) return null;
-
-  return (
-    <a
-      id={`cta-whatsapp-${place}`}
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-cta="whatsapp"
-      data-cta-place={place}
-      className={`btn btn-${variant} ${sizeClass[size]} ${className}`}
-    >
-      <Icon name="whatsapp" className="h-[1.125rem] w-[1.125rem]" />
-      {label}
-      <span className="sr-only"> (se abre en una ventana nueva)</span>
-    </a>
-  );
-}
-
-/**
  * @description Telephone link. Renders nothing until a number is confirmed.
  * @param place Where this CTA sits, recorded on `data-cta-place` for analytics.
  * @param className Extra classes.
@@ -115,6 +68,3 @@ export function PhoneLink({ place, className = '' }: { place: string; className?
     </a>
   );
 }
-
-/** True when at least one direct channel exists, for layout decisions. */
-export const hasDirectChannel = hasWhatsApp || Boolean(contact.phone) || Boolean(contact.email);

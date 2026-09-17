@@ -1,5 +1,5 @@
 import { images, type ImageSlug } from '@/data/imageManifest';
-import { QuoteButton, WhatsAppButton } from '@/components/ui/Cta';
+import { QuoteButton } from '@/components/ui/Cta';
 
 /**
  * Both framings come from the same photograph — a tractor unit hauling a loaded
@@ -74,7 +74,6 @@ export function Hero() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <QuoteButton place="hero" />
-            <WhatsAppButton place="hero" />
           </div>
 
           {/* Short, verifiable reassurance line — no promises about timing. */}

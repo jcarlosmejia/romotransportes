@@ -26,6 +26,14 @@
   --color-romo-red-bright: #b3151a;
   --color-romo-red-deep: #6f0b0e;
 
+  /* WhatsApp button. NOT brand colours — the recognisable green is the whole
+     point of the affordance. `#25D366` is the official fill, but white on it is
+     only 1.98:1, below the 3:1 WCAG 1.4.11 asks of graphical objects, so the
+     shipped fill is darkened to `#1FA855` (3.09:1 with white). Hover/press go
+     darker still so contrast improves under interaction. */
+  --color-whatsapp: #1fa855;
+  --color-whatsapp-hover: #178644;
+
   --color-romo-white: #f7f4eb;
   --color-romo-muted: #aaa38e;
   --color-romo-muted-dark: #4a4636;
@@ -543,6 +551,83 @@
   }
   .skip-link:focus {
     translate: -50% 0;
+  }
+
+  /* ==========================================================================
+     Floating WhatsApp button
+     --------------------------------------------------------------------------
+     The site's single WhatsApp entry point. Fixed bottom-right, above the
+     mobile sticky bar, clear of the iOS home indicator and Android gesture bar.
+     ========================================================================== */
+  .whatsapp-float {
+    position: fixed;
+    z-index: 45; /* under the header (50), over the sticky bar (40) */
+    right: calc(env(safe-area-inset-right, 0px) + 1rem);
+    /* Lifted clear of the sticky "Cotizar" bar (~4.75rem incl. its padding).
+       A constant offset, not one that reacts to the bar showing and hiding —
+       a reactive value made the button jitter mid-scroll. */
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 5.25rem);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 56px: comfortably past the 44px touch-target floor. */
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 9999px;
+
+    background-color: var(--color-whatsapp);
+    color: #ffffff;
+    /* Brand-black ring. This is what makes the button's edge discernible on the
+       cream bands (16.41:1) where the green alone is only 2.50:1. */
+    border: 2px solid var(--color-romo-black);
+    box-shadow:
+      0 6px 20px rgb(0 0 0 / 45%),
+      0 2px 6px rgb(0 0 0 / 30%);
+
+    transition:
+      background-color 0.2s var(--ease-industrial),
+      transform 0.2s var(--ease-industrial),
+      box-shadow 0.2s var(--ease-industrial);
+  }
+
+  .whatsapp-float:hover {
+    background-color: var(--color-whatsapp-hover);
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 26px rgb(0 0 0 / 50%),
+      0 3px 8px rgb(0 0 0 / 32%);
+  }
+
+  .whatsapp-float:active {
+    background-color: var(--color-whatsapp-hover);
+    /* Press feedback: settle down and in, no bounce. */
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 45%);
+  }
+
+  .whatsapp-float:focus-visible {
+    /* Cream ring for consistency with every other focus state on the site. */
+    outline: 2px solid var(--color-romo-cream);
+    outline-offset: 3px;
+  }
+
+  /* Desktop: no sticky bar to clear, so it sits lower and a little further in. */
+  @media (min-width: 64rem) {
+    .whatsapp-float {
+      right: calc(env(safe-area-inset-right, 0px) + 1.75rem);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 1.75rem);
+      width: 3.75rem;
+      height: 3.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whatsapp-float,
+    .whatsapp-float:hover,
+    .whatsapp-float:active {
+      transform: none;
+    }
   }
 
   /* Horizontal snap scroller for the mobile gallery. */

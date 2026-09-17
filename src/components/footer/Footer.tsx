@@ -4,7 +4,7 @@ import { navItems } from '@/data/navigation';
 import { services } from '@/data/services';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
-import { PhoneLink, WhatsAppButton } from '@/components/ui/Cta';
+import { PhoneLink } from '@/components/ui/Cta';
 
 /**
  * @description Site footer.
@@ -16,7 +16,7 @@ import { PhoneLink, WhatsAppButton } from '@/components/ui/Cta';
  */
 export function Footer() {
   const year = new Date().getFullYear();
-  const hasAnyChannel = Boolean(contact.whatsapp || contact.phone || contact.email);
+  const hasAnyChannel = Boolean(contact.phone || contact.email);
 
   return (
     <footer className="border-t border-romo-border bg-romo-black" aria-labelledby="footer-title">
@@ -80,7 +80,7 @@ export function Footer() {
           <div className="mt-4 space-y-3">
             {hasAnyChannel ? (
               <>
-                <WhatsAppButton place="footer" label="WhatsApp" variant="secondary" size="sm" />
+                {/* WhatsApp lives only in the floating button. */}
                 <PhoneLink place="footer" className="text-sm text-romo-cream-light" />
                 {contact.email ? (
                   <a

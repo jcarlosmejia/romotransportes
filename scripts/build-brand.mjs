@@ -49,6 +49,17 @@ const PAIRS = [
   ['error on charcoal', '#d4585c', '#11100e', 4.5],
   ['cream focus ring on black', '#d5cb9d', '#080503', 3],
   ['red focus ring on cream-light', '#940f12', '#eee7ce', 3],
+
+  // Floating WhatsApp button. Not brand colours — the recognisable green is the
+  // point — but still held to WCAG 1.4.11's 3:1 for graphical objects. The
+  // official `#25D366` fails that with a white glyph (1.98:1), which is why the
+  // shipped fill is darkened. The brand-black ring is what makes the button's
+  // boundary discernible on the cream bands, where the green alone is 2.50:1.
+  ['whatsapp glyph on fill', '#ffffff', '#1fa855', 3],
+  ['whatsapp glyph on hover fill', '#ffffff', '#178644', 3],
+  ['whatsapp ring on cream band', '#080503', '#eee7ce', 3],
+  ['whatsapp ring on fill', '#080503', '#1fa855', 3],
+  ['whatsapp fill on dark brand bg', '#1fa855', '#080503', 3],
 ];
 
 async function main() {

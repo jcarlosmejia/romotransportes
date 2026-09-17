@@ -84,7 +84,7 @@ marca sobrevive en fondo claro.
 
 ### Auditoría de contraste (WCAG)
 
-Las 13 combinaciones que el sitio realmente usa, verificadas por script:
+Las 18 combinaciones que el sitio realmente usa, verificadas por script:
 
 | Ratio | Combinación | Mínimo | Resultado |
 | --: | :-- | --: | :-- |
@@ -101,6 +101,11 @@ Las 13 combinaciones que el sitio realmente usa, verificadas por script:
 | 4.84:1 | error sobre charcoal | 4.5 | PASS |
 | 12.44:1 | anillo de foco crema sobre black | 3.0 | PASS |
 | 7.26:1 | anillo de foco rojo sobre cream-light | 3.0 | PASS |
+| 3.09:1 | glifo blanco sobre relleno WhatsApp | 3.0 | PASS |
+| 4.64:1 | glifo blanco sobre relleno hover | 3.0 | PASS |
+| 16.41:1 | anillo del botón sobre banda crema | 3.0 | PASS |
+| 6.57:1 | anillo del botón sobre su relleno | 3.0 | PASS |
+| 6.57:1 | relleno WhatsApp sobre fondo oscuro | 3.0 | PASS |
 
 `npm run brand` termina con código de salida distinto de cero si alguna baja del
 umbral, así que un cambio de paleta no puede romper el contraste en silencio.
@@ -241,7 +246,32 @@ Las fuentes miden 897–1080 px de ancho. La regla que gobierna todo el layout:
 > transparencia permitiría retirar la placa y mejoraría notablemente el
 > encabezado. Registrado en `docs/content-verification.md`.
 
-## 7. Ritmo de secciones
+## 7. Botón de WhatsApp — la excepción deliberada al color de marca
+
+El botón flotante de WhatsApp **no** usa la paleta de Romo's. Es la única pieza
+de la interfaz que se sale del sistema, y a propósito: lo que hace útil a ese
+botón es que se reconozca al instante, y eso lo da el verde de WhatsApp.
+
+Aun así, el verde oficial no se pudo usar tal cual. El lockup oficial —glifo
+blanco sobre `#25D366`— da **1.98:1**, por debajo del 3:1 que WCAG 1.4.11 exige
+a objetos gráficos. El relleno enviado es `#1FA855`: verde WhatsApp oscurecido
+lo justo para sostener el glifo blanco en **3.09:1**.
+
+El puente con la marca es el **anillo de 2 px en `--color-romo-black`**. Cumple
+dos funciones a la vez: ata el botón al lenguaje visual del sitio, y resuelve
+que el verde sólo alcance 2.50:1 contra las bandas crema —el anillo da 16.41:1
+ahí—. El anillo de foco vuelve al crema de marca, igual que el resto del sitio.
+
+| Estado | Relleno | Contraste con el glifo blanco |
+| :-- | :-- | --: |
+| Base | `#1FA855` | 3.09:1 |
+| Hover | `#178644` | 4.64:1 |
+| Press | `#178644` + `scale(0.95)` | 4.64:1 |
+
+El hover va más oscuro, no más claro: con `#23c162` el glifo caía a 2.37:1, es
+decir el estado interactivo habría empeorado la accesibilidad.
+
+## 8. Ritmo de secciones
 
 La página alterna a propósito entre superficie oscura de marca y banda crema
 cálida, con dos cortes fotográficos partiendo los tramos largos de texto:
@@ -254,7 +284,7 @@ hero (oscuro) → puntos clave (carbón) → servicios (claro) → flota (oscuro
 → contacto (oscuro) → pie
 ```
 
-## 8. Movimiento
+## 9. Movimiento
 
 Sólo CSS; no se añadió ninguna librería de animación. Un único
 `IntersectionObserver` alterna la clase `is-visible` sobre `[data-reveal]`.
@@ -270,7 +300,7 @@ animación que no puede ejecutarse:
 Con `prefers-reduced-motion: reduce` se anulan las transiciones y el
 desplazamiento suave, y la galería pasa a desplazamiento instantáneo.
 
-## 9. Nota de cascada (fue un error real)
+## 10. Nota de cascada (fue un error real)
 
 Las clases de componente vivían al **nivel superior** de la hoja de estilos.
 El CSS sin capa gana sobre el CSS en capa, así que `.btn { display: inline-flex }`

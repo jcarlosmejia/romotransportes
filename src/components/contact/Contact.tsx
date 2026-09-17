@@ -1,11 +1,11 @@
-import { contact, hasEmail, hasPhone, hasWhatsApp } from '@/data/company';
+import { contact, hasEmail, hasPhone } from '@/data/company';
 import { Icon } from '@/components/ui/Icon';
-import { PhoneLink, WhatsAppButton } from '@/components/ui/Cta';
+import { PhoneLink } from '@/components/ui/Cta';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { QuoteForm } from './QuoteForm';
 
-const hasAnyChannel = hasWhatsApp || hasPhone || hasEmail;
+const hasAnyChannel = hasPhone || hasEmail;
 
 /**
  * @description Contact section: the quote form plus whatever direct channels
@@ -34,8 +34,9 @@ export function Contact() {
                 <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-romo-cream">
                   Contacto directo
                 </h3>
+                {/* WhatsApp is intentionally absent: the floating button is the
+                    single WhatsApp entry point site-wide. */}
                 <div className="flex flex-col gap-3">
-                  <WhatsAppButton place="contacto" variant="secondary" />
                   <PhoneLink place="contacto" className="text-romo-cream-light" />
                   {contact.email ? (
                     <a

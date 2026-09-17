@@ -15,6 +15,7 @@ import { Faq } from '@/components/faq/Faq';
 import { Contact } from '@/components/contact/Contact';
 import { Footer } from '@/components/footer/Footer';
 import { StickyCta } from '@/components/layout/StickyCta';
+import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat';
 import { StructuredData } from '@/components/layout/StructuredData';
 
 /**
@@ -66,6 +67,7 @@ export default function HomePage() {
 
       <Footer />
       <StickyCta />
+      <WhatsAppFloat />
     </>
   );
 }
