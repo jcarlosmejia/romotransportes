@@ -29,21 +29,14 @@
 # rule covers chunks, CSS and fonts — a splat matches greedily, across path
 # separators.
 #
-# KNOWN COSMETIC QUIRK (measured under `wrangler dev`, not yet on production):
-# `.woff2` responses come back with the value twice —
-# `public, max-age=31536000, immutable, public, max-age=31536000, immutable`.
-# It is not caused by this file: only one rule here matches that path, and root
-# probe files with no Cache-Control rule get `max-age=0, must-revalidate`. The
-# asset server appears to apply its own immutable default to fonts, and per the
-# `_headers` spec a repeated header is joined with a comma. `.css` and `.js`
-# under the very same rule are not affected.
-#
-# Left as-is deliberately. The combined value is functionally identical (RFC
-# 9110 parsers read the first `max-age`), whereas narrowing this rule to skip
-# `/_next/static/media/*` would drop font caching entirely if production does
-# NOT add that default. Confirm against the deployed URL with:
-#   curl -sI https://romostransportes.com.mx/_next/static/media/<hash>.woff2
-# and only then narrow the rule if the duplicate is real in production.
+# RESOLVED (checked against the live deployment on 2026-09-17):
+# Under `wrangler dev`, `.woff2` responses came back with this value twice —
+# `public, max-age=31536000, immutable, public, max-age=31536000, immutable` —
+# while `.css` and `.js` under the very same rule did not. Production does NOT
+# do that: the deployed Worker serves a single, clean
+# `public, max-age=31536000, immutable` for fonts and CSS alike. The duplication
+# was a local miniflare artifact only, so this rule needs no exception and the
+# fonts keep their year-long caching.
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 

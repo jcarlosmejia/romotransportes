@@ -162,14 +162,44 @@ HTTP* más abajo.
 
 ### Dominio y DNS
 
-En el Worker → *Settings* → *Domains & Routes* → **Add** → *Custom domain*,
-agregue `romostransportes.com.mx` y `www.romostransportes.com.mx`.
+Los dos hostnames están declarados en `wrangler.jsonc`, así que `wrangler deploy`
+los adjunta al Worker:
 
-- Si el dominio ya usa los nameservers de Cloudflare, los registros se crean
-  automáticamente.
-- Si el DNS sigue en NEUBOX, cree ahí el `CNAME` que Cloudflare indique. Para
-  el dominio raíz NEUBOX debe soportar `CNAME` plano o `ALIAS`; si no, conviene
-  mover los nameservers a Cloudflare.
+```jsonc
+"routes": [
+  { "pattern": "romostransportes.com.mx", "custom_domain": true },
+  { "pattern": "www.romostransportes.com.mx", "custom_domain": true }
+]
+```
+
+`custom_domain: true` —y no una ruta normal— es lo que hace que Cloudflare
+apunte el DNS del hostname al Worker y emita su certificado.
+
+#### El estado en que estaba el dominio
+
+Diagnóstico del 17/09/2026, antes de este cambio:
+
+| Comprobación | Resultado |
+| :-- | :-- |
+| Nameservers | `rick.ns.cloudflare.com`, `elma.ns.cloudflare.com` → la zona **sí** está en Cloudflare |
+| `A` de apex y `www` | Resolvían a IPs de Cloudflare |
+| `https://romostransportes.com.mx` | **Error 521 de Cloudflare** (origen inaccesible) |
+| `http://romostransportes.com.mx` | 200, pero sirviendo una página vieja (`Last-Modified` del 11/09) |
+| `https://romotransportes.jcarlosmejiaayala.workers.dev` | 200, sitio correcto |
+
+Es decir: la zona estaba en Cloudflare y el DNS existía, pero estaba
+**proxeando a un origen antiguo** en lugar de apuntar al Worker. Tener el
+dominio "configurado" en Cloudflare no es lo mismo que tenerlo **enrutado al
+Worker**; son dos cosas distintas y sólo la segunda hace que el sitio aparezca.
+
+#### Si el deploy se queja del registro existente
+
+Adjuntar un dominio personalizado **reemplaza** el registro DNS que ya existe.
+Si `wrangler deploy` (o Workers Builds) falla diciendo que el registro ya
+existe, borre en la pestaña **DNS** de la zona los dos registros `A` de
+`romostransportes.com.mx` y `www`, y vuelva a desplegar. La alternativa por
+panel es: Worker → *Settings* → *Domains & Routes* → **Add** → *Custom domain*,
+que muestra una confirmación para reemplazar el registro.
 
 ### Después del primer despliegue
 
