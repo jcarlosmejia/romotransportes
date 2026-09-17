@@ -100,6 +100,28 @@ de API, sin middleware, sin Server Actions, sin ISR, sin rutas dinámicas. Las
 rutas de metadatos (`sitemap.ts`, `robots.ts`, `manifest.ts`) declaran
 `export const dynamic = 'force-static'`, requisito del export.
 
+### Cabeceras HTTP
+
+Un export estático no puede emitir cabeceras desde `next.config.ts`, así que van
+en **`public/_headers`**, que Next copia a `out/_headers` y Cloudflare Pages lee
+automáticamente. Incluye:
+
+- Cabeceras de seguridad: `X-Content-Type-Options`, `Referrer-Policy`,
+  `X-Frame-Options`, `Permissions-Policy`, `Strict-Transport-Security` (sin
+  `preload`, porque inscribirse en la lista HSTS es difícil de revertir y es
+  decisión del propietario) y `Cross-Origin-Opener-Policy`.
+- Caché inmutable de un año para `/_next/static/*`, que llevan hash en el
+  nombre. Sin esto, Cloudflare Pages los sirve con `max-age=0,
+  must-revalidate` y cada visita repetida los revalida.
+- Caché de una semana con `stale-while-revalidate` para `/images/*` y
+  `/brand/*`.
+- HTML siempre revalidado, para que un redespliegue se vea de inmediato.
+
+No se declara `Content-Security-Policy`: el sitio no renderiza contenido de
+usuario ni carga scripts de terceros, así que la superficie es mínima, y una CSP
+mal calibrada rompería el script en línea que habilita las animaciones. Queda
+como endurecimiento opcional.
+
 ### Variables de entorno
 
 **No hace falta configurar ninguna para publicar.** Los datos confirmados están
