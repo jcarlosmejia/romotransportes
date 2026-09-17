@@ -1,0 +1,39 @@
+{
+  "name": "romotransportes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page de Romo's Transportes — transporte de carga nacional.",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "npx serve out -l 4310",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "images": "node scripts/build-images.mjs",
+    "brand": "node scripts/build-brand.mjs",
+    "build:turbopack": "next build --turbopack",
+    "lint:fix": "eslint . --fix",
+    "docs": "node scripts/build-docs.mjs"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.5",
+    "postcss": "^8.5.6",
+    "sharp": "0.35.4",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5.9.0"
+  }
+}
