@@ -18,7 +18,7 @@ especificaciones de equipo y los datos de contacto el **17 de septiembre de
 | Dato | Valor publicado |
 | :-- | :-- |
 | WhatsApp y teléfono | `+52 33 2383 8729` |
-| Correo | `jcarlosmejiaayala@gmail.com` |
+| Correo | `contacto.romotransportes@gmail.com` |
 | Dominio | `https://romostransportes.com.mx` |
 | Inicio de operaciones | 2010 |
 | Cobertura | Culiacán, Hermosillo, Tijuana, Tecate, León, interior de Jalisco, y otras rutas nacionales |
@@ -214,7 +214,7 @@ Conviene además:
 - Verificar en un teléfono real que el botón flotante abre WhatsApp con el
   mensaje ya escrito.
 - Enviar una solicitud de prueba con el formulario y confirmar que llega a
-  `jcarlosmejiaayala@gmail.com`.
+  `contacto.romotransportes@gmail.com`.
 - Comprobar que una URL inexistente devuelve el 404 del sitio con código 404.
 - Dar de alta el sitio en Google Search Console y enviar
   `https://romostransportes.com.mx/sitemap.xml`.

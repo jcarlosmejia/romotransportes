@@ -87,7 +87,7 @@ export const contact = {
    * the destination for the contact form's e-mail path.
    */
   email: (process.env.NEXT_PUBLIC_ROMO_EMAIL ??
-    'jcarlosmejiaayala@gmail.com') as string | null,
+    'contacto.romotransportes@gmail.com') as string | null,
 
   /** Business hours for the commercial desk. */
   hours: TODO_VERIFY as string | null,
