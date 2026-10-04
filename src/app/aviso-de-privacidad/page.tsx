@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description:
     "Cómo trata Romo's Transportes los datos que se capturan en el formulario de cotización de este sitio.",
   robots: { index: true, follow: true },
+  alternates: { canonical: '/aviso-de-privacidad/' },
+  openGraph: { url: '/aviso-de-privacidad/' },
 };
 
 /**

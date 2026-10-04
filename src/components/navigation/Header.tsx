@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { navItems } from '@/data/navigation';
 import { PhoneLink, QuoteButton, WhatsAppCta } from '@/components/ui/Cta';
@@ -18,7 +19,7 @@ import { Logo } from '@/components/ui/Logo';
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState<string>('#inicio');
+  const [active, setActive] = useState<string>('');
   const toggleRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -111,29 +112,29 @@ export function Header() {
       }`}
     >
       <div className="shell flex h-[4.5rem] items-center justify-between gap-4">
-        <a
+        <Link
           id="header-logo-link"
-          href="#inicio"
+          href="/#inicio"
           className="shrink-0 rounded-sm"
           aria-label="Romo's Transportes — ir al inicio"
         >
           <Logo size="md" priority />
-        </a>
+        </Link>
 
         <nav aria-label="Navegación principal" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item) => (
               <li key={item.href}>
-                <a
+                <Link
                   id={`nav-desktop-${item.href.slice(1)}`}
-                  href={item.href}
+                  href={`/${item.href}`}
                   aria-current={active === item.href ? 'true' : undefined}
                   className={`relative block rounded-sm px-2.5 py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.1em] transition-colors xl:px-3 after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:bg-romo-red after:transition-transform hover:text-romo-cream-light hover:after:scale-x-100 aria-[current]:text-romo-cream-light aria-[current]:after:scale-x-100 ${
                     active === item.href ? 'text-romo-cream-light' : 'text-romo-muted'
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -189,16 +190,16 @@ export function Header() {
           <ul className="flex flex-col">
             {navItems.map((item) => (
               <li key={item.href} className="border-b border-romo-border/60 last:border-b-0">
-                <a
+                <Link
                   id={`nav-mobile-${item.href.slice(1)}`}
-                  href={item.href}
+                  href={`/${item.href}`}
                   onClick={() => setOpen(false)}
                   aria-current={active === item.href ? 'true' : undefined}
                   className="flex min-h-[3.25rem] items-center justify-between gap-3 py-1 text-base font-semibold uppercase tracking-[0.08em] text-romo-cream-light aria-[current]:text-romo-red"
                 >
                   {item.label}
                   <Icon name="arrow" className="h-4 w-4 text-romo-muted" />
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

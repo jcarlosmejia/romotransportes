@@ -221,7 +221,7 @@ export const pendingVerification: readonly VerificationItem[] = [
     question:
       '¿Hay más ciudades o corredores de operación frecuente que convenga listar además de los confirmados?',
     reason:
-      'Se confirmaron Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. Conviene validar que Tepic, Mazatlán y Ciudad Obregón son rutas frecuentes y no solo de paso.',
+      'Se confirmaron el corredor Pacífico (Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tijuana, Tecate), Norte (Torreón, Chihuahua, Ciudad Juárez), Noreste (Saltillo, Monterrey), León y el interior de Jalisco. Conviene validar cuáles son frecuentes y cuáles ocasionales, y si hay datos útiles por ruta (tiempos de tránsito típicos, frecuencia) para crear páginas por ruta con contenido propio.',
     currentBehaviour:
       'El mapa y la lista muestran el corredor Pacífico–Norte como "rutas frecuentes" y se indica cobertura nacional bajo cotización.',
     impact: 'nice-to-have',

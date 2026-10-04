@@ -1,7 +1,7 @@
 import { company, contact, siteUrl, siteUrlIsVerified } from '@/data/company';
 import { coverage } from '@/data/content';
-import { faqs } from '@/data/faqs';
 import { services } from '@/data/services';
+import { equipmentPages } from '@/data/equipmentPages';
 
 /**
  * @description JSON-LD structured data.
@@ -12,6 +12,10 @@ import { services } from '@/data/services';
  * `numberOfEmployees` and no street address (only locality Guadalajara,
  * Jalisco) — none of those are verified, and
  * fabricating review markup is both false and a search-policy violation.
+ *
+ * No `FAQPage`: since 2023 Google shows FAQ rich results only for
+ * authoritative government and health sites, so the markup would add nothing
+ * here. The FAQ stays as visible content.
  *
  * `LocalBusiness` is deliberately not used: it requires a physical address,
  * which has not been confirmed (see `address-hours` in `pendingVerification`).
@@ -25,6 +29,8 @@ export function StructuredData() {
     '@type': 'Organization',
     '@id': id,
     name: company.legalName,
+    // Spellings buyers actually type, including the one in the domain.
+    alternateName: ['Romo Transportes', 'Romos Transportes'],
     description: company.valueProposition,
     image: siteUrlIsVerified ? `${siteUrl}/brand/og-image.jpg` : '/brand/og-image.jpg',
     logo: siteUrlIsVerified
@@ -55,12 +61,17 @@ export function StructuredData() {
   if (contact.phone) organization.telephone = contact.phone;
   if (contact.email) organization.email = contact.email;
   // Primary first, then the alternate line; both reach sales.
-  const phones = [contact.phone, contact.phoneSecondary].filter(Boolean);
+  const phones = [
+    { telephone: contact.phone, description: 'Teléfono principal' },
+    { telephone: contact.phoneSecondary, description: 'Teléfono alterno' },
+    { telephone: contact.whatsapp ? `+${contact.whatsapp}` : null, description: 'WhatsApp' },
+  ].filter((p) => p.telephone);
   if (phones.length) {
-    organization.contactPoint = phones.map((telephone) => ({
+    organization.contactPoint = phones.map((p) => ({
       '@type': 'ContactPoint',
       contactType: 'sales',
-      telephone,
+      telephone: p.telephone,
+      description: p.description,
       areaServed: 'MX',
       availableLanguage: 'es',
     }));
@@ -85,6 +96,25 @@ export function StructuredData() {
   }
   if (company.foundedYear) organization.foundingDate = String(company.foundedYear);
 
+  const website = {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#sitio`,
+    url: `${siteUrl}/`,
+    name: company.legalName,
+    inLanguage: 'es-MX',
+    publisher: { '@id': id },
+  };
+
+  // Equipment pages carry their own full Service node; link to them here.
+  const equipmentNodes = equipmentPages.map((page) => ({
+    '@type': 'Service',
+    name: page.metaTitle,
+    serviceType: page.breadcrumb,
+    url: `${siteUrl}/${page.slug}/`,
+    provider: { '@id': id },
+    areaServed: { '@type': 'Country', name: 'México' },
+  }));
+
   const serviceNodes = services.map((service) => ({
     '@type': 'Service',
     name: service.title,
@@ -94,18 +124,10 @@ export function StructuredData() {
     areaServed: { '@type': 'Country', name: 'México' },
   }));
 
-  const faqPage = {
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-    })),
-  };
 
   const graph = {
     '@context': 'https://schema.org',
-    '@graph': [organization, ...serviceNodes, faqPage],
+    '@graph': [website, organization, ...serviceNodes, ...equipmentNodes],
   };
 
   return (

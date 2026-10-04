@@ -16,9 +16,9 @@
  * delta; the sixteen offshore island rings in the source data are dropped.
  *
  * ROUTE OVERLAY (owner brief 2026-10-04)
- * Guadalajara is drawn as the dominant hub and the Pacific / Northern corridor
- * as a single dashed line through the frequent destinations, plus a short leg
- * to León. It is one corridor, not a web of daily routes, on purpose: the copy
+ * Guadalajara is drawn as the dominant hub with three corridors: Pacific to
+ * Baja California, North to Ciudad Juárez, Northeast to Monterrey, plus a
+ * short leg to León. Corridors, not a web of daily routes, on purpose: the copy
  * says "rutas frecuentes y cobertura nacional", and the map must not imply that
  * every line runs every day. No animation. City coordinates are projected with
  * the same equirectangular fit as the outline, so dots sit where they belong.
@@ -39,8 +39,9 @@ export function MexicoMap({ className = '' }: { className?: string }) {
     >
       <title id="mapa-mexico-title">Mapa de la República Mexicana</title>
       <desc id="mapa-mexico-desc">
-        Mapa de México con Guadalajara como base operativa y el corredor de rutas frecuentes hacia
-        Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tecate y Tijuana, además de León.
+        Mapa de México con Guadalajara como base operativa y tres corredores de rutas frecuentes:
+        Pacífico (Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tijuana y Tecate), Norte
+        (Torreón, Chihuahua y Ciudad Juárez) y Noreste (Saltillo y Monterrey), además de León.
         Romo&rsquo;s Transportes también da cobertura nacional bajo cotización.
       </desc>
 
@@ -75,14 +76,21 @@ export function MexicoMap({ className = '' }: { className?: string }) {
         />
       </g>
 
-      {/* Frequent-route corridor: Guadalajara → Pacific → North → Baja California. */}
-      <g fill="none" stroke="#940f12" strokeLinecap="round" strokeLinejoin="round">
-        <path
-          d="M 457.1 409 L 409.9 381.2 L 363 323.4 L 333.3 270.5 L 255.2 180.9 L 223.9 128.1 L 187.5 73.2 L 107.2 14.7 L 50.2 11 L 37.7 12.4"
-          strokeWidth="4"
-          strokeDasharray="10 8"
-        />
-        <path d="M 457.1 409 L 508.3 393.9" strokeWidth="4" strokeDasharray="10 8" />
+      {/* Frequent-route corridors from Guadalajara. Pacific → Baja California;
+          a shared trunk through Zacatecas that splits north (Torreón →
+          Chihuahua → Ciudad Juárez) and northeast (Saltillo → Monterrey);
+          and the short León leg. */}
+      <g
+        fill="none"
+        stroke="#940f12"
+        strokeWidth="4"
+        strokeDasharray="10 8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {ROUTES.map((d) => (
+          <path key={d} d={d} />
+        ))}
       </g>
 
       {/* Destination dots. */}
@@ -139,7 +147,21 @@ const CITIES: readonly {
   { name: 'Tecate', x: 50.2, y: 11 },
   { name: 'Tijuana', x: 37.7, y: 12.4, label: 'Tijuana · Tecate', lx: 30, ly: 46, anchor: 'start' },
   { name: 'León', x: 508.3, y: 393.9, label: 'León', lx: 522, ly: 389, anchor: 'start' },
+  { name: 'Torreón', x: 455.3, y: 246.1, label: 'Torreón', lx: 441, ly: 253, anchor: 'end' },
+  { name: 'Chihuahua', x: 373.2, y: 142.8, label: 'Chihuahua', lx: 388, ly: 149, anchor: 'start' },
+  { name: 'Ciudad Juárez', x: 362.4, y: 40.4, label: 'Cd. Juárez', lx: 377, ly: 47, anchor: 'start' },
+  { name: 'Saltillo', x: 529.1, y: 250.1, label: 'Saltillo', lx: 529, ly: 281, anchor: 'middle' },
+  { name: 'Monterrey', x: 550.2, y: 241.1, label: 'Monterrey', lx: 565, ly: 240, anchor: 'start' },
 ];
+
+/** Corridor polylines. Zacatecas (481, 338.8) and Jiménez (409, 192.9) are
+ *  road waypoints only — no dot, no label, not claimed as destinations. */
+const ROUTES = [
+  'M 457.1 409 L 409.9 381.2 L 363 323.4 L 333.3 270.5 L 255.2 180.9 L 223.9 128.1 L 187.5 73.2 L 107.2 14.7 L 50.2 11 L 37.7 12.4',
+  'M 457.1 409 L 508.3 393.9',
+  'M 457.1 409 L 481 338.8 L 455.3 246.1 L 409 192.9 L 373.2 142.8 L 362.4 40.4',
+  'M 481 338.8 L 529.1 250.1 L 550.2 241.1',
+] as const;
 
 const MEXICO_OUTLINE =
   'M 34.7 12.1 L 108.4 6.0 L 105.0 12.9 L 221.3 52.5 L 308.0 52.4 L 308.1 37.3 L 362.3 37.7 L 371.3 ' +

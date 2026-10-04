@@ -6,14 +6,14 @@ import type { MetadataRoute } from 'next';
  */
 export const dynamic = 'force-static';
 import { siteUrl } from '@/data/company';
+import { equipmentPages } from '@/data/equipmentPages';
 
 /**
  * @description Static sitemap.
  *
  * `output: 'export'` prerenders this to `out/sitemap.xml` at build time. The
- * site is a single page, so the sitemap lists the home page and the privacy
- * notice only. Absolute URLs need a real origin; set `NEXT_PUBLIC_SITE_URL`
- * on Cloudflare Pages once the domain is confirmed.
+ * Home, the two equipment pages and the privacy notice — every indexable
+ * page, canonical HTTPS URL with trailing slash, nothing else.
  * @returns The sitemap entries.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: `${siteUrl}/`, lastModified, changeFrequency: 'monthly', priority: 1 },
+    ...equipmentPages.map((page) => ({
+      url: `${siteUrl}/${page.slug}/`,
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    })),
     {
       url: `${siteUrl}/aviso-de-privacidad/`,
       lastModified,

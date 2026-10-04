@@ -46,7 +46,7 @@ export type RequiredField = (typeof requiredFields)[number];
 export type QuoteErrors = Partial<Record<keyof QuoteFields, string>>;
 
 export const unidadOptions = [
-  { value: '', label: 'No estoy seguro / me ayudan a definirlo' },
+  { value: '', label: 'No estoy seguro' },
   { value: 'Caja seca 48 o 53 pies', label: "Caja seca 48' / 53'" },
   { value: 'Plataforma tipo plana', label: "Plataforma tipo plana 40'+" },
 ] as const;

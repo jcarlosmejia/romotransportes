@@ -1,78 +1,37 @@
 import { coverage } from '@/data/content';
-import { Icon } from '@/components/ui/Icon';
+import { WhatsAppCta } from '@/components/ui/Cta';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { MexicoMap } from './MexicoMap';
 
 /**
- * @description National coverage on a light band.
+ * @description Coverage on a light band: map first, corridors as real HTML.
  *
- * Map with the Guadalajara hub and the frequent-route corridor, a three-item
- * legend, and the city chips (which carry the city names on phones, where the
- * map hides its labels). Always framed as "rutas frecuentes" plus national
- * coverage — never as the only places Romo's goes.
+ * The map gets the wide column so the corridors read at a glance. Beside it,
+ * each corridor is an `h3` with its states and stops, which is the crawlable,
+ * screen-reader equivalent of the map and also what carries the city names on
+ * phones, where the map hides its labels. Always framed as frequent routes
+ * plus coverage elsewhere — never as the only places Romo's goes.
  */
 export function Coverage() {
   return (
     <section id="cobertura" className="band-light section" aria-labelledby="cobertura-title">
       <div className="shell">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <Reveal className="grid gap-6 lg:grid-cols-[1fr_minmax(0,30rem)] lg:items-end lg:gap-16">
+          <SectionHeading
+            id="cobertura-title"
+            overline="Rutas frecuentes y cobertura nacional"
+            title={coverage.title}
+          />
+          <p className="text-[1.0625rem] leading-relaxed text-romo-muted-dark">{coverage.body}</p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-14">
           <Reveal>
-            <SectionHeading
-              id="cobertura-title"
-              overline="Rutas frecuentes y cobertura nacional"
-              title={coverage.title}
-              lede={coverage.body}
-            />
-
-            <ul className="mt-8 space-y-3">
-              {coverage.bullets.map((bullet) => (
-                <li key={bullet} className="flex items-start gap-3 text-[0.9375rem]">
-                  <Icon name="check" className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-romo-red" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* Confirmed destinations. Closed with a footnote so the list never
-                reads as an exhaustive map of where Romo's can go. */}
-            <div className="mt-9">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-romo-red">
-                Rutas frecuentes desde Guadalajara
-              </h3>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {coverage.cities.map((city) => (
-                  <li
-                    key={city.name}
-                    className="cut-corner border border-romo-border-light bg-white px-3 py-1.5"
-                    style={{ ['--cut' as string]: '0.5rem' }}
-                  >
-                    <span className="text-[0.8125rem] font-bold uppercase tracking-[0.06em] text-romo-charcoal">
-                      {city.name}
-                    </span>
-                    <span className="ml-1.5 text-[0.75rem] text-romo-muted-dark">{city.state}</span>
-                  </li>
-                ))}
-                <li className="flex items-center px-1 py-1.5 text-[0.8125rem] italic text-romo-muted-dark">
-                  {coverage.citiesFootnote}
-                </li>
-              </ul>
-            </div>
-
-            <p className="mt-7 border-l-2 border-romo-red bg-white/70 py-3 pl-4 pr-3 text-sm text-romo-muted-dark">
-              {coverage.note}
-            </p>
-          </Reveal>
-
-          {/* Map alone in this column. A photograph stacked beneath it made the
-              column far taller than the text beside it, and `items-center` then
-              pushed the map up out of view on first scroll. The section's
-              photographic weight is carried by its neighbours instead. */}
-          <Reveal className="order-first lg:order-last">
             <MexicoMap className="w-full text-romo-charcoal" />
             <ul
               aria-label="Leyenda del mapa"
-              className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[0.8125rem] font-semibold text-romo-charcoal"
+              className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[0.8125rem] font-semibold text-romo-charcoal"
             >
               <li className="flex items-center gap-2">
                 <span aria-hidden="true" className="h-3.5 w-3.5 rounded-full border-2 border-white bg-romo-red outline outline-2 outline-romo-red/40" />
@@ -87,6 +46,27 @@ export function Coverage() {
                 Cobertura nacional disponible
               </li>
             </ul>
+          </Reveal>
+
+          <Reveal>
+            <ul className="divide-y divide-romo-border-light border-y border-romo-border-light">
+              {coverage.corridors.map((corridor) => (
+                <li key={corridor.id} className="py-5">
+                  <h3 className="text-[0.9375rem] font-bold uppercase tracking-[0.06em] text-romo-charcoal">
+                    {corridor.name}
+                  </h3>
+                  <p className="mt-0.5 text-xs font-semibold text-romo-red">{corridor.states}</p>
+                  <p className="mt-2 text-[0.9375rem] text-romo-muted-dark">
+                    Guadalajara → {corridor.stops.join(' · ')}
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-6 border-l-2 border-romo-red bg-white/70 py-3 pl-4 pr-3 text-sm text-romo-muted-dark">
+              {coverage.note}
+            </p>
+            <WhatsAppCta place="cobertura" label="Cotizar mi ruta por WhatsApp" size="sm" className="mt-6" />
           </Reveal>
         </div>
       </div>

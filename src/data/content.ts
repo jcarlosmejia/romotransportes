@@ -7,7 +7,6 @@
  * practice rather than an outcome the company cannot control.
  */
 
-export type TrustPoint = { id: string; title: string; description: string; icon: IconName };
 
 export type IconName =
   | 'route'
@@ -40,77 +39,60 @@ export const heroCapabilities: readonly string[] = [
   "Caja seca 48' y 53'",
   "Plataforma 40'+",
   'GPS y seguimiento',
-  'Cobertura nacional',
+  'Rutas Pacífico y Norte',
 ];
 
 /**
- * Credibility strip below the hero. Does not repeat the hero row: these are the
- * trust facts (tenure, own fleet, insurance, direct attention).
+ * Operational highlights under the hero. Every figure is owner-confirmed
+ * (2026-10-04 brief): year, trailer lengths, platform length, the reference
+ * capacity range (always shown with its disclaimer nearby) and the corridors
+ * drawn on the map. No fleet counts, trip totals or on-time percentages.
  */
-export const trustPoints: readonly TrustPoint[] = [
-  {
-    id: 'experiencia',
-    title: 'Desde 2010',
-    description: 'Operando transporte de carga por carretera desde Guadalajara.',
-    icon: 'clock',
-  },
-  {
-    id: 'unidades',
-    title: 'Unidades propias',
-    description: 'Tractocamiones, cajas secas y plataformas en operación directa.',
-    icon: 'truck',
-  },
-  {
-    id: 'seguro',
-    title: 'Seguro de carga',
-    description: 'Cobertura confirmada por embarque según mercancía y valor declarado.',
-    icon: 'shield',
-  },
-  {
-    id: 'atencion',
-    title: 'Atención directa',
-    description: 'Un mismo contacto desde la tarifa hasta la confirmación de entrega.',
-    icon: 'headset',
-  },
+export const highlights: readonly { value: string; label: string; detail: string }[] = [
+  { value: '2010', label: 'Operando desde', detail: 'Transporte de carga por carretera' },
+  { value: "48' · 53'", label: 'Caja seca', detail: 'Carga completa, sin transbordos' },
+  { value: "40'+", label: 'Plataforma tipo plana', detail: 'Acero, estructura y maquinaria' },
+  { value: '10–35 t', label: 'Capacidad de referencia', detail: 'Sujeta a configuración y unidad' },
+  { value: '3', label: 'Corredores frecuentes', detail: 'Pacífico · Norte · Noreste' },
 ];
 
 /** "Por qué Romo's" — operating commitments, not adjectives. */
 export const differentiators: readonly { title: string; description: string; icon: IconName }[] = [
   {
-    title: 'Origen en Guadalajara',
+    title: 'Base operativa en Guadalajara',
     description:
-      'Base operativa en la Zona Metropolitana de Guadalajara: cargamos en la ZMG y en el interior de Jalisco y salimos directo a ruta.',
+      'Cargamos en la Zona Metropolitana de Guadalajara y el interior de Jalisco y salimos directo a ruta, sin escalas por patios de terceros.',
     icon: 'map',
   },
   {
     title: 'Hablas con quien opera',
     description:
-      'No hay intermediarios entre su solicitud y la operación. La persona que cotiza es la que da seguimiento al viaje.',
+      'Sin intermediarios: la persona que te cotiza es la que asigna la unidad y da seguimiento al viaje.',
     icon: 'headset',
   },
   {
-    title: 'Cada traslado se planea',
+    title: 'La unidad adecuada para tu carga',
     description:
-      'Antes de confirmar revisamos origen, destino, dimensiones, peso, maniobra de carga y fechas. Si el equipo no es el adecuado, lo decimos.',
+      'Caja seca o plataforma según peso, dimensiones y maniobra. Si nuestro equipo no es el indicado, te lo decimos antes de confirmar.',
     icon: 'clipboard',
   },
   {
-    title: 'La carga se asegura para viajar',
+    title: 'GPS y seguimiento en ruta',
     description:
-      'La sujeción se hace de acuerdo con el tipo de mercancía: bandas, cadenas y cubierta cuando la carga lo requiere.',
-    icon: 'straps',
-  },
-  {
-    title: 'Comunicación durante la ruta',
-    description:
-      'Contacto directo con la operación mientras la unidad está en camino y aviso al confirmar la entrega.',
+      'Unidades con GPS y comunicación con la operación durante el traslado; te avisamos al confirmar la entrega.',
     icon: 'radio',
   },
   {
-    title: 'Experiencia en carretera desde 2010',
+    title: 'Experiencia en el Pacífico y el Norte',
     description:
-      'Operamos transporte de carga por carretera desde 2010, con operadores con experiencia en viaje largo y en las maniobras que exige la carga en plataforma.',
+      'Corredores frecuentes hacia Sinaloa, Sonora, Baja California, Chihuahua, Coahuila y Nuevo León desde Guadalajara.',
     icon: 'route',
+  },
+  {
+    title: 'Spot o recurrente',
+    description:
+      'Atendemos el viaje urgente y también la operación programada entre plantas, proveedores y CEDIS.',
+    icon: 'truck',
   },
 ];
 
@@ -207,15 +189,20 @@ export const processSteps: readonly { title: string; description: string }[] = [
 ];
 
 /** Sectors the equipment can serve. Framed as capability, never as a client list. */
-export const industries: readonly { title: string; description: string }[] = [
-  { title: 'Acero y metalmecánica', description: 'Perfil, placa, tubería, varilla y estructura fabricada.' },
-  { title: 'Construcción y materiales', description: 'Material de obra y estructura hacia sitio o almacén.' },
-  { title: 'Manufactura', description: 'Materia prima de entrada y producto terminado entre plantas.' },
-  { title: 'Maquinaria y equipo', description: 'Maquinaria en plataforma, sujeta a evaluación de dimensiones.' },
-  { title: 'Distribución y CEDIS', description: 'Mercancía paletizada en caja seca, planta–CEDIS.' },
-  { title: 'Empaque y embalaje', description: 'Material de empaque, fardo y paca en volumen.' },
-  { title: 'Proveedores industriales', description: 'Insumos y refacciones para planta, servicio recurrente.' },
-  { title: 'Agroindustria y reciclaje', description: 'Producto enfardado y material para acopio, cubierto.' },
+/** Sectors served, with the equipment that usually fits each. Capability, not client claims. */
+export const industries: readonly {
+  title: string;
+  description: string;
+  equipment: 'Caja seca' | 'Plataforma' | 'Caja seca o plataforma';
+}[] = [
+  { title: 'Acero y metalmecánica', description: 'Perfil, placa, tubería, varilla y estructura fabricada.', equipment: 'Plataforma' },
+  { title: 'Construcción', description: 'Material de obra y estructura hacia sitio o almacén.', equipment: 'Plataforma' },
+  { title: 'Maquinaria y equipo', description: 'Equipo industrial, evaluado por peso y dimensiones.', equipment: 'Plataforma' },
+  { title: 'Manufactura', description: 'Materia prima de entrada y producto terminado entre plantas.', equipment: 'Caja seca o plataforma' },
+  { title: 'Distribución y CEDIS', description: 'Mercancía paletizada de planta a centro de distribución.', equipment: 'Caja seca' },
+  { title: 'Insumos industriales', description: 'Refacciones e insumos para planta, en servicio recurrente.', equipment: 'Caja seca' },
+  { title: 'Empaque y embalaje', description: 'Material de empaque, fardo y paca en volumen.', equipment: 'Caja seca o plataforma' },
+  { title: 'Agroindustria y reciclaje', description: 'Producto enfardado y material de acopio, cubierto en ruta.', equipment: 'Plataforma' },
 ];
 
 /**
@@ -224,16 +211,37 @@ export const industries: readonly { title: string; description: string }[] = [
  * "rutas frecuentes y cobertura nacional", never "únicamente operamos".
  */
 export const coverage = {
-  title: 'Rutas del Pacífico y Norte desde Guadalajara',
-  body: 'Salimos desde la Zona Metropolitana de Guadalajara. Tenemos experiencia especialmente en el corredor del Pacífico y el Norte del país, y damos servicio a cualquier destino nacional según la carga y la fecha.',
+  title: 'Corredores del Pacífico y Norte desde Guadalajara',
+  body: 'Operamos fletes desde Guadalajara hacia el Pacífico y el Norte de México: Tepic, Mazatlán, Culiacán, Sonora y Baja California por la costa, y Chihuahua, Coahuila y Nuevo León por el centro-norte. Fuera de estos corredores también movemos carga a otros estados según el requerimiento de cada operación.',
   note: '¿Tu ruta no aparece en el mapa? También la cotizamos. Indícanos origen, destino y ventana de carga.',
-  bullets: [
-    'Origen en Guadalajara, Jalisco y su zona metropolitana',
-    'Rutas locales, semiforáneas y foráneas',
-    'Corredor del Pacífico y Norte de México',
-    'Cobertura nacional bajo cotización',
+  /** Corridors as drawn on the map. Also the semantic HTML that describes it. */
+  corridors: [
+    {
+      id: 'pacifico',
+      name: 'Corredor Pacífico',
+      states: 'Nayarit, Sinaloa, Sonora y Baja California',
+      stops: ['Tepic', 'Mazatlán', 'Culiacán', 'Ciudad Obregón', 'Hermosillo', 'Tijuana', 'Tecate'],
+    },
+    {
+      id: 'norte',
+      name: 'Corredor Norte',
+      states: 'Coahuila y Chihuahua',
+      stops: ['Torreón', 'Chihuahua', 'Ciudad Juárez'],
+    },
+    {
+      id: 'noreste',
+      name: 'Corredor Noreste',
+      states: 'Coahuila y Nuevo León',
+      stops: ['Saltillo', 'Monterrey'],
+    },
+    {
+      id: 'occidente',
+      name: 'Jalisco y Bajío',
+      states: 'Jalisco y Guanajuato',
+      stops: ['Interior de Jalisco', 'León'],
+    },
   ],
-  /** Frequent destinations, in corridor order from Guadalajara. */
+  /** Frequent destinations (used for `areaServed` in structured data). */
   cities: [
     { name: 'Tepic', state: 'Nayarit' },
     { name: 'Mazatlán', state: 'Sinaloa' },
@@ -242,10 +250,13 @@ export const coverage = {
     { name: 'Hermosillo', state: 'Sonora' },
     { name: 'Tijuana', state: 'Baja California' },
     { name: 'Tecate', state: 'Baja California' },
+    { name: 'Torreón', state: 'Coahuila' },
+    { name: 'Saltillo', state: 'Coahuila' },
+    { name: 'Chihuahua', state: 'Chihuahua' },
+    { name: 'Ciudad Juárez', state: 'Chihuahua' },
+    { name: 'Monterrey', state: 'Nuevo León' },
     { name: 'León', state: 'Guanajuato' },
-    { name: 'Interior de Jalisco', state: 'Jalisco' },
   ],
-  citiesFootnote: 'y cobertura nacional.',
 } as const;
 
 /** About / mission — rewritten from the owner's original wording, not copied. */
@@ -253,8 +264,7 @@ export const about = {
   overline: "Nosotros · Desde 2010",
   title: "Por qué elegir Romo's Transportes",
   paragraphs: [
-    'Romo\'s Transportes es una empresa mexicana de transporte terrestre de carga. Desde 2010 operamos desde Guadalajara, Jalisco, moviendo mercancía comercial e industrial a todo México con unidades propias, cajas secas de 48 y 53 pies y plataformas tipo plana.',
-    'Trabajamos con una idea simple: la mercancía que nos entregan es responsabilidad nuestra desde que se carga hasta que se confirma la entrega. Eso significa revisar el equipo antes de salir, asegurar la carga como corresponde, mantener las unidades con GPS y seguimiento en ruta, y comunicarnos con el cliente durante el traslado.',
-    'Nos interesa la relación de largo plazo más que el viaje aislado. Por eso la atención es directa: quien cotiza es quien da seguimiento, y cuando el equipo o la ruta no son los adecuados para una carga, lo decimos antes de confirmar el servicio.',
+    "Romo's Transportes es una empresa transportista mexicana con base en Guadalajara, Jalisco. Desde 2010 movemos carga comercial e industrial con unidades propias: cajas secas de 48 y 53 pies y plataformas tipo plana.",
+    'Para las empresas que buscan un proveedor de transporte confiable, eso significa una cosa: la carga es responsabilidad nuestra desde que se sube a la unidad hasta que se confirma la entrega, y quien cotiza es quien da seguimiento.',
   ],
 } as const;

@@ -1,41 +1,33 @@
-import { trustPoints } from '@/data/content';
-import { Icon } from '@/components/ui/Icon';
+import { highlights } from '@/data/content';
 import { Reveal } from '@/components/ui/Reveal';
 
 /**
- * @description Four differentiators immediately below the hero.
+ * @description Operational highlights directly under the hero.
  *
- * Every item states a practice or a capability, never a statistic. There are no
- * counters here on purpose: unit counts, years of operation and completed-trip
- * totals are all unverified (see `pendingVerification`), and a fabricated
- * number is the fastest way to lose a B2B prospect who checks.
+ * Big display figures in a ruled strip, like a spec plate: the five numbers a
+ * freight buyer checks first. Every figure is owner-confirmed (see
+ * `highlights`); there are no fleet counts or on-time percentages.
  */
 export function TrustStrip() {
   return (
-    <section
-      className="border-y border-romo-border bg-romo-charcoal py-10 lg:py-12"
-      aria-labelledby="puntos-clave-title"
-    >
-      {/* Visually hidden heading: without it the outline jumps h1 -> h3, because
-          the strip's items are h3 and the first visible h2 is in Servicios. */}
+    <section className="border-y border-romo-border bg-romo-charcoal" aria-labelledby="puntos-clave-title">
       <h2 id="puntos-clave-title" className="sr-only">
-        Puntos clave del servicio
+        Datos de operación
       </h2>
-      <Reveal as="ul" stagger className="shell grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-        {trustPoints.map((point) => (
-          <li key={point.id} className="flex gap-4">
-            <span
-              aria-hidden="true"
-              className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center border border-romo-border bg-romo-black text-romo-red"
-            >
-              <Icon name={point.icon} className="h-[1.375rem] w-[1.375rem]" />
-            </span>
-            <div>
-              <h3 className="text-[0.9375rem] font-bold uppercase tracking-[0.1em] text-romo-cream-light">
-                {point.title}
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-romo-muted">{point.description}</p>
-            </div>
+      <Reveal
+        as="ul"
+        stagger
+        className="shell grid grid-cols-2 divide-romo-border sm:grid-cols-3 lg:grid-cols-5 lg:divide-x"
+      >
+        {highlights.map((item) => (
+          <li key={item.label} className="py-7 lg:px-6 lg:first:pl-0 last:col-span-2 sm:last:col-span-1">
+            <p className="font-[family-name:var(--font-display)] text-[1.75rem] leading-none text-romo-white sm:text-[2rem]">
+              {item.value}
+            </p>
+            <p className="mt-2.5 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-romo-cream">
+              {item.label}
+            </p>
+            <p className="mt-1 text-[0.8125rem] text-romo-muted">{item.detail}</p>
           </li>
         ))}
       </Reveal>

@@ -59,13 +59,17 @@ export function Footer() {
             Servicios
           </h3>
           <ul className="mt-4 space-y-1.5">
-            {services.map((service) => (
-              <li key={service.id}>
+            {[
+              { href: '/caja-seca-48-53-pies/', label: "Caja seca 48' y 53'" },
+              { href: '/plataforma-carga-pesada/', label: 'Plataforma y carga pesada' },
+              ...services.map((service) => ({ href: '/#servicios', label: service.title })),
+            ].map((link) => (
+              <li key={link.label}>
                 <Link
-                  href="/#servicios"
+                  href={link.href}
                   className="inline-flex min-h-7 items-center text-sm text-romo-muted transition-colors hover:text-romo-cream-light"
                 >
-                  {service.title}
+                  {link.label}
                 </Link>
               </li>
             ))}

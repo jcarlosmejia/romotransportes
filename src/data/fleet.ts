@@ -23,11 +23,16 @@ export type EquipmentCard = {
   /** How the load is handled. */
   handling: readonly string[];
   image: ImageSlug;
+  /** Equipment landing page and its descriptive anchor text. */
+  href: string;
+  linkText: string;
 };
 
 export const equipment: readonly EquipmentCard[] = [
   {
     id: 'caja-seca',
+    href: '/caja-seca-48-53-pies/',
+    linkText: "Ver fletes en caja seca 48' y 53'",
     kicker: 'Equipo cerrado',
     title: "Caja seca 48' y 53'",
     description:
@@ -45,6 +50,8 @@ export const equipment: readonly EquipmentCard[] = [
   },
   {
     id: 'plataforma',
+    href: '/plataforma-carga-pesada/',
+    linkText: 'Ver transporte en plataforma y carga pesada',
     kicker: 'Equipo abierto',
     title: "Plataforma tipo plana 40'+",
     description:

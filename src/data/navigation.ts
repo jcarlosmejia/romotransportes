@@ -16,4 +16,4 @@ export const navItems: readonly NavItem[] = [
 ];
 
 /** Anchor for every "solicitar cotización" call to action. */
-export const QUOTE_ANCHOR = '#cotizar';
+export const QUOTE_ANCHOR = '/#cotizar';

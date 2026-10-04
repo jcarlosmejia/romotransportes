@@ -25,7 +25,8 @@ especificaciones de equipo y los datos de contacto el **17 de septiembre de
 | Inicio de operaciones | 2010 |
 | Base | Guadalajara, Jalisco (ZMG) |
 | Equipo | Caja seca 48' y 53'; plataforma tipo plana 40'+; capacidad 10 / 15 / 35 t como referencia |
-| Rutas frecuentes | Tepic, Mazatlán, Culiacán, Cd. Obregón, Hermosillo, Tijuana, Tecate, León, interior de Jalisco; cobertura nacional |
+| Rutas frecuentes | Pacífico: Tepic, Mazatlán, Culiacán, Cd. Obregón, Hermosillo, Tijuana, Tecate · Norte: Torreón, Chihuahua, Cd. Juárez · Noreste: Saltillo, Monterrey · León e interior de Jalisco; cobertura nacional |
+| Páginas | `/`, `/caja-seca-48-53-pies/`, `/plataforma-carga-pesada/`, `/aviso-de-privacidad/` (contenido de las páginas de equipo en `src/data/equipmentPages.ts`) |
 | Seguro, GPS y monitoreo | Publicados en la sección de Seguridad |
 | Destino del formulario | Correo. WhatsApp es el CTA principal (hero, equipo, contacto, CTA final, botón flotante) |
 

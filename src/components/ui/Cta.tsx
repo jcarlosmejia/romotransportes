@@ -67,14 +67,17 @@ export function WhatsAppCta({
   label = 'Solicitar tarifa por WhatsApp',
   size = 'md',
   place,
+  message = whatsappQuoteMessage,
   className = '',
 }: {
   label?: string;
   size?: Size;
   place: string;
+  /** Prefilled text; defaults to the generic quote template. */
+  message?: string;
   className?: string;
 }) {
-  const href = whatsappLink(whatsappQuoteMessage);
+  const href = whatsappLink(message);
   if (!href) return null;
   return (
     <a
@@ -147,7 +150,7 @@ export function PhoneLink({
       href={`tel:${contact.phone}`}
       data-cta="telefono"
       data-cta-place={place}
-      className={`inline-flex min-h-[2.75rem] items-center gap-2 font-semibold ${className}`}
+      className={`inline-flex min-h-[2.75rem] items-center gap-2 whitespace-nowrap font-semibold ${className}`}
     >
       <Icon name="phone" className="h-[1.125rem] w-[1.125rem] text-romo-red" />
       {label ? `${label} ` : ''}

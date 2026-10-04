@@ -8,9 +8,8 @@ import { Logo } from '@/components/ui/Logo';
 /**
  * @description About + differentiators, on a light band.
  *
- * The narrative is a rewrite of the owner's original mission statement — same
- * intent, professional Spanish, nothing added. No founding year, tenure or
- * headcount appears anywhere, because none of those were confirmed.
+ * Two short paragraphs plus six concrete operating advantages. Year (2010) is
+ * owner-confirmed; no headcount, fleet size or on-time figures, which are not.
  */
 export function About() {
   return (
@@ -33,7 +32,7 @@ export function About() {
               <p className="text-sm font-semibold uppercase tracking-[0.14em] text-romo-muted-dark">
                 Transporte terrestre de carga
                 <br />
-                <span className="text-romo-red">Rutas nacionales</span>
+                <span className="text-romo-red">Guadalajara · Desde 2010</span>
               </p>
             </div>
           </Reveal>

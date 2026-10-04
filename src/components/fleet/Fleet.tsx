@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { capacity, equipment } from '@/data/fleet';
 import { EmailCta, WhatsAppCta } from '@/components/ui/Cta';
 import { Icon } from '@/components/ui/Icon';
@@ -78,7 +79,16 @@ export function Fleet() {
                 </p>
 
                 <div className="mt-6 flex-1" />
-                <WhatsAppCta place={`equipo-${item.id}`} label="Cotizar por WhatsApp" className="w-full sm:w-auto sm:self-start" />
+                <div className="flex flex-col items-start gap-3">
+                  <WhatsAppCta place={`equipo-${item.id}`} label="Cotizar por WhatsApp" className="w-full sm:w-auto" />
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-romo-cream underline underline-offset-4"
+                  >
+                    {item.linkText}
+                    <Icon name="arrow" className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
             </Reveal>
           ))}

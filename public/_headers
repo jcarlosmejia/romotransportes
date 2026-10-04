@@ -55,3 +55,9 @@
 
 /aviso-de-privacidad/
   Cache-Control: public, max-age=0, must-revalidate
+
+/caja-seca-48-53-pies/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/plataforma-carga-pesada/
+  Cache-Control: public, max-age=0, must-revalidate

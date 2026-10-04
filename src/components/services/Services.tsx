@@ -8,10 +8,9 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 /**
  * @description Services section on a light band.
  *
- * Layout deliberately breaks the uniform card grid: the first service runs as a
- * wide editorial row with its photograph, the remaining four sit in a 2×2 grid.
- * That gives the page a change of rhythm instead of a fifth identical row of
- * rounded cards.
+ * The first service runs as a wide editorial row with its photograph; the
+ * other four sit as ruled spec columns (heavy top rule, no card chrome) so the
+ * section does not repeat the equipment cards' look.
  */
 export function Services() {
   const [lead, ...rest] = services;
@@ -23,7 +22,7 @@ export function Services() {
           <SectionHeading
             id="servicios-title"
             overline="Servicios"
-            title="Fletes desde Guadalajara: spot, recurrentes y carga pesada"
+            title="Fletes spot y recurrentes desde Guadalajara"
             lede="Carga completa en rutas locales, semiforáneas y nacionales. Trabajamos viajes únicos y operación programada para plantas, proveedores y CEDIS."
           />
         </Reveal>
@@ -58,12 +57,16 @@ export function Services() {
           </Reveal>
         ) : null}
 
-        <Reveal as="ul" stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-14">
+        <Reveal
+          as="ul"
+          stagger
+          className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4"
+        >
           {rest.map((service) => (
             <li
               key={service.id}
               id={`servicio-${service.id}`}
-              className="card card-interactive card-ticked cut-corner flex flex-col"
+              className="flex flex-col border-t-[3px] border-romo-charcoal pt-5"
             >
               <p className="label-tech text-romo-red">{service.kicker}</p>
               <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-romo-charcoal">
@@ -72,7 +75,7 @@ export function Services() {
               <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-romo-muted-dark">
                 {service.description}
               </p>
-              <ul className="mt-5 space-y-2 border-t border-romo-border-light pt-4">
+              <ul className="mt-5 space-y-2">
                 {service.points.map((point) => (
                   <li key={point} className="flex items-start gap-2.5 text-sm">
                     <Icon name="check" className="mt-px h-4 w-4 shrink-0 text-romo-red" />

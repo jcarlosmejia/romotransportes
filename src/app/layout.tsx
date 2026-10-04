@@ -52,7 +52,7 @@ const archivoBlack = localFont({
 
 const title = "Transporte de Carga y Fletes en Guadalajara | Romo's Transportes";
 const description =
-  'Transporte de carga y fletes desde Guadalajara a todo México. Caja seca de 48 y 53 pies, plataformas tipo plana y soluciones para carga industrial, comercial y pesada.';
+  'Transporte de carga y fletes desde Guadalajara a todo México. Caja seca de 48 y 53 pies, plataforma tipo plana, carga industrial y servicios recurrentes o spot.';
 
 export const metadata: Metadata = {
   // `metadataBase` is always set: without it Next resolves OpenGraph image URLs
@@ -79,8 +79,12 @@ export const metadata: Metadata = {
     'transporte de carga pesada',
     'fletes Guadalajara Tijuana',
     'fletes Guadalajara Hermosillo',
-    'transporte de carga nacional',
-    'carga completa FTL',
+    'transportista Guadalajara',
+    'empresa transportista Guadalajara',
+    'proveedor de transporte de carga',
+    'flete Guadalajara Monterrey',
+    'flete Guadalajara Chihuahua',
+    'cotizar flete Guadalajara',
   ],
   authors: [{ name: company.legalName }],
   creator: company.legalName,
