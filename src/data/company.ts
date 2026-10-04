@@ -36,60 +36,56 @@ export const company = {
   shortName: "Romo's",
 
   /**
-   * Positioning statement. Deliberately describes *what the company does*
-   * rather than asserting scale, tenure or rankings.
+   * Positioning. Owner brief 2026-10-04: a Guadalajara-based B2B carrier with
+   * dry vans and flatbeds, direct attention and national coverage.
    */
-  tagline: 'Transporte de carga nacional',
+  tagline: 'Transporte de carga y fletes desde Guadalajara',
   valueProposition:
-    'Servicio de transporte terrestre de carga para empresas, con unidades propias, plataformas y cajas secas para distintos tipos de mercancía.',
+    'Transporte de carga y fletes desde Guadalajara para empresas, con caja seca de 48 y 53 pies y plataforma tipo plana, atención directa y cobertura nacional.',
 
   /** Year the business started operating. CONFIRMED by the owner 2026-09-17. */
   foundedYear: 2010 as number | null,
   /**
    * Unit / trailer counts stay `null` by the owner's explicit instruction: the
-   * fleet is to be described generically ("unidades propias", "equipo
-   * disponible"), never as a figure. Do not populate this.
+   * fleet is to be described generically ("unidades propias"), never as a
+   * figure. Do not populate this.
    */
   fleetSize: TODO_VERIFY as number | null,
-  /** Registered office or operations base — NOT confirmed. */
-  baseCity: TODO_VERIFY as string | null,
-  baseState: TODO_VERIFY as string | null,
+  /** Operating base. CONFIRMED 2026-10-04 (city/metro area only, no street). */
+  baseCity: 'Guadalajara' as string | null,
+  baseState: 'Jalisco' as string | null,
+  baseArea: 'Zona Metropolitana de Guadalajara',
+  /** Street address — NOT provided. Never invent one. */
   address: TODO_VERIFY as string | null,
 } as const;
 
 /**
- * Contact channels.
- *
- * Every value here is `null` until the owner confirms it. The site is built so
- * that a `null` channel is *hidden*, never rendered as a broken link, and the
- * on-page quote form remains a complete conversion path on its own.
- *
- * To go live, set these (or the matching `NEXT_PUBLIC_*` environment variables
- * on Cloudflare Pages — see README) and rebuild. Nothing else has to change.
+ * Contact channels. CONFIRMED by the owner 2026-10-04, in this order of
+ * precedence: primary phone first wherever telephone contact is presented.
+ * Each value can still be overridden with the matching `NEXT_PUBLIC_*`
+ * variable; a `null` channel is hidden, never rendered as a broken link.
  */
 export const contact = {
-  /**
-   * WhatsApp number in full international E.164 form, digits only, no `+`.
-   * Example shape (NOT a real Romo's number): `521234567890`.
-   */
-  whatsapp: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP ?? '523323838729') as string | null,
-  /** Display form of the WhatsApp number, e.g. `+52 1 33 1234 5678`. */
+  /** WhatsApp, E.164 digits only, no `+`. Primary conversion channel. */
+  whatsapp: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP ?? '523310131863') as string | null,
   whatsappDisplay: (process.env.NEXT_PUBLIC_ROMO_WHATSAPP_DISPLAY ??
-    '+52 33 2383 8729') as string | null,
+    '+52 33 1013 1863') as string | null,
 
-  /** Voice line in `tel:` form, digits and `+` only. */
-  phone: (process.env.NEXT_PUBLIC_ROMO_PHONE ?? '+523323838729') as string | null,
+  /** Primary voice line (`tel:` form). */
+  phone: (process.env.NEXT_PUBLIC_ROMO_PHONE ?? '+523343995054') as string | null,
   phoneDisplay: (process.env.NEXT_PUBLIC_ROMO_PHONE_DISPLAY ??
+    '+52 33 4399 5054') as string | null,
+
+  /** Secondary voice line. */
+  phoneSecondary: (process.env.NEXT_PUBLIC_ROMO_PHONE_2 ?? '+523323838729') as string | null,
+  phoneSecondaryDisplay: (process.env.NEXT_PUBLIC_ROMO_PHONE_2_DISPLAY ??
     '+52 33 2383 8729') as string | null,
 
-  /**
-   * Commercial mailbox that receives quote requests. CONFIRMED by the owner as
-   * the destination for the contact form's e-mail path.
-   */
+  /** Commercial mailbox; destination of the quote form and e-mail CTAs. */
   email: (process.env.NEXT_PUBLIC_ROMO_EMAIL ??
     'contacto.romotransportes@gmail.com') as string | null,
 
-  /** Business hours for the commercial desk. */
+  /** Business hours for the commercial desk — not provided. */
   hours: TODO_VERIFY as string | null,
 } as const;
 
@@ -168,19 +164,19 @@ export const pendingVerification: readonly VerificationItem[] = [
   {
     id: 'platform-specs',
     question:
-      '¿Confirmación documental de la capacidad de la plataforma (36 t) y del tipo de suspensión (de aire)?',
+      '¿Qué configuración vehicular (p. ej. T3-S2, T3-S3, full) y qué peso bruto vehicular autorizado tiene cada unidad, conforme a la NOM-012-SCT-2?',
     reason:
-      'El propietario indicó mantener únicamente "plataforma de tres ejes" hasta contar con confirmación documental.',
+      'El propietario autorizó publicar capacidades de 10, 15 y 35 t como rangos de referencia. El máximo legal depende de la configuración, del tipo de camino y de la NOM-012-SCT-2, por lo que no se publica un tope.',
     currentBehaviour:
-      'Se publica "plataforma de tres ejes" (los tres ejes son visibles en la fotografía). No se publica tonelaje ni tipo de suspensión.',
+      'Se publica "desde 10 toneladas hasta carga pesada" con 10 t / 15 t / 35 t como referencia y el aviso "Capacidad sujeta a configuración, dimensiones de la carga y unidad asignada". No se publica tipo de suspensión.',
     impact: 'limits-messaging',
   },
   {
-    id: 'dry-van-specs',
-    question: '¿Qué medidas tienen las cajas secas (48 ft, 53 ft u otras) y qué capacidad soportan?',
-    reason: 'El propietario indicó describir la caja seca por uso hasta confirmar medidas.',
-    currentBehaviour: 'La caja seca se describe por uso, sin medidas ni capacidad.',
-    impact: 'limits-messaging',
+    id: 'dry-van-capacity',
+    question: '¿Qué capacidad en tarimas y en peso tienen las cajas secas de 48 y 53 pies?',
+    reason: 'Se confirmaron las medidas (48 y 53 pies), no la capacidad por caja.',
+    currentBehaviour: 'Se publican las medidas. La capacidad se confirma al cotizar.',
+    impact: 'nice-to-have',
   },
   {
     id: 'insurance-detail',
@@ -225,9 +221,9 @@ export const pendingVerification: readonly VerificationItem[] = [
     question:
       '¿Hay más ciudades o corredores de operación frecuente que convenga listar además de los confirmados?',
     reason:
-      'Se confirmaron Culiacán, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. La lista se cierra con "y otras rutas nacionales".',
+      'Se confirmaron Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. Conviene validar que Tepic, Mazatlán y Ciudad Obregón son rutas frecuentes y no solo de paso.',
     currentBehaviour:
-      'Se publican las ciudades confirmadas y se indica cobertura en rutas nacionales para el resto del país.',
+      'El mapa y la lista muestran el corredor Pacífico–Norte como "rutas frecuentes" y se indica cobertura nacional bajo cotización.',
     impact: 'nice-to-have',
   },
   {

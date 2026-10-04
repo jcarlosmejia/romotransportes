@@ -15,9 +15,16 @@
  * ring here because it is a peninsula joined to the mainland at the Colorado
  * delta; the sixteen offshore island rings in the source data are dropped.
  *
- * IMPORTANT: no route lines, city markers or corridor labels are drawn. The
- * only coverage statement the source material supports is "rutas nacionales";
- * plotting specific corridors would publish a route claim nobody has confirmed.
+ * ROUTE OVERLAY (owner brief 2026-10-04)
+ * Guadalajara is drawn as the dominant hub and the Pacific / Northern corridor
+ * as a single dashed line through the frequent destinations, plus a short leg
+ * to León. It is one corridor, not a web of daily routes, on purpose: the copy
+ * says "rutas frecuentes y cobertura nacional", and the map must not imply that
+ * every line runs every day. No animation. City coordinates are projected with
+ * the same equirectangular fit as the outline, so dots sit where they belong.
+ *
+ * City labels are hidden below `sm`: at phone widths they would shrink to ~5px.
+ * The city chips rendered next to the map carry that information on mobile.
  *
  * @param className Classes for the root `<svg>`.
  */
@@ -32,8 +39,9 @@ export function MexicoMap({ className = '' }: { className?: string }) {
     >
       <title id="mapa-mexico-title">Mapa de la República Mexicana</title>
       <desc id="mapa-mexico-desc">
-        Contorno estilizado de México que representa la cobertura de Romo&rsquo;s Transportes en
-        rutas nacionales. No señala rutas ni ciudades específicas.
+        Mapa de México con Guadalajara como base operativa y el corredor de rutas frecuentes hacia
+        Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tecate y Tijuana, además de León.
+        Romo&rsquo;s Transportes también da cobertura nacional bajo cotización.
       </desc>
 
       <defs>
@@ -66,9 +74,72 @@ export function MexicoMap({ className = '' }: { className?: string }) {
           opacity="0.92"
         />
       </g>
+
+      {/* Frequent-route corridor: Guadalajara → Pacific → North → Baja California. */}
+      <g fill="none" stroke="#940f12" strokeLinecap="round" strokeLinejoin="round">
+        <path
+          d="M 457.1 409 L 409.9 381.2 L 363 323.4 L 333.3 270.5 L 255.2 180.9 L 223.9 128.1 L 187.5 73.2 L 107.2 14.7 L 50.2 11 L 37.7 12.4"
+          strokeWidth="4"
+          strokeDasharray="10 8"
+        />
+        <path d="M 457.1 409 L 508.3 393.9" strokeWidth="4" strokeDasharray="10 8" />
+      </g>
+
+      {/* Destination dots. */}
+      <g fill="currentColor" stroke="#eee7ce" strokeWidth="3">
+        {CITIES.map((c) => (
+          <circle key={c.name} cx={c.x} cy={c.y} r="7" />
+        ))}
+      </g>
+
+      {/* Hub. */}
+      <circle cx="457.1" cy="409" r="20" fill="none" stroke="#940f12" strokeWidth="3" opacity="0.45" />
+      <circle cx="457.1" cy="409" r="11" fill="#940f12" stroke="#eee7ce" strokeWidth="3" />
+
+      {/* Labels — hidden on phones, see note above. */}
+      <g
+        className="hidden sm:inline"
+        fontFamily="var(--font-archivo), Arial, sans-serif"
+        fontSize="21"
+        fontWeight="700"
+        fill="currentColor"
+        stroke="#eee7ce"
+        strokeWidth="6"
+        paintOrder="stroke"
+        strokeLinejoin="round"
+      >
+        <text x="457" y="452" textAnchor="middle" fontSize="27" fill="#940f12">
+          Guadalajara
+        </text>
+        {CITIES.filter((c) => c.label).map((c) => (
+          <text key={c.name} x={c.lx} y={c.ly} textAnchor={c.anchor}>
+            {c.label}
+          </text>
+        ))}
+      </g>
     </svg>
   );
 }
+
+/** Frequent destinations, projected into this viewBox. */
+const CITIES: readonly {
+  name: string;
+  x: number;
+  y: number;
+  label?: string;
+  lx?: number;
+  ly?: number;
+  anchor?: 'start' | 'middle' | 'end';
+}[] = [
+  { name: 'Tepic', x: 409.9, y: 381.2, label: 'Tepic', lx: 396, ly: 389, anchor: 'end' },
+  { name: 'Mazatlán', x: 363, y: 323.4, label: 'Mazatlán', lx: 349, ly: 331, anchor: 'end' },
+  { name: 'Culiacán', x: 333.3, y: 270.5, label: 'Culiacán', lx: 319, ly: 277, anchor: 'end' },
+  { name: 'Ciudad Obregón', x: 255.2, y: 180.9, label: 'Cd. Obregón', lx: 270, ly: 192, anchor: 'start' },
+  { name: 'Hermosillo', x: 223.9, y: 128.1, label: 'Hermosillo', lx: 239, ly: 134, anchor: 'start' },
+  { name: 'Tecate', x: 50.2, y: 11 },
+  { name: 'Tijuana', x: 37.7, y: 12.4, label: 'Tijuana · Tecate', lx: 30, ly: 46, anchor: 'start' },
+  { name: 'León', x: 508.3, y: 393.9, label: 'León', lx: 522, ly: 389, anchor: 'start' },
+];
 
 const MEXICO_OUTLINE =
   'M 34.7 12.1 L 108.4 6.0 L 105.0 12.9 L 221.3 52.5 L 308.0 52.4 L 308.1 37.3 L 362.3 37.7 L 371.3 ' +

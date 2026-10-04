@@ -9,7 +9,8 @@ import { services } from '@/data/services';
  * Only confirmed facts are emitted. `foundingDate` (2010), `telephone`,
  * `email` and the named `areaServed` cities are all owner-confirmed. There is
  * still **no** `aggregateRating`, no `review`, no `award`, no
- * `numberOfEmployees` and no street address — none of those are verified, and
+ * `numberOfEmployees` and no street address (only locality Guadalajara,
+ * Jalisco) — none of those are verified, and
  * fabricating review markup is both false and a search-policy violation.
  *
  * `LocalBusiness` is deliberately not used: it requires a physical address,
@@ -40,17 +41,39 @@ export function StructuredData() {
     ],
     knowsAbout: [
       'Transporte de carga',
-      'Transporte terrestre de mercancías',
-      'Carga completa',
-      'Caja seca',
-      'Plataforma',
-      'Fletes nacionales',
+      'Fletes desde Guadalajara',
+      'Carga completa (FTL)',
+      "Caja seca de 48 y 53 pies",
+      'Plataforma tipo plana',
+      'Carga pesada e industrial',
+      'Servicio spot',
+      'Servicio recurrente',
     ],
   };
 
   if (siteUrlIsVerified) organization.url = siteUrl;
   if (contact.phone) organization.telephone = contact.phone;
   if (contact.email) organization.email = contact.email;
+  // Primary first, then the alternate line; both reach sales.
+  const phones = [contact.phone, contact.phoneSecondary].filter(Boolean);
+  if (phones.length) {
+    organization.contactPoint = phones.map((telephone) => ({
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      telephone,
+      areaServed: 'MX',
+      availableLanguage: 'es',
+    }));
+  }
+  if (!company.address && company.baseCity) {
+    // City-level only: the owner has not published a street address.
+    organization.address = {
+      '@type': 'PostalAddress',
+      addressLocality: company.baseCity,
+      addressRegion: company.baseState,
+      addressCountry: 'MX',
+    };
+  }
   if (company.address) {
     organization.address = {
       '@type': 'PostalAddress',

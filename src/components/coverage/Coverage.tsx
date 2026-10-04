@@ -7,9 +7,10 @@ import { MexicoMap } from './MexicoMap';
 /**
  * @description National coverage on a light band.
  *
- * Pairs the country outline with a real highway photograph. Deliberately names
- * no state, city or corridor — see `MexicoMap` and
- * docs/content-verification.md for why.
+ * Map with the Guadalajara hub and the frequent-route corridor, a three-item
+ * legend, and the city chips (which carry the city names on phones, where the
+ * map hides its labels). Always framed as "rutas frecuentes" plus national
+ * coverage — never as the only places Romo's goes.
  */
 export function Coverage() {
   return (
@@ -19,7 +20,7 @@ export function Coverage() {
           <Reveal>
             <SectionHeading
               id="cobertura-title"
-              overline="Cobertura nacional"
+              overline="Rutas frecuentes y cobertura nacional"
               title={coverage.title}
               lede={coverage.body}
             />
@@ -37,7 +38,7 @@ export function Coverage() {
                 reads as an exhaustive map of where Romo's can go. */}
             <div className="mt-9">
               <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-romo-red">
-                Ciudades con servicio
+                Rutas frecuentes desde Guadalajara
               </h3>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {coverage.cities.map((city) => (
@@ -69,6 +70,23 @@ export function Coverage() {
               photographic weight is carried by its neighbours instead. */}
           <Reveal className="order-first lg:order-last">
             <MexicoMap className="w-full text-romo-charcoal" />
+            <ul
+              aria-label="Leyenda del mapa"
+              className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[0.8125rem] font-semibold text-romo-charcoal"
+            >
+              <li className="flex items-center gap-2">
+                <span aria-hidden="true" className="h-3.5 w-3.5 rounded-full border-2 border-white bg-romo-red outline outline-2 outline-romo-red/40" />
+                Base operativa · Guadalajara
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden="true" className="w-7 border-t-[3px] border-dashed border-romo-red" />
+                Rutas frecuentes
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden="true" className="h-3.5 w-5 border border-romo-charcoal/40 bg-romo-charcoal/15" />
+                Cobertura nacional disponible
+              </li>
+            </ul>
           </Reveal>
         </div>
       </div>

@@ -23,68 +23,52 @@ export type Service = {
 export const services: readonly Service[] = [
   {
     id: 'transporte-nacional',
-    kicker: 'Rutas nacionales',
-    title: 'Transporte nacional',
+    kicker: 'Desde Guadalajara',
+    title: 'Fletes nacionales desde Guadalajara',
     description:
-      'Traslado de mercancía dentro de la República Mexicana. Revisamos origen, destino, tipo de carga y fechas para definir la unidad y la ruta que corresponden a cada servicio.',
+      'Cargamos en la Zona Metropolitana de Guadalajara y el interior de Jalisco y movemos tu mercancía a cualquier destino del país, con experiencia especial en el Pacífico y el Norte.',
     points: [
-      'Servicio en rutas nacionales',
-      'Unidad asignada según el tipo de carga',
-      'Seguimiento directo durante el traslado',
+      'Rutas locales, semiforáneas y foráneas',
+      'Caja seca o plataforma según la carga',
+      'GPS y seguimiento durante el traslado',
     ],
     image: 'romo-forage-load-highway',
   },
   {
     id: 'carga-completa',
-    kicker: 'Carga completa · FTL',
+    kicker: 'FTL',
     title: 'Carga completa',
     description:
-      'La unidad se destina a un solo embarque. Es la opción para volúmenes que ocupan el equipo completo o para mercancía que no debe compartir plataforma ni caja con otros embarques.',
-    points: [
-      'Una unidad, un embarque',
-      'Sin transbordos intermedios',
-      'Recolección y entrega directas',
-    ],
-    image: 'romo-black-flatbed-palletized-load',
+      'Una unidad dedicada a tu embarque, sin transbordos ni carga compartida. Recolección y entrega directas.',
+    points: ['Una unidad, un embarque', 'Sin transbordos intermedios'],
+    image: null,
   },
   {
-    id: 'caja-seca',
-    kicker: 'Equipo cerrado',
-    title: 'Caja seca',
+    id: 'recurrente',
+    kicker: 'Operación programada',
+    title: 'Servicio recurrente',
     description:
-      'Para mercancía general que necesita viajar protegida del clima, el polvo y la exposición exterior. Es el equipo habitual para producto paletizado, empaque y mercancía comercial.',
-    points: [
-      'Mercancía protegida del exterior',
-      'Carga y descarga por la parte trasera',
-      'Apta para producto paletizado',
-    ],
-    image: 'romo-purple-dry-van-mountains',
+      'Para movimientos que se repiten: entre plantas, de proveedor a planta o a CEDIS. Planeamos frecuencia, ventanas de carga y equipo disponible.',
+    points: ['Planeación por frecuencia y ruta', 'Un mismo contacto para la operación'],
+    image: null,
   },
   {
-    id: 'plataforma',
-    kicker: 'Equipo abierto',
-    title: 'Plataforma',
+    id: 'spot',
+    kicker: 'Viaje único',
+    title: 'Servicio spot',
     description:
-      'Para materiales, estructuras, tubería, maquinaria y carga de gran dimensión. La plataforma permite cargar y descargar por los costados o por arriba, con grúa o montacargas, y sujetar la carga con bandas y cadenas.',
-    points: [
-      'Carga lateral y superior',
-      'Materiales, estructuras y maquinaria',
-      'Sujeción con bandas y cadenas',
-    ],
-    image: 'romo-steel-structures-flatbed',
+      'Para embarques puntuales o urgentes. Envíanos origen, destino y tipo de carga y te confirmamos unidad y tarifa.',
+    points: ['Cotización por embarque', 'Caja seca o plataforma'],
+    image: null,
   },
   {
-    id: 'dedicado',
-    kicker: 'Operación recurrente',
-    title: 'Servicio dedicado',
+    id: 'carga-pesada',
+    kicker: 'Carga industrial',
+    title: 'Carga pesada e industrial',
     description:
-      'Cuando el movimiento se repite, la operación se planea en conjunto: frecuencia, rutas, ventanas de carga y el tipo de equipo que conviene mantener disponible para su operación.',
-    points: [
-      'Planeación por frecuencia y ruta',
-      'Equipo definido con anticipación',
-      'Un mismo contacto para toda la operación',
-    ],
-    image: 'romo-purple-flatbed-steel-pipes-warehouse',
+      'Acero, estructura, maquinaria y material de construcción en plataforma, con maniobra y sujeción según la carga. Capacidad sujeta a configuración.',
+    points: ['Maniobra con grúa o montacargas', 'Sujeción con bandas y cadenas'],
+    image: null,
   },
 ];
 

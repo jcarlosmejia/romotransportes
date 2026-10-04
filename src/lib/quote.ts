@@ -18,6 +18,8 @@ export type QuoteFields = {
   unidad: string;
   fecha: string;
   peso: string;
+  dimensiones: string;
+  operacion: string;
   mensaje: string;
 };
 
@@ -32,6 +34,8 @@ export const emptyQuote: QuoteFields = {
   unidad: '',
   fecha: '',
   peso: '',
+  dimensiones: '',
+  operacion: '',
   mensaje: '',
 };
 
@@ -43,10 +47,14 @@ export type QuoteErrors = Partial<Record<keyof QuoteFields, string>>;
 
 export const unidadOptions = [
   { value: '', label: 'No estoy seguro / me ayudan a definirlo' },
-  { value: 'Caja seca', label: 'Caja seca' },
-  { value: 'Plataforma', label: 'Plataforma' },
-  { value: 'Carga completa', label: 'Carga completa' },
-  { value: 'Servicio dedicado o recurrente', label: 'Servicio dedicado o recurrente' },
+  { value: 'Caja seca 48 o 53 pies', label: "Caja seca 48' / 53'" },
+  { value: 'Plataforma tipo plana', label: "Plataforma tipo plana 40'+" },
+] as const;
+
+export const operacionOptions = [
+  { value: '', label: 'Sin definir' },
+  { value: 'Servicio único (spot)', label: 'Servicio único (spot)' },
+  { value: 'Servicio recurrente', label: 'Servicio recurrente' },
 ] as const;
 
 /**
@@ -91,7 +99,7 @@ export function validateQuote(fields: QuoteFields): QuoteErrors {
   if (!fields.destino.trim()) errors.destino = 'Indique la ciudad o el punto de destino.';
 
   if (!fields.mercancia.trim()) {
-    errors.mercancia = 'Describa brevemente qué mercancía va a mover.';
+    errors.mercancia = 'Describe brevemente el tipo de carga.';
   }
 
   return errors;
@@ -105,10 +113,12 @@ const MESSAGE_ROWS: readonly [keyof QuoteFields, string][] = [
   ['email', 'Correo'],
   ['origen', 'Origen'],
   ['destino', 'Destino'],
-  ['mercancia', 'Mercancía'],
+  ['mercancia', 'Tipo de carga'],
   ['peso', 'Peso aproximado'],
-  ['unidad', 'Tipo de unidad'],
-  ['fecha', 'Fecha estimada'],
+  ['dimensiones', 'Dimensiones'],
+  ['unidad', 'Tipo de servicio'],
+  ['operacion', 'Operación'],
+  ['fecha', 'Fecha de carga'],
   ['mensaje', 'Comentarios'],
 ];
 
@@ -131,14 +141,47 @@ export function buildQuoteMessage(fields: QuoteFields): string {
 }
 
 /**
- * Message pre-filled by the floating WhatsApp button. Deliberately short: it is
- * an opener the visitor can send as-is, not a form to edit.
+ * Message pre-filled by every WhatsApp CTA. A fill-in-the-blanks template, so
+ * the first message the commercial desk receives already carries the three
+ * facts needed to quote: origin, destination and cargo type.
  */
-export const whatsappFloatMessage =
-  "Hola, me gustaría solicitar información y una cotización con Romo's Transportes.";
+export const whatsappQuoteMessage =
+  'Hola, quiero solicitar una cotización de transporte.\nOrigen: \nDestino: \nTipo de carga: ';
 
-/** Subject line for the e-mail delivery path. */
-export const quoteEmailSubject = "Solicitud de cotización — Romo's Transportes";
+/** Kept as an alias so older imports keep working. */
+export const whatsappFloatMessage = whatsappQuoteMessage;
+
+/** Subject line for every e-mail path. */
+export const quoteEmailSubject = 'Solicitud de tarifa de transporte';
+
+/** Body for the stand-alone "Solicitar tarifa por correo" CTA. */
+const EMAIL_TEMPLATE = [
+  "Hola, me gustaría solicitar una tarifa de transporte con Romo's Transportes.",
+  '',
+  'Origen:',
+  'Destino:',
+  'Mercancía:',
+  'Peso aproximado:',
+  'Dimensiones:',
+  'Fecha de carga:',
+  'Tipo de unidad (caja seca / plataforma):',
+  'Servicio único o recurrente:',
+].join('\n');
+
+/** mailto encoder: %20 for spaces (URLSearchParams uses "+", shown literally). */
+function mailto(email: string, body: string): string {
+  const params = new URLSearchParams({ subject: quoteEmailSubject, body });
+  return `mailto:${email}?${params.toString().replace(/\+/g, '%20')}`;
+}
+
+/**
+ * @description `mailto:` with the blank tariff-request template.
+ * @param email Destination mailbox.
+ * @returns The `mailto:` URL.
+ */
+export function quoteTemplateMailtoLink(email: string): string {
+  return mailto(email, EMAIL_TEMPLATE);
+}
 
 /**
  * @description Builds a `mailto:` link carrying the formatted quote request.
@@ -152,11 +195,5 @@ export const quoteEmailSubject = "Solicitud de cotización — Romo's Transporte
  * @returns The `mailto:` URL.
  */
 export function quoteMailtoLink(email: string, fields: QuoteFields): string {
-  const params = new URLSearchParams({
-    subject: quoteEmailSubject,
-    body: buildQuoteMessage(fields),
-  });
-  // URLSearchParams encodes spaces as "+", which mail clients render literally
-  // in the body; %20 is what they expect.
-  return `mailto:${email}?${params.toString().replace(/\+/g, '%20')}`;
+  return mailto(email, buildQuoteMessage(fields));
 }

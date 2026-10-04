@@ -1,6 +1,6 @@
 import { contact, hasEmail, hasPhone } from '@/data/company';
 import { Icon } from '@/components/ui/Icon';
-import { PhoneLink } from '@/components/ui/Cta';
+import { ContactList, EmailCta, WhatsAppCta } from '@/components/ui/Cta';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { QuoteForm } from './QuoteForm';
@@ -26,36 +26,25 @@ export function Contact() {
               id="contacto-title"
               overline="Contacto"
               title="Solicita tu cotización"
-              lede="Comparte origen, destino, tipo de mercancía y la fecha que tienes prevista. Con esos datos definimos la unidad adecuada y te respondemos con la cotización."
+              lede="Comparte origen, destino, tipo de carga y la fecha que tienes prevista. Con esos datos definimos si conviene caja seca o plataforma y te respondemos con la tarifa."
             />
 
             {hasAnyChannel ? (
-              <div className="mt-10 space-y-4">
+              <div className="mt-10 space-y-5">
                 <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-romo-cream">
                   Contacto directo
                 </h3>
-                {/* WhatsApp is intentionally absent: the floating button is the
-                    single WhatsApp entry point site-wide. */}
-                <div className="flex flex-col gap-3">
-                  <PhoneLink place="contacto" className="text-romo-cream-light" />
-                  {contact.email ? (
-                    <a
-                      href={`mailto:${contact.email}`}
-                      data-cta="correo"
-                      data-cta-place="contacto"
-                      className="inline-flex min-h-[2.75rem] items-center gap-2 font-semibold text-romo-cream-light"
-                    >
-                      <Icon name="mail" className="h-[1.125rem] w-[1.125rem] text-romo-red" />
-                      {contact.email}
-                    </a>
-                  ) : null}
-                  {contact.hours ? (
-                    <p className="flex items-center gap-2 text-sm text-romo-muted">
-                      <Icon name="clock" className="h-[1.125rem] w-[1.125rem]" />
-                      {contact.hours}
-                    </p>
-                  ) : null}
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <WhatsAppCta place="contacto" size="sm" />
+                  <EmailCta place="contacto" size="sm" />
                 </div>
+                <ContactList place="contacto" />
+                {contact.hours ? (
+                  <p className="flex items-center gap-2 text-sm text-romo-muted">
+                    <Icon name="clock" className="h-[1.125rem] w-[1.125rem]" />
+                    {contact.hours}
+                  </p>
+                ) : null}
               </div>
             ) : null}
 

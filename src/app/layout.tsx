@@ -50,9 +50,9 @@ const archivoBlack = localFont({
   fallback: ['Arial Black', 'Helvetica Neue', 'Arial', 'sans-serif'],
 });
 
-const title = "Romo's Transportes | Transporte de carga nacional en México";
+const title = "Transporte de Carga y Fletes en Guadalajara | Romo's Transportes";
 const description =
-  'Transporte terrestre de carga para empresas en rutas nacionales. Plataformas, cajas secas y carga completa. Solicita tu cotización.';
+  'Transporte de carga y fletes desde Guadalajara a todo México. Caja seca de 48 y 53 pies, plataformas tipo plana y soluciones para carga industrial, comercial y pesada.';
 
 export const metadata: Metadata = {
   // `metadataBase` is always set: without it Next resolves OpenGraph image URLs
@@ -69,16 +69,18 @@ export const metadata: Metadata = {
   description,
   applicationName: company.legalName,
   keywords: [
-    'transporte de carga',
-    'transporte de carga en México',
-    'transporte nacional',
-    'transporte terrestre de carga',
-    'fletes nacionales',
-    'carga completa',
-    'cajas secas',
-    'plataformas',
-    'transporte de mercancías',
-    'transporte para empresas',
+    'transporte de carga Guadalajara',
+    'fletes Guadalajara',
+    'fletes desde Guadalajara',
+    'transporte de carga Jalisco',
+    'caja seca 53 pies',
+    'caja seca 48 pies',
+    'plataforma tipo plana',
+    'transporte de carga pesada',
+    'fletes Guadalajara Tijuana',
+    'fletes Guadalajara Hermosillo',
+    'transporte de carga nacional',
+    'carga completa FTL',
   ],
   authors: [{ name: company.legalName }],
   creator: company.legalName,
@@ -97,7 +99,7 @@ export const metadata: Metadata = {
         url: '/brand/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: "Romo's Transportes — transporte de carga nacional",
+        alt: "Romo's Transportes — transporte de carga y fletes desde Guadalajara",
       },
     ],
   },

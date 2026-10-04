@@ -27,11 +27,16 @@ import { StructuredData } from '@/components/layout/StructuredData';
  * cream "light band" so the page never reads as one uninterrupted black scroll,
  * and two photographic breaks split the longer text runs:
  *
- *   hero (dark) → trust (charcoal) → servicios (light) → flota (dark)
- *   → corte fotográfico → seguridad (charcoal) → cobertura (light)
- *   → industrias (charcoal) → proceso (light) → galería (dark)
- *   → nosotros (light) → CTA de cotización (fotográfico) → preguntas (light)
- *   → contacto (dark) → footer
+ *   hero (dark) → confianza → equipo: caja seca vs plataforma (dark)
+ *   → servicios spot/recurrente (light) → industrias (charcoal)
+ *   → cobertura y mapa (light) → corte fotográfico → galería (dark)
+ *   → nosotros / por qué Romo's (light) → seguridad (charcoal)
+ *   → cómo cotizar (light) → contacto + formulario (dark) → preguntas (light)
+ *   → CTA final (fotográfico) → footer
+ *
+ * Follows the owner brief (2026-10-04) — equipment right after the hero,
+ * because "do they have my trailer?" is the buyer's first question — with two
+ * neighbours swapped so light and dark bands keep alternating.
  */
 export default function HomePage() {
   return (
@@ -44,8 +49,10 @@ export default function HomePage() {
       <main id="contenido">
         <Hero />
         <TrustStrip />
-        <Services />
         <Fleet />
+        <Services />
+        <Industries />
+        <Coverage />
 
         <ImageBreak
           slug="romo-purple-flatbed-steel-pipes-warehouse"
@@ -54,15 +61,13 @@ export default function HomePage() {
           caption="Maniobra de carga de tubería de acero sobre plataforma, en nave industrial."
         />
 
-        <Safety />
-        <Coverage />
-        <Industries />
-        <Process />
         <Gallery />
         <About />
-        <QuoteCta />
-        <Faq />
+        <Safety />
+        <Process />
         <Contact />
+        <Faq />
+        <QuoteCta />
       </main>
 
       <Footer />

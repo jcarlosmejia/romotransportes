@@ -1,10 +1,10 @@
-import { QuoteButton } from '@/components/ui/Cta';
+import { EmailCta, PhoneLink, WhatsAppCta } from '@/components/ui/Cta';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { Reveal } from '@/components/ui/Reveal';
 
 /**
- * @description High-impact quote call to action, placed just before the FAQ and
- * contact sections.
+ * @description Final call to action, the last section before the footer:
+ * WhatsApp first, e-mail second, a call third.
  *
  * Uses the night photograph as a background because dark source pixels carry a
  * full-bleed treatment far better than a bright daylight frame at this source
@@ -34,13 +34,15 @@ export function QuoteCta() {
           </h2>
           <div aria-hidden="true" className="mt-6 h-[3px] w-20 bg-romo-red" />
           <p className="lede mt-6 max-w-xl">
-            Cuéntanos origen, destino, tipo de mercancía y la fecha estimada. Te ayudamos a definir la
-            unidad adecuada y te enviamos la cotización.
+            Envíanos origen, destino y tipo de carga. Te decimos qué unidad conviene —caja seca o
+            plataforma— y te respondemos con la tarifa.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <QuoteButton place="cta-media-pagina" />
+            <WhatsAppCta place="cta-final" />
+            <EmailCta place="cta-final" />
           </div>
+          <PhoneLink place="cta-final" label="o llama al" className="mt-4 text-sm text-romo-cream-light" />
         </div>
       </Reveal>
     </section>

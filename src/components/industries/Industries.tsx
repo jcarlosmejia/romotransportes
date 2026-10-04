@@ -20,7 +20,7 @@ export function Industries() {
           <SectionHeading
             id="industrias-title"
             overline="Tipos de carga"
-            title="Qué transportamos"
+            title="Carga industrial, comercial y pesada"
             lede="Nuestro equipo cubre carga cerrada y abierta. Estas son las categorías de mercancía y los sectores que podemos atender."
           />
         </Reveal>

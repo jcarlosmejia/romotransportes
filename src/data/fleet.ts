@@ -1,68 +1,79 @@
 /**
- * @description Equipment presented on the site.
+ * @description Equipment, presented as two equal-weight offers.
  *
- * FACTUAL RULE APPLIED HERE
- * -------------------------
- * `specs` may only contain attributes that are *directly countable in Romo's
- * own photographs* (for example: a three-axle platform — the three axles are
- * visible). Anything that requires a document or the owner's word — payload
- * capacity, trailer length, suspension type, unit counts, model years — stays
- * in `pendingSpecs` and is NEVER rendered. The source material mentioned
- * "tres ejes, suspensión de aire, 36 toneladas"; only the axle count survives
- * that test.
+ * Owner brief 2026-10-04 confirmed: caja seca 48' and 53', plataforma tipo
+ * plana from 40'. Flatbed is deliberately NOT secondary to dry van — the two
+ * cards share one component and one layout.
+ *
+ * Capacity is published only as ranges "según configuración", never as a hard
+ * legal maximum: payload depends on tractor/trailer configuration, axle count
+ * and the road class under NOM-012-SCT-2. See `capacity` and
+ * docs/content-verification.md (`platform-specs`).
  */
 
 import type { ImageSlug } from './imageManifest';
 
-export type FleetItem = {
-  id: string;
+export type EquipmentCard = {
+  id: 'caja-seca' | 'plataforma';
+  kicker: string;
   title: string;
-  /** What this equipment is used for, in operational terms. */
   description: string;
-  /** Observable attributes only. */
-  specs: readonly string[];
-  /** Attributes withheld pending owner confirmation (never rendered). */
-  pendingSpecs: readonly string[];
+  /** What this equipment is for. */
+  uses: readonly string[];
+  /** How the load is handled. */
+  handling: readonly string[];
   image: ImageSlug;
 };
 
-export const fleet: readonly FleetItem[] = [
+export const equipment: readonly EquipmentCard[] = [
   {
-    id: 'tractocamiones',
-    title: 'Tractocamiones',
+    id: 'caja-seca',
+    kicker: 'Equipo cerrado',
+    title: "Caja seca 48' y 53'",
     description:
-      'Las unidades motrices que jalan el equipo. Operan tanto con plataforma como con caja seca, según lo que requiera el embarque, y son la base de cada servicio en ruta.',
-    specs: ['Unidades tipo tractocamión', 'Cabina dormitorio para viaje largo', 'Operan plataforma y caja seca'],
-    pendingSpecs: ['Cantidad de unidades', 'Marcas y años de modelo', 'Potencia y configuración de ejes'],
-    image: 'romo-purple-flatbed-facility-wide',
-  },
-  {
-    id: 'plataformas',
-    title: 'Plataformas',
-    description:
-      'Equipo abierto para material, estructura, tubería y carga de gran dimensión. Permite maniobrar con grúa o montacargas por los costados y por arriba, y asegurar la carga con bandas y cadenas.',
-    specs: ['Plataforma de tres ejes', 'Carga lateral y superior', 'Sujeción con bandas y cadenas'],
-    pendingSpecs: [
-      'Capacidad máxima de carga (el material de origen menciona 36 t, sin confirmar)',
-      'Tipo de suspensión (el material de origen menciona suspensión de aire, sin confirmar)',
-      'Longitud de la plataforma',
+      'Para mercancía que debe viajar protegida del clima y el polvo. Carga completa (FTL) de planta a CEDIS, de proveedor a planta o a distribución.',
+    uses: [
+      'Mercancía general y comercial',
+      'Carga paletizada',
+      'Materia prima e insumos industriales',
+      'Producto terminado',
+      'Empaque y embalaje',
+      'Distribución planta–CEDIS',
     ],
-    // Deliberately NOT another crop of the tractor portrait above: the two cards
-    // sit side by side, and two framings of one photograph read as a mistake.
-    // This frame also shows what a platform is actually for.
-    image: 'romo-steel-structures-flatbed',
-  },
-  {
-    id: 'cajas-secas',
-    title: 'Cajas secas',
-    description:
-      'Equipo cerrado para mercancía que debe viajar protegida del clima y del polvo. Es la opción habitual para producto paletizado, empaque y mercancía comercial.',
-    specs: ['Caja cerrada', 'Carga y descarga por la parte trasera', 'Mercancía protegida del exterior'],
-    pendingSpecs: [
-      'Medidas de caja (48 ft / 53 ft u otras)',
-      'Capacidad de carga',
-      'Cantidad de cajas en operación',
-    ],
+    handling: ['Carga y descarga trasera', 'Servicio spot o recurrente'],
     image: 'romo-purple-dry-van-mountains',
   },
+  {
+    id: 'plataforma',
+    kicker: 'Equipo abierto',
+    title: "Plataforma tipo plana 40'+",
+    description:
+      'Para carga larga, pesada o de gran dimensión que se maniobra por los costados o por arriba, con grúa o montacargas, y se asegura según el tipo de carga.',
+    uses: [
+      'Acero, perfiles y placa',
+      'Tubería y varilla',
+      'Estructuras metálicas',
+      'Maquinaria y equipo',
+      'Material para construcción',
+      'Sobredimensionada, sujeta a evaluación',
+    ],
+    handling: ['Carga lateral y superior', 'Sujeción con bandas y cadenas'],
+    image: 'romo-steel-structures-flatbed',
+  },
 ];
+
+/**
+ * Weight positioning. Ranges, not a legal maximum. The disclaimer is rendered
+ * next to the numbers, every time, by design.
+ */
+export const capacity = {
+  title: 'Desde 10 toneladas hasta carga pesada',
+  points: [
+    { value: '10 t', label: 'Movimientos industriales' },
+    { value: '15 t', label: 'Carga comercial e industrial' },
+    { value: '35 t', label: 'Carga pesada en plataforma' },
+  ],
+  disclaimer:
+    'Capacidad sujeta a configuración del equipo, dimensiones de la carga, unidad asignada y regulación de pesos y dimensiones aplicable a la ruta.',
+  image: 'romo-purple-flatbed-facility-wide' as ImageSlug,
+} as const;

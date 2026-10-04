@@ -1,5 +1,7 @@
 import { images, type ImageSlug } from '@/data/imageManifest';
-import { QuoteButton } from '@/components/ui/Cta';
+import { EmailCta, PhoneLink, WhatsAppCta } from '@/components/ui/Cta';
+import { Icon } from '@/components/ui/Icon';
+import { heroCapabilities } from '@/data/content';
 
 /**
  * Both framings come from the same photograph — a tractor unit hauling a loaded
@@ -58,32 +60,40 @@ export function Hero() {
 
       <div className="shell relative grid items-center gap-10 lg:grid-cols-[1fr_minmax(0,35rem)] lg:gap-14">
         <div>
-          <p className="overline">Transporte de carga nacional</p>
+          <p className="overline">Base en Guadalajara, Jalisco · Desde 2010</p>
 
-          <h1 id="hero-title" className="display-1 mt-4 uppercase">
-            Tu carga,
-            <br />
-            en buenas manos
-            <span className="text-romo-red">.</span>
+          {/* The H1 names the service AND the city: it is the strongest on-page
+              signal for "transporte de carga Guadalajara" / "fletes desde
+              Guadalajara", and it answers "what / where" in one read. */}
+          <h1 id="hero-title" className="display-hero mt-4 uppercase">
+            Transporte de carga y fletes desde Guadalajara
+            <span className="text-romo-red"> a todo México</span>
           </h1>
 
-          <p className="lede mt-6">
-            Transporte terrestre de carga para empresas en rutas nacionales. Plataformas y cajas
-            secas, carga completa y atención directa durante todo el servicio.
+          <p className="lede mt-6 !max-w-[52ch]">
+            Movemos carga comercial e industrial en cajas secas de 48 y 53 pies y plataformas tipo
+            plana, en rutas locales, semiforáneas y nacionales. Servicio spot o recurrente, con
+            atención directa.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <QuoteButton place="hero" />
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <WhatsAppCta place="hero" />
+            <EmailCta place="hero" />
           </div>
+          <PhoneLink place="hero" label="o llama al" className="mt-3 text-sm text-romo-cream-light" />
 
-          {/* Short, verifiable reassurance line — no promises about timing. */}
-          <p className="mt-7 flex items-start gap-2.5 text-sm text-romo-muted">
-            <span aria-hidden="true" className="mt-[0.4rem] h-[2px] w-6 shrink-0 bg-romo-red" />
-            <span className="max-w-sm">
-              Cuéntanos origen, destino y qué vas a mover. Te ayudamos a definir la unidad
-              adecuada.
-            </span>
-          </p>
+          {/* Capability row: the five facts a logistics buyer checks first. */}
+          <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2" aria-label="Capacidades principales">
+            {heroCapabilities.map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-1.5 text-[0.8125rem] font-semibold text-romo-cream-light"
+              >
+                <Icon name="check" className="h-4 w-4 shrink-0 text-romo-red" />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Contained, angular photo frame. Cream keyline offset by a red block —
@@ -137,7 +147,7 @@ export function Hero() {
 
           <p className="mt-4 flex items-center gap-2 pl-1 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-romo-muted">
             <span aria-hidden="true" className="h-1.5 w-1.5 bg-romo-red" />
-            Unidades y equipo propios
+            Unidades propias · Operación real
           </p>
         </div>
       </div>

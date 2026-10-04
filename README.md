@@ -17,13 +17,17 @@ especificaciones de equipo y los datos de contacto el **17 de septiembre de
 
 | Dato | Valor publicado |
 | :-- | :-- |
-| WhatsApp y teléfono | `+52 33 2383 8729` |
+| Teléfono principal | `+52 33 4399 5054` |
+| Teléfono alterno | `+52 33 2383 8729` |
+| WhatsApp | `+52 33 1013 1863` |
 | Correo | `contacto.romotransportes@gmail.com` |
 | Dominio | `https://romostransportes.com.mx` |
 | Inicio de operaciones | 2010 |
-| Cobertura | Culiacán, Hermosillo, Tijuana, Tecate, León, interior de Jalisco, y otras rutas nacionales |
+| Base | Guadalajara, Jalisco (ZMG) |
+| Equipo | Caja seca 48' y 53'; plataforma tipo plana 40'+; capacidad 10 / 15 / 35 t como referencia |
+| Rutas frecuentes | Tepic, Mazatlán, Culiacán, Cd. Obregón, Hermosillo, Tijuana, Tecate, León, interior de Jalisco; cobertura nacional |
 | Seguro, GPS y monitoreo | Publicados en la sección de Seguridad |
-| Destino del formulario | Sólo correo. WhatsApp queda en el botón flotante |
+| Destino del formulario | Correo. WhatsApp es el CTA principal (hero, equipo, contacto, CTA final, botón flotante) |
 
 Quedan **10 puntos de mejora**, **ninguno bloqueante**:
 **[`docs/content-verification.md`](docs/content-verification.md)**.

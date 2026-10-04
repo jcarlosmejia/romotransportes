@@ -8,7 +8,7 @@ export type NavItem = { href: string; label: string };
 export const navItems: readonly NavItem[] = [
   { href: '#inicio', label: 'Inicio' },
   { href: '#servicios', label: 'Servicios' },
-  { href: '#flota', label: 'Flota' },
+  { href: '#flota', label: 'Equipo' },
   { href: '#cobertura', label: 'Cobertura' },
   { href: '#seguridad', label: 'Seguridad' },
   { href: '#nosotros', label: 'Nosotros' },

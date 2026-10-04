@@ -60,6 +60,9 @@ const PAIRS = [
   ['whatsapp ring on cream band', '#080503', '#eee7ce', 3],
   ['whatsapp ring on fill', '#080503', '#1fa855', 3],
   ['whatsapp fill on dark brand bg', '#1fa855', '#080503', 3],
+  // WhatsApp TEXT button (primary CTA): label text, so 4.5:1 applies.
+  ['whatsapp button label', '#ffffff', '#178644', 4.5],
+  ['whatsapp button label hover', '#ffffff', '#11683a', 4.5],
 ];
 
 async function main() {

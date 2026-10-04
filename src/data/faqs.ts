@@ -11,6 +11,11 @@ export type Faq = { question: string; answer: string };
 
 export const faqs: readonly Faq[] = [
   {
+    question: '¿Dónde están ubicados?',
+    answer:
+      'Nuestra base de operación está en Guadalajara, Jalisco. Cargamos en la Zona Metropolitana de Guadalajara y el interior de Jalisco, y movemos carga a cualquier destino del país.',
+  },
+  {
     question: '¿Qué información necesitan para cotizar?',
     answer:
       'Origen y destino, tipo de mercancía, peso y dimensiones aproximados, y la fecha en que necesita el servicio. Si la carga requiere maniobra especial en origen o destino, conviene indicarlo desde el principio para asignar el equipo correcto.',
@@ -18,7 +23,12 @@ export const faqs: readonly Faq[] = [
   {
     question: '¿Qué diferencia hay entre caja seca y plataforma?',
     answer:
-      'La caja seca es un equipo cerrado: protege la mercancía del clima y del polvo, y se carga por la parte trasera. Es lo habitual para producto paletizado y mercancía comercial. La plataforma es un equipo abierto: permite cargar por los costados o por arriba con grúa o montacargas, y es la opción para material, estructura, tubería y carga que no entra en un equipo cerrado.',
+      'La caja seca (48 o 53 pies) es un equipo cerrado: protege la mercancía del clima y del polvo, y se carga por la parte trasera. Es lo habitual para producto paletizado y mercancía comercial. La plataforma tipo plana (40 pies o más) es un equipo abierto: permite cargar por los costados o por arriba con grúa o montacargas, y es la opción para material, estructura, tubería y carga que no entra en un equipo cerrado.',
+  },
+  {
+    question: '¿Cuánto peso pueden transportar?',
+    answer:
+      'Movemos cargas desde 10 toneladas hasta carga pesada, con referencias de 10, 15 y 35 toneladas según el equipo. La capacidad está sujeta a la configuración, a las dimensiones de la carga y a la unidad asignada; indíquenos peso y medidas y le confirmamos la unidad adecuada.',
   },
   {
     question: '¿Cómo sé qué unidad necesito?',
@@ -33,7 +43,7 @@ export const faqs: readonly Faq[] = [
   {
     question: '¿Trabajan rutas nacionales?',
     answer:
-      'Sí. Realizamos traslados dentro de la República Mexicana. La ruta se define a partir del origen, el destino y el tipo de carga de cada servicio.',
+      'Sí. Desde Guadalajara hacemos rutas locales, semiforáneas y foráneas a todo el país, en servicio spot (viaje único) o recurrente.',
   },
   {
     question: '¿Puedo solicitar un servicio dedicado o recurrente?',
@@ -63,7 +73,7 @@ export const faqs: readonly Faq[] = [
   {
     question: '¿A qué ciudades llegan?',
     answer:
-      'Damos servicio a las principales ciudades del país. Entre los destinos habituales están Culiacán, Hermosillo, Tijuana, Tecate, León y el interior de Jalisco, además de otras rutas nacionales. Indíquenos su origen y destino y le confirmamos la disponibilidad.',
+      'Nuestras rutas frecuentes salen de Guadalajara hacia el Pacífico y el Norte: Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tijuana y Tecate, además de León y el interior de Jalisco. También cotizamos cualquier otra ruta nacional; indíquenos origen y destino y le confirmamos disponibilidad.',
   },
   {
     question: '¿Desde cuándo opera Romo\'s Transportes?',

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { navItems } from '@/data/navigation';
-import { QuoteButton } from '@/components/ui/Cta';
+import { PhoneLink, QuoteButton, WhatsAppCta } from '@/components/ui/Cta';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
 
@@ -140,10 +140,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {/* No WhatsApp button here: the floating button (`WhatsAppFloat`) is the
-              site's single WhatsApp entry point, so the header carries only the
-              quote CTA. That also gives the seven nav items room to breathe —
-              with two buttons they overflowed between 1024px and 1280px. */}
+          {/* Primary phone only from 1280px: between 1024 and 1280 the seven nav
+              items plus two controls overflow. WhatsApp stays in the floating
+              button so the header does not carry two green targets. */}
+          <span className="hidden xl:block">
+            <PhoneLink place="header" className="text-sm text-romo-cream-light" />
+          </span>
           <QuoteButton place="header" label="Cotizar" size="sm" className="hidden sm:inline-flex" />
 
           <button
@@ -202,7 +204,9 @@ export function Header() {
           </ul>
 
           <div className="mt-5 flex flex-col gap-2.5">
+            <WhatsAppCta place="menu-movil" className="w-full" />
             <QuoteButton place="menu-movil" className="w-full" />
+            <PhoneLink place="menu-movil" label="Llamar al" className="justify-center text-romo-cream-light" />
           </div>
         </nav>
       </div>

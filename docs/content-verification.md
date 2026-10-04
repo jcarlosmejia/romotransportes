@@ -12,7 +12,7 @@ están en `null` y la interfaz oculta lo que no puede sostener.
 
 **Total de puntos pendientes: 10**
 
-## Limita el mensaje (6)
+## Limita el mensaje (5)
 
 _El sitio funciona, pero no puede afirmarlo hasta que se confirme._
 
@@ -22,17 +22,11 @@ _El sitio funciona, pero no puede afirmarlo hasta que se confirme._
 - **Qué hace el sitio hoy:** No se menciona ninguna certificación. Sí se publican seguro de carga, GPS y monitoreo durante el traslado, que quedaron autorizados.
 - **Identificador interno:** `certifications`
 
-### ¿Confirmación documental de la capacidad de la plataforma (36 t) y del tipo de suspensión (de aire)?
+### ¿Qué configuración vehicular (p. ej. T3-S2, T3-S3, full) y qué peso bruto vehicular autorizado tiene cada unidad, conforme a la NOM-012-SCT-2?
 
-- **Por qué no se publica:** El propietario indicó mantener únicamente "plataforma de tres ejes" hasta contar con confirmación documental.
-- **Qué hace el sitio hoy:** Se publica "plataforma de tres ejes" (los tres ejes son visibles en la fotografía). No se publica tonelaje ni tipo de suspensión.
+- **Por qué no se publica:** El propietario autorizó publicar capacidades de 10, 15 y 35 t como rangos de referencia. El máximo legal depende de la configuración, del tipo de camino y de la NOM-012-SCT-2, por lo que no se publica un tope.
+- **Qué hace el sitio hoy:** Se publica "desde 10 toneladas hasta carga pesada" con 10 t / 15 t / 35 t como referencia y el aviso "Capacidad sujeta a configuración, dimensiones de la carga y unidad asignada". No se publica tipo de suspensión.
 - **Identificador interno:** `platform-specs`
-
-### ¿Qué medidas tienen las cajas secas (48 ft, 53 ft u otras) y qué capacidad soportan?
-
-- **Por qué no se publica:** El propietario indicó describir la caja seca por uso hasta confirmar medidas.
-- **Qué hace el sitio hoy:** La caja seca se describe por uso, sin medidas ni capacidad.
-- **Identificador interno:** `dry-van-specs`
 
 ### ¿Qué cobertura y qué aseguradora respaldan la carga, y hay un monto o tope que convenga publicar?
 
@@ -52,9 +46,15 @@ _El sitio funciona, pero no puede afirmarlo hasta que se confirme._
 - **Qué hace el sitio hoy:** Se habla de "operadores con experiencia en viaje largo" sin afirmar certificaciones ni programas.
 - **Identificador interno:** `operator-qualifications`
 
-## Mejora opcional (4)
+## Mejora opcional (5)
 
 _No bloquea nada; mejora el resultado si se resuelve._
+
+### ¿Qué capacidad en tarimas y en peso tienen las cajas secas de 48 y 53 pies?
+
+- **Por qué no se publica:** Se confirmaron las medidas (48 y 53 pies), no la capacidad por caja.
+- **Qué hace el sitio hoy:** Se publican las medidas. La capacidad se confirma al cotizar.
+- **Identificador interno:** `dry-van-capacity`
 
 ### ¿Desea publicar un domicilio de operaciones y un horario de atención comercial?
 
@@ -64,8 +64,8 @@ _No bloquea nada; mejora el resultado si se resuelve._
 
 ### ¿Hay más ciudades o corredores de operación frecuente que convenga listar además de los confirmados?
 
-- **Por qué no se publica:** Se confirmaron Culiacán, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. La lista se cierra con "y otras rutas nacionales".
-- **Qué hace el sitio hoy:** Se publican las ciudades confirmadas y se indica cobertura en rutas nacionales para el resto del país.
+- **Por qué no se publica:** Se confirmaron Tepic, Mazatlán, Culiacán, Ciudad Obregón, Hermosillo, Tecate, Tijuana, el interior de Jalisco y León. Conviene validar que Tepic, Mazatlán y Ciudad Obregón son rutas frecuentes y no solo de paso.
+- **Qué hace el sitio hoy:** El mapa y la lista muestran el corredor Pacífico–Norte como "rutas frecuentes" y se indica cobertura nacional bajo cotización.
 - **Identificador interno:** `coverage-additional`
 
 ### ¿Desea medir conversiones (Cloudflare Web Analytics, GA4 u otra herramienta)?

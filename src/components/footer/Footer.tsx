@@ -4,15 +4,15 @@ import { navItems } from '@/data/navigation';
 import { services } from '@/data/services';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
-import { PhoneLink } from '@/components/ui/Cta';
+import { ContactList } from '@/components/ui/Cta';
 
 /**
  * @description Site footer.
  *
  * Address, phone, e-mail and business hours render only when confirmed in
  * `src/data/company.ts`. Nothing is invented — an unconfirmed field is simply
- * absent, and the "service area" line states only what the source material
- * supports: national routes within Mexico, no named states or corridors.
+ * absent. Contact rows follow the site-wide order: primary phone, secondary
+ * phone, WhatsApp, e-mail (see `ContactList`).
  */
 export function Footer() {
   const year = new Date().getFullYear();
@@ -79,21 +79,7 @@ export function Footer() {
 
           <div className="mt-4 space-y-3">
             {hasAnyChannel ? (
-              <>
-                {/* WhatsApp lives only in the floating button. */}
-                <PhoneLink place="footer" className="text-sm text-romo-cream-light" />
-                {contact.email ? (
-                  <a
-                    href={`mailto:${contact.email}`}
-                    data-cta="correo"
-                    data-cta-place="footer"
-                    className="inline-flex min-h-7 items-center gap-2 text-sm text-romo-cream-light"
-                  >
-                    <Icon name="mail" className="h-4 w-4 text-romo-red" />
-                    {contact.email}
-                  </a>
-                ) : null}
-              </>
+              <ContactList place="footer" />
             ) : (
               <Link
                 href="/#cotizar"
@@ -126,7 +112,8 @@ export function Footer() {
               Zona de servicio
             </h3>
             <p className="mt-3 text-sm text-romo-muted">
-              Rutas nacionales dentro de la República Mexicana.
+              Base en {company.baseCity}, {company.baseState}. Rutas frecuentes al Pacífico y
+              Norte, y cobertura nacional.
             </p>
           </div>
         </div>

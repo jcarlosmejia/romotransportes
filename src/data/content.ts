@@ -31,38 +31,57 @@ export type IconName =
   | 'quote'
   | 'arrow';
 
-/** Immediately below the hero. Four claims, all verifiable as practices. */
+/**
+ * Hero capability row. The five facts a logistics buyer checks before reading
+ * anything else: where, what equipment, how it is tracked, how far.
+ */
+export const heroCapabilities: readonly string[] = [
+  'Base Guadalajara',
+  "Caja seca 48' y 53'",
+  "Plataforma 40'+",
+  'GPS y seguimiento',
+  'Cobertura nacional',
+];
+
+/**
+ * Credibility strip below the hero. Does not repeat the hero row: these are the
+ * trust facts (tenure, own fleet, insurance, direct attention).
+ */
 export const trustPoints: readonly TrustPoint[] = [
   {
-    id: 'cobertura',
-    title: 'Rutas nacionales',
-    description: 'Traslados dentro de la República Mexicana según origen, destino y tipo de carga.',
-    icon: 'route',
+    id: 'experiencia',
+    title: 'Desde 2010',
+    description: 'Operando transporte de carga por carretera desde Guadalajara.',
+    icon: 'clock',
   },
   {
-    id: 'equipo',
-    title: 'Plataforma y caja seca',
-    description: 'Equipo abierto y cerrado para resolver distintos tipos de mercancía.',
-    icon: 'flatbed',
+    id: 'unidades',
+    title: 'Unidades propias',
+    description: 'Tractocamiones, cajas secas y plataformas en operación directa.',
+    icon: 'truck',
+  },
+  {
+    id: 'seguro',
+    title: 'Seguro de carga',
+    description: 'Cobertura confirmada por embarque según mercancía y valor declarado.',
+    icon: 'shield',
   },
   {
     id: 'atencion',
     title: 'Atención directa',
-    description: 'Un mismo contacto desde la cotización hasta la confirmación de entrega.',
+    description: 'Un mismo contacto desde la tarifa hasta la confirmación de entrega.',
     icon: 'headset',
-  },
-  {
-    // Tenure is confirmed (2010), so it earns a slot here. It replaced a
-    // "carga completa" tile that duplicated the Servicios section.
-    id: 'experiencia',
-    title: 'Desde 2010',
-    description: 'Operando transporte de carga por carretera en rutas nacionales.',
-    icon: 'clock',
   },
 ];
 
 /** "Por qué Romo's" — operating commitments, not adjectives. */
 export const differentiators: readonly { title: string; description: string; icon: IconName }[] = [
+  {
+    title: 'Origen en Guadalajara',
+    description:
+      'Base operativa en la Zona Metropolitana de Guadalajara: cargamos en la ZMG y en el interior de Jalisco y salimos directo a ruta.',
+    icon: 'map',
+  },
   {
     title: 'Hablas con quien opera',
     description:
@@ -80,12 +99,6 @@ export const differentiators: readonly { title: string; description: string; ico
     description:
       'La sujeción se hace de acuerdo con el tipo de mercancía: bandas, cadenas y cubierta cuando la carga lo requiere.',
     icon: 'straps',
-  },
-  {
-    title: 'Equipo para distintas cargas',
-    description:
-      'Plataforma para material y estructura, caja seca para mercancía general. La unidad se asigna según lo que se va a mover.',
-    icon: 'truck',
   },
   {
     title: 'Comunicación durante la ruta',
@@ -195,78 +208,52 @@ export const processSteps: readonly { title: string; description: string }[] = [
 
 /** Sectors the equipment can serve. Framed as capability, never as a client list. */
 export const industries: readonly { title: string; description: string }[] = [
-  {
-    title: 'Manufactura',
-    description: 'Insumo de entrada y producto terminado entre planta y centro de distribución.',
-  },
-  {
-    title: 'Materiales y construcción',
-    description: 'Estructura, perfil, tubería y varilla que requieren plataforma.',
-  },
-  {
-    title: 'Metalmecánica',
-    description: 'Pieza fabricada y estructura que se maniobra con grúa.',
-  },
-  {
-    title: 'Empaque y embalaje',
-    description: 'Material de empaque, fardo y paca en volumen.',
-  },
-  {
-    title: 'Comercio y distribución',
-    description: 'Mercancía comercial paletizada en caja seca.',
-  },
-  {
-    title: 'Agroindustria',
-    description: 'Forraje y producto de campo enfardado y cubierto.',
-  },
-  {
-    title: 'Reciclaje y acopio',
-    description: 'Material enfardado y chatarra para centros de acopio y proceso.',
-  },
-  {
-    title: 'Proyectos y obra',
-    description: 'Equipo y material de gran dimensión hacia sitio de obra.',
-  },
+  { title: 'Acero y metalmecánica', description: 'Perfil, placa, tubería, varilla y estructura fabricada.' },
+  { title: 'Construcción y materiales', description: 'Material de obra y estructura hacia sitio o almacén.' },
+  { title: 'Manufactura', description: 'Materia prima de entrada y producto terminado entre plantas.' },
+  { title: 'Maquinaria y equipo', description: 'Maquinaria en plataforma, sujeta a evaluación de dimensiones.' },
+  { title: 'Distribución y CEDIS', description: 'Mercancía paletizada en caja seca, planta–CEDIS.' },
+  { title: 'Empaque y embalaje', description: 'Material de empaque, fardo y paca en volumen.' },
+  { title: 'Proveedores industriales', description: 'Insumos y refacciones para planta, servicio recurrente.' },
+  { title: 'Agroindustria y reciclaje', description: 'Producto enfardado y material para acopio, cubierto.' },
 ];
 
 /**
- * Coverage.
- *
- * The cities below were confirmed by the owner on 2026-09-17, so they are now
- * named. The list is closed with "y otras rutas nacionales" rather than padded
- * with plausible-sounding corridors: only these were confirmed. The map in
- * `MexicoMap` still draws no route lines or markers — the confirmation was of
- * cities served, not of specific highway corridors or transit times.
+ * Coverage. Guadalajara is the hub; the Pacific / Northern corridor is where the
+ * operation has the most road experience (owner brief 2026-10-04). Copy says
+ * "rutas frecuentes y cobertura nacional", never "únicamente operamos".
  */
 export const coverage = {
-  title: 'Movemos tu carga por México',
-  body: 'Operamos traslados de carga dentro de la República Mexicana, con servicio a las principales ciudades del país. Cada servicio se organiza a partir del punto de origen, el destino y el tipo de mercancía, para definir la unidad y la ruta que corresponden.',
-  note: 'Si su ruta requiere una ventana de carga específica o una maniobra particular en origen o destino, indíquelo al solicitar la cotización.',
+  title: 'Rutas del Pacífico y Norte desde Guadalajara',
+  body: 'Salimos desde la Zona Metropolitana de Guadalajara. Tenemos experiencia especialmente en el corredor del Pacífico y el Norte del país, y damos servicio a cualquier destino nacional según la carga y la fecha.',
+  note: '¿Tu ruta no aparece en el mapa? También la cotizamos. Indícanos origen, destino y ventana de carga.',
   bullets: [
-    'Servicio a las principales ciudades del país',
-    'Rutas definidas por origen, destino y tipo de carga',
-    'Viaje largo con operador asignado a la unidad',
-    'Coordinación de ventanas de carga y entrega',
+    'Origen en Guadalajara, Jalisco y su zona metropolitana',
+    'Rutas locales, semiforáneas y foráneas',
+    'Corredor del Pacífico y Norte de México',
+    'Cobertura nacional bajo cotización',
   ],
-  /** Confirmed destinations. Used by the coverage section and the JSON-LD. */
+  /** Frequent destinations, in corridor order from Guadalajara. */
   cities: [
+    { name: 'Tepic', state: 'Nayarit' },
+    { name: 'Mazatlán', state: 'Sinaloa' },
     { name: 'Culiacán', state: 'Sinaloa' },
+    { name: 'Ciudad Obregón', state: 'Sonora' },
     { name: 'Hermosillo', state: 'Sonora' },
     { name: 'Tijuana', state: 'Baja California' },
     { name: 'Tecate', state: 'Baja California' },
     { name: 'León', state: 'Guanajuato' },
     { name: 'Interior de Jalisco', state: 'Jalisco' },
   ],
-  /** Shown after the city list so it never reads as an exhaustive map. */
-  citiesFootnote: 'y otras rutas nacionales.',
+  citiesFootnote: 'y cobertura nacional.',
 } as const;
 
 /** About / mission — rewritten from the owner's original wording, not copied. */
 export const about = {
-  overline: "Nosotros",
-  title: "Romo's Transportes",
+  overline: "Nosotros · Desde 2010",
+  title: "Por qué elegir Romo's Transportes",
   paragraphs: [
-    'Romo\'s Transportes es una empresa mexicana de transporte terrestre de carga. Desde 2010 movemos mercancía de empresas dentro de la República Mexicana con unidades propias, plataformas y cajas secas, de acuerdo con lo que cada embarque necesita.',
+    'Romo\'s Transportes es una empresa mexicana de transporte terrestre de carga. Desde 2010 operamos desde Guadalajara, Jalisco, moviendo mercancía comercial e industrial a todo México con unidades propias, cajas secas de 48 y 53 pies y plataformas tipo plana.',
     'Trabajamos con una idea simple: la mercancía que nos entregan es responsabilidad nuestra desde que se carga hasta que se confirma la entrega. Eso significa revisar el equipo antes de salir, asegurar la carga como corresponde, mantener las unidades con GPS y seguimiento en ruta, y comunicarnos con el cliente durante el traslado.',
     'Nos interesa la relación de largo plazo más que el viaje aislado. Por eso la atención es directa: quien cotiza es quien da seguimiento, y cuando el equipo o la ruta no son los adecuados para una carga, lo decimos antes de confirmar el servicio.',
   ],

@@ -1,5 +1,5 @@
 import { services } from '@/data/services';
-import { QuoteButton } from '@/components/ui/Cta';
+import { EmailCta, WhatsAppCta } from '@/components/ui/Cta';
 import { Icon } from '@/components/ui/Icon';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { Reveal } from '@/components/ui/Reveal';
@@ -23,8 +23,8 @@ export function Services() {
           <SectionHeading
             id="servicios-title"
             overline="Servicios"
-            title="Soluciones para distintos tipos de carga"
-            lede="El equipo y el servicio se definen a partir de lo que se va a mover, no al contrario. Estas son las opciones con las que trabajamos."
+            title="Fletes desde Guadalajara: spot, recurrentes y carga pesada"
+            lede="Carga completa en rutas locales, semiforáneas y nacionales. Trabajamos viajes únicos y operación programada para plantas, proveedores y CEDIS."
           />
         </Reveal>
 
@@ -86,10 +86,13 @@ export function Services() {
 
         <Reveal className="mt-12 flex flex-col items-start gap-5 border-t border-romo-border-light pt-9 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-[0.9375rem] text-romo-muted-dark">
-            <strong className="font-bold text-romo-charcoal">¿No sabes qué unidad necesitas?</strong>{' '}
-            Descríbenos la carga y nosotros te decimos si conviene plataforma o caja seca.
+            <strong className="font-bold text-romo-charcoal">¿Tienes origen y destino?</strong>{' '}
+            Envíanos la ruta y el tipo de carga y te respondemos con unidad y tarifa.
           </p>
-          <QuoteButton place="servicios" className="shrink-0" />
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <WhatsAppCta place="servicios" size="sm" />
+            <EmailCta place="servicios" size="sm" />
+          </div>
         </Reveal>
       </div>
     </section>

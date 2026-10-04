@@ -28,7 +28,7 @@ export function Safety() {
             <SectionHeading
               id="seguridad-title"
               overline="Seguridad"
-              title="La carga se prepara para el viaje"
+              title="Seguridad de la carga: seguro, GPS y sujeción"
               lede="La mercancía que nos entregan es responsabilidad nuestra desde la carga hasta la entrega. Esto es lo que hacemos en cada servicio."
             />
 

@@ -274,6 +274,13 @@
     color: var(--accent);
   }
 
+  /* Hero H1: longer than the old 4-word slogan because it now carries the
+     service + city, so it steps down from display-1 to stay on ~3 lines. */
+  .display-hero {
+    font-size: clamp(2rem, 4.6vw, 3.5rem);
+    line-height: 1.04;
+  }
+
   .display-1 {
     font-size: clamp(2.25rem, 6.2vw, 4.5rem);
   }
@@ -355,6 +362,18 @@
   .band-light .btn-secondary:hover {
     background-color: var(--color-romo-charcoal);
     color: var(--color-romo-cream-light);
+  }
+
+  /* WhatsApp text button — the primary CTA. Uses the DARKER WhatsApp green:
+     the float's #1FA855 carries a white icon at 3.09:1 (fine for a graphical
+     object, WCAG 1.4.11) but button LABEL TEXT needs 4.5:1. #178644 gives
+     4.64:1; hover darkens further so contrast improves under interaction. */
+  .btn-whatsapp {
+    background-color: var(--color-whatsapp-hover);
+    color: #ffffff;
+  }
+  .btn-whatsapp:hover {
+    background-color: #11683a;
   }
 
   .btn-ghost {

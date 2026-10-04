@@ -1,16 +1,19 @@
-import { fleet } from '@/data/fleet';
-import { QuoteButton } from '@/components/ui/Cta';
+import { capacity, equipment } from '@/data/fleet';
+import { EmailCta, WhatsAppCta } from '@/components/ui/Cta';
+import { Icon } from '@/components/ui/Icon';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
- * @description Equipment showcase on the dark brand surface.
+ * @description "Equipo para cada tipo de carga" — directly after the hero.
  *
- * Photography leads each card because the fleet is the strongest proof the
- * business has. Note that only observable attributes appear in `specs` — payload
- * capacity, trailer length and suspension type are held in `pendingSpecs` and
- * are never rendered until the owner confirms them.
+ * Two cards of identical weight: caja seca and plataforma share one layout, so
+ * flatbed never reads as the secondary service. Each card carries a real
+ * photograph, what it is for, how the load is handled, and its own WhatsApp
+ * CTA so a buyer who has just recognised their equipment can ask for a rate
+ * without scrolling. Below them, the capacity band publishes weight RANGES with
+ * the configuration disclaimer always beside the numbers.
  */
 export function Fleet() {
   return (
@@ -19,68 +22,95 @@ export function Fleet() {
         <Reveal>
           <SectionHeading
             id="flota-title"
-            overline="Flota y equipo"
-            title="Plataformas y cajas secas"
-            lede="Unidades propias y equipo para carga abierta y cerrada. Estas son fotografías de nuestra operación, no imágenes de catálogo."
+            overline="Equipo · Unidades propias"
+            title="Equipo para cada tipo de carga"
+            lede="Caja seca para mercancía protegida, plataforma para carga larga, pesada o de gran dimensión. Si no sabes cuál necesitas, te lo indicamos al cotizar."
           />
         </Reveal>
 
-        <Reveal as="ul" stagger className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3">
-          {fleet.map((item) => (
-            <li
+        <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-2">
+          {equipment.map((item) => (
+            <Reveal
+              as="article"
               key={item.id}
-              id={`flota-${item.id}`}
-              className="card card-interactive cut-corner-lg flex flex-col !p-0"
+              id={`equipo-${item.id}`}
+              className="card cut-corner-lg flex flex-col !p-0"
+              aria-labelledby={`equipo-${item.id}-title`}
             >
               <div className="relative overflow-hidden border-b border-romo-border">
                 <ResponsiveImage
                   slug={item.image}
-                  sizes="(max-width: 639px) calc(100vw - 2.5rem), (max-width: 1023px) calc(100vw - 3rem), 380px"
-                  className="aspect-[4/3] w-full object-cover"
+                  sizes="(max-width: 1023px) calc(100vw - 2.5rem), 600px"
+                  className="aspect-[16/9] w-full object-cover"
                 />
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-romo-surface to-transparent"
-                />
+                <span className="absolute left-0 top-0 bg-romo-red px-3 py-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-romo-white">
+                  {item.kicker}
+                </span>
               </div>
 
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="text-xl font-bold uppercase tracking-tight">{item.title}</h3>
-                <div aria-hidden="true" className="mt-3 h-[2px] w-9 bg-romo-red" />
-                <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-romo-muted">
+              <div className="flex flex-1 flex-col p-6 sm:p-7">
+                <h3
+                  id={`equipo-${item.id}-title`}
+                  className="display-3 uppercase"
+                >
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-[0.9375rem] leading-relaxed text-romo-muted">
                   {item.description}
                 </p>
 
-                <dl className="mt-5 space-y-2 border-t border-romo-border pt-4">
-                  {item.specs.map((spec) => (
-                    <div key={spec} className="flex items-start gap-2.5">
-                      <dt className="sr-only">Característica</dt>
-                      <dd className="flex items-start gap-2.5 text-sm text-romo-cream">
-                        <span
-                          aria-hidden="true"
-                          className="mt-[0.5rem] h-1 w-1 shrink-0 bg-romo-red"
-                        />
-                        {spec}
-                      </dd>
-                    </div>
+                <h4 className="mt-6 text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-romo-cream">
+                  Ideal para
+                </h4>
+                <ul className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-2">
+                  {item.uses.map((use) => (
+                    <li key={use} className="flex items-start gap-2 text-sm text-romo-cream-light">
+                      <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-romo-red" />
+                      {use}
+                    </li>
                   ))}
-                </dl>
-              </div>
-            </li>
-          ))}
-        </Reveal>
+                </ul>
 
-        <Reveal className="mt-12 flex flex-col items-start gap-5 border border-romo-border bg-romo-charcoal p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-          <div>
-            <h3 className="text-lg font-bold uppercase tracking-tight">
-              ¿No sabes qué unidad necesitas?
-            </h3>
-            <p className="mt-2 max-w-xl text-[0.9375rem] text-romo-muted">
-              Dinos qué vas a mover, cuánto pesa aproximadamente y cómo se va a cargar. Con eso
-              definimos el equipo y te lo indicamos en la cotización.
-            </p>
+                <p className="mt-5 flex flex-wrap gap-x-4 gap-y-1 border-t border-romo-border pt-4 text-xs font-semibold uppercase tracking-[0.1em] text-romo-muted">
+                  {item.handling.map((h) => (
+                    <span key={h}>· {h}</span>
+                  ))}
+                </p>
+
+                <div className="mt-6 flex-1" />
+                <WhatsAppCta place={`equipo-${item.id}`} label="Cotizar por WhatsApp" className="w-full sm:w-auto sm:self-start" />
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Capacity band. Ranges with the disclaimer always attached. */}
+        <Reveal className="mt-8 grid overflow-hidden border border-romo-border bg-romo-charcoal lg:grid-cols-[minmax(0,22rem)_1fr]">
+          <ResponsiveImage
+            slug={capacity.image}
+            sizes="(max-width: 1023px) 100vw, 352px"
+            className="h-full max-h-64 w-full object-cover lg:max-h-none"
+            wrapperClassName="h-full"
+          />
+          <div className="p-6 sm:p-8">
+            <p className="overline">Capacidad</p>
+            <h3 className="display-3 mt-2 uppercase">{capacity.title}</h3>
+            <ul className="mt-6 grid grid-cols-3 gap-3">
+              {capacity.points.map((p) => (
+                <li key={p.value} className="border-l-2 border-romo-red pl-3">
+                  <span className="block font-[family-name:var(--font-display)] text-2xl text-romo-white sm:text-3xl">
+                    {p.value}
+                  </span>
+                  <span className="mt-1 block text-xs text-romo-muted">{p.label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-xs leading-relaxed text-romo-muted">{capacity.disclaimer}</p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <WhatsAppCta place="capacidad" size="sm" />
+              <EmailCta place="capacidad" size="sm" />
+            </div>
           </div>
-          <QuoteButton place="flota" label="Cotizar mi carga" className="shrink-0" />
         </Reveal>
       </div>
     </section>

@@ -5,14 +5,18 @@ import { contact } from '@/data/company';
 import {
   buildQuoteMessage,
   emptyQuote,
+  operacionOptions,
   quoteMailtoLink,
+  quoteTemplateMailtoLink,
   requiredFields,
   unidadOptions,
+  whatsappQuoteMessage,
   validateQuote,
   type QuoteErrors,
   type QuoteFields,
 } from '@/lib/quote';
 import { Icon } from '@/components/ui/Icon';
+import { whatsappLink } from '@/data/company';
 
 type FieldKey = keyof QuoteFields;
 
@@ -38,12 +42,13 @@ const FIELDS: readonly FieldSpec[] = [
   { name: 'destino', label: 'Destino', placeholder: 'Ciudad y estado' },
   {
     name: 'mercancia',
-    label: 'Tipo de mercancía',
+    label: 'Tipo de carga',
     placeholder: 'Ej. estructura metálica, producto paletizado',
     wide: true,
   },
   { name: 'peso', label: 'Peso aproximado', placeholder: 'Ej. 18 toneladas' },
-  { name: 'fecha', label: 'Fecha estimada', type: 'date' },
+  { name: 'dimensiones', label: 'Dimensiones', placeholder: 'Largo × ancho × alto' },
+  { name: 'fecha', label: 'Fecha de carga', type: 'date' },
 ];
 
 /**
@@ -212,24 +217,31 @@ export function QuoteForm() {
           );
         })}
 
-        <div>
-          <label htmlFor={fieldId('unidad')} className="field-label">
-            Tipo de unidad
-          </label>
-          <select
-            id={fieldId('unidad')}
-            name="unidad"
-            value={fields.unidad}
-            onChange={(e) => update('unidad', e.target.value)}
-            className="field-input"
-          >
-            {unidadOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        {(
+          [
+            { name: 'unidad', label: 'Tipo de servicio', options: unidadOptions },
+            { name: 'operacion', label: 'Operación', options: operacionOptions },
+          ] as const
+        ).map((select) => (
+          <div key={select.name}>
+            <label htmlFor={fieldId(select.name)} className="field-label">
+              {select.label}
+            </label>
+            <select
+              id={fieldId(select.name)}
+              name={select.name}
+              value={fields[select.name]}
+              onChange={(e) => update(select.name, e.target.value)}
+              className="field-input"
+            >
+              {select.options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
 
         <div className="sm:col-span-2">
           <label htmlFor={fieldId('mensaje')} className="field-label">
@@ -240,7 +252,7 @@ export function QuoteForm() {
             name="mensaje"
             value={fields.mensaje}
             onChange={(e) => update('mensaje', e.target.value)}
-            placeholder="Dimensiones, maniobra de carga, horarios, o cualquier dato que debamos considerar."
+            placeholder="Maniobra de carga, horarios, frecuencia o cualquier dato que debamos considerar."
             className="field-input"
             rows={4}
           />
@@ -254,8 +266,8 @@ export function QuoteForm() {
         Datos necesarios para poder cotizar. El resto es opcional.
       </p>
 
-      {/* One action. E-mail is this form's only destination — WhatsApp lives in
-          the floating button, one click away, with no form to fill. */}
+      {/* The form submits by e-mail. The two links below it are escape hatches
+          for visitors who would rather not fill a form. */}
       <div className="mt-7">
         <button
           id="enviar-cotizacion"
@@ -265,8 +277,37 @@ export function QuoteForm() {
           className="btn btn-primary w-full"
         >
           <Icon name={contact.email ? 'mail' : 'quote'} className="h-[1.125rem] w-[1.125rem]" />
-          {contact.email ? 'Enviar por correo' : 'Generar solicitud'}
+          {contact.email ? 'Solicitar cotización' : 'Generar solicitud'}
         </button>
+      </div>
+
+      <div className="mt-5 space-y-2 text-sm text-romo-muted">
+        <p>
+          ¿Prefieres respuesta inmediata?{' '}
+          <a
+            href={whatsappLink(whatsappQuoteMessage) ?? undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cta="whatsapp"
+            data-cta-place="formulario"
+            className="font-semibold text-romo-cream underline underline-offset-2"
+          >
+            Escríbenos por WhatsApp
+          </a>
+        </p>
+        {contact.email ? (
+          <p>
+            ¿Quieres enviar especificaciones?{' '}
+            <a
+              href={quoteTemplateMailtoLink(contact.email)}
+              data-cta="correo"
+              data-cta-place="formulario"
+              className="font-semibold text-romo-cream underline underline-offset-2"
+            >
+              Envíalas por correo
+            </a>
+          </p>
+        ) : null}
       </div>
 
       {/* Post-submit status. Never claims a message was delivered to an inbox
