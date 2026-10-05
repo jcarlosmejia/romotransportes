@@ -19,8 +19,9 @@ export const metadata: Metadata = {
  *
  * Scope note: this page documents only what is **verifiable from the site's own
  * code** — that the quote form runs entirely in the browser, that the site
- * stores nothing, sets no cookies and loads no third-party analytics or
- * tracking scripts. All of that is true of the build as shipped.
+ * stores nothing and sets no cookies. Measurement is Cloudflare's own
+ * cookieless analytics (and Zaraz events, if enabled), configured in the
+ * Cloudflare dashboard, not in this code.
  *
  * It is deliberately NOT presented as a complete aviso de privacidad under the
  * LFPDPPP, because a compliant notice requires the responsable's legal name,
@@ -80,10 +81,12 @@ export default function PrivacyPage() {
                 Cookies y herramientas de medición
               </h2>
               <p className="mt-3">
-                Este sitio no instala cookies de seguimiento, no carga scripts de analítica ni de
-                publicidad, y no incorpora recursos de terceros. Las tipografías se sirven desde el
-                propio dominio del sitio, por lo que su visita no genera solicitudes a servidores
-                externos.
+                Este sitio no instala cookies de seguimiento ni carga scripts de publicidad. Para
+                saber cuántas personas lo visitan y qué botones de contacto usan, utilizamos la
+                medición de Cloudflare, el proveedor que aloja el sitio: registra datos agregados
+                (página visitada, tipo de dispositivo, país y botón pulsado) sin cookies y sin
+                identificar a la persona. Las tipografías se sirven desde el propio dominio del
+                sitio.
               </p>
             </section>
 

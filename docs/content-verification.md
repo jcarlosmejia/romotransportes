@@ -71,7 +71,7 @@ _No bloquea nada; mejora el resultado si se resuelve._
 ### ¿Desea medir conversiones (Cloudflare Web Analytics, GA4 u otra herramienta)?
 
 - **Por qué no se publica:** No se configuró ninguna herramienta de analítica.
-- **Qué hace el sitio hoy:** No se carga ningún script de terceros. Los botones ya emiten un evento `romo:cta` en el DOM, listo para conectar.
+- **Qué hace el sitio hoy:** Los botones envían `cta_click` a Cloudflare Zaraz si está activado; falta activarlo en el panel de Cloudflare (ver docs/medicion-y-buscadores.md).
 - **Identificador interno:** `analytics`
 
 ### ¿Puede conseguir el logotipo en vectorial o PNG con transparencia?
